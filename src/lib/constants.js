@@ -1,3 +1,3 @@
-const variable = 'new';
-
-module.exports = { variable };
+module.exports = Object.freeze({
+  CONSTANT: 'some value',
+});
