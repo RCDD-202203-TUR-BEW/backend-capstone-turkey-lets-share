@@ -5,7 +5,7 @@ const objectId = mongoose.Schema.Types.ObjectId;
 
 const orderRequestSchema = new mongoose.Schema(
   {
-    requestedUser: {
+    requestUser: {
       ref: 'User',
       type: objectId,
     },

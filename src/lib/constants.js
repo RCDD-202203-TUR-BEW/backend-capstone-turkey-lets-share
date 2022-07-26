@@ -10,7 +10,7 @@ module.exports = Object.freeze({
     'Ukraine',
     'Other',
   ],
-  enumStatus: ['Pending', 'Resolved'],
+  enumReportStatus: ['Pending', 'Resolved'],
   enumProvider: ['Local', 'Google', 'Facebook'],
   enumCategory: [
     'Books',
@@ -24,7 +24,7 @@ module.exports = Object.freeze({
     'Other',
   ],
   enumRequestStatus: ['Requested', 'Confirmed', 'Rejected'],
-  enumProductCondition: ['New', 'Underuse', 'Overuse'],
+  enumProductCondition: ['New', 'Underused', 'Overused'],
   enumShippingOptions: [
     'Meet up',
     'Drop off',

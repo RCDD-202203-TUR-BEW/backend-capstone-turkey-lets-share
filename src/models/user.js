@@ -79,7 +79,7 @@ const reportSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: constants.enumStatus,
+      enum: constants.enumReportStatus,
       default: 'Pending',
     },
   },
@@ -175,7 +175,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    hash: {
+    passwordHash: {
       type: String,
       required: false,
     },
