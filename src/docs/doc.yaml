@@ -1,0 +1,20 @@
+paths:
+  /:
+    get:
+      description: 'Simple index API route'
+      responses:
+        '200':
+          description: 'Returns a simple description string.'
+components:
+  schemas:
+    user:
+      type: object
+      required:
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of user.
+        createdAt:
+          type: string
+          format: date
+          description: The date of the record creation.
