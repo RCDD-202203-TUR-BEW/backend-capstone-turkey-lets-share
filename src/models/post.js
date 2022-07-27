@@ -16,7 +16,7 @@ const orderRequestSchema = new mongoose.Schema(
     },
     requestStatus: {
       type: String,
-      enum: constants.enumRequestStatus,
+      enum: constants.ENUM_REQUEST_STATUS,
       default: 'Requested',
     },
   },
@@ -41,7 +41,7 @@ const postSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: constants.enumCategory,
+      enum: constants.ENUM_CATEGORY,
       required: true,
     },
     location: {
@@ -50,22 +50,22 @@ const postSchema = new mongoose.Schema(
     },
     productCondition: {
       type: String,
-      enum: constants.enumProductCondition,
+      enum: constants.ENUM_PRODUCT_CONDITION,
       required: true,
     },
     shippingOptions: {
       type: String,
-      enum: constants.enumShippingOptions,
+      enum: constants.ENUM_SHIPPING_OPTION,
       required: true,
     },
     postType: {
       type: String,
-      enum: constants.enumPostType,
+      enum: constants.ENUM_POST_TYPE,
       required: true,
     },
     postStatus: {
       type: String,
-      enum: constants.enumPostStatus,
+      enum: constants.ENUM_POST_STATUS,
     },
     donor: {
       ref: 'User',

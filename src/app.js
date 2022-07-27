@@ -7,10 +7,18 @@ const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
 const connectToMongo = require('./db/connection');
 
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
 app.use(bodyParser.json());
+
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/post', postRoutes);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

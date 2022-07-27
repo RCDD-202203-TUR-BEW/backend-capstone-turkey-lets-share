@@ -1,7 +1,6 @@
 module.exports = Object.freeze({
-  // models' constants start
-  enumGender: ['Female', 'Male', 'Prefer not to say', 'Other'],
-  enumNationality: [
+  ENUM_GENDER: ['Female', 'Male', 'Prefer not to say', 'Other'],
+  ENUM_NATIONALITY: [
     'Afghanistan',
     'Iran',
     'Iraq',
@@ -10,9 +9,9 @@ module.exports = Object.freeze({
     'Ukraine',
     'Other',
   ],
-  enumReportStatus: ['Pending', 'Resolved'],
-  enumProvider: ['Local', 'Google', 'Facebook'],
-  enumCategory: [
+  ENUM_REPORT_STATUS: ['Pending', 'Resolved'],
+  ENUM_PROVIDER: ['Local', 'Google', 'Facebook'],
+  ENUM_CATEGORY: [
     'Books',
     'Clothing',
     'Electronics',
@@ -23,16 +22,15 @@ module.exports = Object.freeze({
     'Toys',
     'Other',
   ],
-  enumRequestStatus: ['Requested', 'Confirmed', 'Rejected'],
-  enumProductCondition: ['New', 'Underused', 'Overused'],
-  enumShippingOptions: [
+  ENUM_REQUEST_STATUS: ['Requested', 'Confirmed', 'Rejected'],
+  ENUM_PRODUCT_CONDITION: ['New', 'Underused', 'Overused'],
+  ENUM_SHIPPING_OPTION: [
     'Meet up',
     'Drop off',
     'Free shipping',
     'Paid shipping',
     'To be determined',
   ],
-  enumPostType: ['Request', 'Donate'],
-  enumPostStatus: ['Published', 'Verified'],
-  // models' constants end
+  ENUM_POST_TYPE: ['Request', 'Donate'],
+  ENUM_POST_STATUS: ['Published', 'Verified'],
 });

@@ -79,7 +79,7 @@ const reportSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: constants.enumReportStatus,
+      enum: constants.ENUM_REPORT_STATUS,
       default: 'Pending',
     },
   },
@@ -129,12 +129,12 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
-      enum: constants.enumGender,
+      enum: constants.ENUM_GENDER,
     },
     nationality: {
       type: String,
       required: true,
-      enum: constants.enumNationality,
+      enum: constants.ENUM_NATIONALITY,
     },
     refugee: {
       type: Boolean,
@@ -169,7 +169,7 @@ const userSchema = new mongoose.Schema(
     provider: {
       type: String,
       required: true,
-      enum: constants.enumProvider,
+      enum: constants.ENUM_PROVIDER,
     },
     providerId: {
       type: String,
