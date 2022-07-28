@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 
-const urlDev = process.env.DB_DEV_URL;
+const urlDev = process.env.ATLAS_URL;
+// const urlDev = process.env.DB_DEV_URL;
+
 const urlTest = process.env.DB_TEST_URL;
 const urlProd = process.env.DB_PROD_URL;
 
