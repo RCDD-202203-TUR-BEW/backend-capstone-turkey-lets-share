@@ -119,26 +119,26 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: Number,
-      required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
     },
     age: {
       type: Number,
-      required: true,
+      // required: true,
     },
     gender: {
       type: String,
-      required: true,
+      // required: true,
       enum: constants.ENUM_GENDER,
     },
     nationality: {
       type: String,
-      required: true,
+      // required: true,
       enum: constants.ENUM_NATIONALITY,
     },
     refugee: {
       type: Boolean,
-      required: true,
+      // required: true,
     },
     avaregeRating: {
       type: Number,

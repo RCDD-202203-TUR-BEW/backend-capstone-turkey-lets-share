@@ -8,18 +8,19 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "start-production": "export NODE_ENV=production && nodemon src/app.js",
-    "test": "export NODE_ENV=test && yarn validate && jest --passWithNoTests",
+    "test": "export NODE_ENV=test && jest --passWithNoTests --forceExit",
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\"",
     "validate": "yarn format && yarn lint",
     "validate-staged": "lint-staged",
-    "postinstall": "husky install && husky add .husky/pre-commit \"yarn validate-staged\" && husky add .husky/pre-push \"yarn test\""
+    "postinstall": "husky install && husky add .husky/pre-commit \"yarn validate\" && husky add .husky/pre-push \"yarn test\""
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
+    "cookie-signature": "^1.2.0",
     "dotenv": "^14.2.0",
     "encrypt-cookie": "^1.1.5",
     "express": "^4.18.1",
@@ -27,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.8.0",
     "mongoose": "^6.4.5",
+    "monkeypatch": "^1.0.0",
     "node-cron": "^3.0.1",
     "nodemailer": "^6.7.7",
     "passport": "^0.6.0",
@@ -59,5 +61,8 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "supertest": "^6.2.4"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
