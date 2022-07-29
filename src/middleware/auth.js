@@ -1,18 +1,19 @@
 const constants = require('../lib/constants');
 
+// eslint-disable-next-line consistent-return
 const registerMiddleware = async (req, res, next) => {
-  const errorsArr = [];
-  const {
-    firstName,
-    lastName,
-    email,
-    username,
-    phoneNumber,
-    password0,
-    password1,
-  } = req.body;
-
   try {
+    const errorsArr = [];
+    const {
+      firstName,
+      lastName,
+      email,
+      username,
+      phoneNumber,
+      password0,
+      password1,
+    } = req.body;
+
     if (password0 !== password1) {
       errorsArr.push('Password fields do not match');
     }
@@ -29,7 +30,7 @@ const registerMiddleware = async (req, res, next) => {
     }
 
     if (!constants.EMAIL_REGEX.test(email)) {
-      errorsArr.push('Invalid email');
+      errorsArr.push('Invalid email format');
     }
 
     if (!constants.USERNAME_REGEX.test(username)) {
@@ -41,13 +42,13 @@ const registerMiddleware = async (req, res, next) => {
     }
 
     if (errorsArr.length > 0) {
-      return res.status(401).send({ error: errorsArr });
+      return res.status(401).json({ error: errorsArr });
     }
-  } catch (err) {
-    res.status(500).send(err);
+  } catch (error) {
+    return res.status(500).json({ error });
   }
 
-  return next();
+  await next();
 };
 
 module.exports = { registerMiddleware };
