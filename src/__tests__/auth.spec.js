@@ -28,7 +28,7 @@ const mockUser = {
   given_name: 'Nilay',
   family_name: 'Aydin',
   picture: 'https://lh3.googleusercontent.com/a-/AOh1',
-  email: 'Nilay.Aydin@gmail.com',
+  email: 'nilay.aydin@gmail.com',
   email_verified: true,
   locale: 'en-GB',
 };
