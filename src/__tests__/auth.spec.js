@@ -24,11 +24,11 @@ const UserModel = require('../models/user');
 
 const mockUser = {
   sub: '12345678',
-  name: 'John Doe',
-  given_name: 'John',
-  family_name: 'Doe',
+  name: 'Nilay Aydin',
+  given_name: 'Nilay',
+  family_name: 'Aydin',
   picture: 'https://lh3.googleusercontent.com/a-/AOh1',
-  email: 'john.doe@gmail.com',
+  email: 'Nilay.Aydin@gmail.com',
   email_verified: true,
   locale: 'en-GB',
 };
@@ -93,7 +93,7 @@ describe('Google Auth Endpoints', () => {
     it('Redirects to home with a valid JWT cookie for correct credentials', async () => {
       expect(redirectUri).not.toBeNull();
 
-      const res = await runInPatchedServer(
+      const res = await runGoogleRequestInPatchedServer(
         async () => await cookiesAgent.get(getLoginURL(redirectUri.pathname))
       );
 
@@ -122,7 +122,7 @@ describe('Google Auth Endpoints', () => {
   });
 });
 
-async function runInPatchedServer(cb) {
+async function runGoogleRequestInPatchedServer(cb) {
   const undo = patch__google_request({
     [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
     [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),

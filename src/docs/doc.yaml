@@ -18,3 +18,4 @@ components:
           type: string
           format: date
           description: The date of the record creation.
+

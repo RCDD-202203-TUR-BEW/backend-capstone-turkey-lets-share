@@ -51,8 +51,7 @@ const swaggerDefinition = {
 // options for the swagger docs
 const options = {
   definition: swaggerDefinition,
-  // apis: ['./docs/**/*.yaml'],
-  apis: [`${__dirname}/routes/auth.js`],
+  apis: ['./src/docs/**/*.yaml'],
 };
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(options);
