@@ -4,6 +4,8 @@ require('dotenv').config();
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
+const { expressjwt: jwt } = require('express-jwt');
+
 const cookieParser = require('cookie-parser');
 const { encryptCookieNodeMiddleware } = require('encrypt-cookie');
 
@@ -13,6 +15,8 @@ const connectToMongo = require('./db/connection');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+
+const constants = require('./lib/constants');
 
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
@@ -24,6 +28,19 @@ app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(
+  '/api',
+  jwt({
+    secret: process.env.SECRET_KEY,
+    algorithms: ['HS256'],
+    getToken: (req) => req.signedCookies.token,
+
+    requestProperty: 'user',
+  }).unless({
+    path: constants.PUBLIC_PATHS,
+  })
+);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);

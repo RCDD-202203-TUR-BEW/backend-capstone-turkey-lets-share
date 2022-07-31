@@ -93,7 +93,7 @@ describe('Google Auth Endpoints', () => {
     it('Redirects to home with a valid JWT cookie for correct credentials', async () => {
       expect(redirectUri).not.toBeNull();
 
-      const res = await runGoogleRequestInPatchedServer(
+      const res = await runInPatchedServer(
         async () => await cookiesAgent.get(getLoginURL(redirectUri.pathname))
       );
 
@@ -120,9 +120,34 @@ describe('Google Auth Endpoints', () => {
       expect(auth_cookie).toEqual(expect.objectContaining(expected));
     });
   });
+
+  describe('GET /api/auth/me', () => {
+    it('It responds with a user schema json correctly for valid token', async () => {
+      const res = await cookiesAgent.get('/api/auth/me');
+
+      expect(res.status).toBe(200);
+      const expected = {
+        email: expect.any(String),
+      };
+      expect(res.body).toEqual(expect.objectContaining(expected));
+    });
+
+    it('It responds with 401 for invalid token', async () => {
+      const res = await req.get('/api/auth/me');
+
+      expect(res.status).toBe(401);
+      const notExpected = {
+        name: expect.any(String),
+        email: expect.any(String),
+        avatar: expect.any(String),
+      };
+
+      expect(res.body).not.toEqual(expect.objectContaining(notExpected));
+    });
+  });
 });
 
-async function runGoogleRequestInPatchedServer(cb) {
+async function runInPatchedServer(cb) {
   const undo = patch__google_request({
     [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
     [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
