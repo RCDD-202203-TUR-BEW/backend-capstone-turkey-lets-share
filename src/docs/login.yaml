@@ -1,0 +1,25 @@
+/api/auth/login:
+  post:
+    tags:
+    - "user"
+    summary: "Logs user into the system"
+    operationId: "loginUser"
+    produces:
+    - "application/json"
+    parameters:
+    - name: "email"
+      in: "body"
+      description: "Esdfsdfsdlogin"
+      required: true
+      type: "string"
+    - name: "password"
+      in: "body"
+      description: "Password for login"
+      required: true
+      type: "string"
+    responses:
+      "201":
+        description: "User sucesfully signed in!"
+
+      "401":
+        description: "Wrong username or password!"
