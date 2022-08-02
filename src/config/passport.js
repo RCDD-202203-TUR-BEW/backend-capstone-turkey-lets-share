@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
@@ -24,10 +25,11 @@ passport.use(
         if (!user) {
           user = await User.create({
             email: profile.emails[0].value,
-            username: profile.emails[0].value.substring(
-              0,
-              profile.emails[0].value.indexOf('@')
-            ),
+            username:
+              profile.name.familyName +
+              profile.name.givenName +
+              '_' +
+              Math.floor(Math.random() * 89998 + 10000),
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             profilePhoto: profile.photos[0].value,
