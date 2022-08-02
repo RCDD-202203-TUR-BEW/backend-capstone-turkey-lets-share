@@ -13,6 +13,5 @@ router.post(
   errorHandlingForValidation,
   authController.loginUsers
 );
-router.get('/profile', authController.getProfile);
 
 module.exports = router;

@@ -18,6 +18,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "chai": "^4.3.6",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^14.2.0",
