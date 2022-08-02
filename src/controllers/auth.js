@@ -18,16 +18,9 @@ const saveUserToTokenAndCookie = (req, res) => {
     signed: true,
     maxAge: 1000 * 60 * 60 * 24 * 14,
   });
-
-  res.redirect('/api/auth/me');
-};
-
-const protectedEndpoint = (req, res) => {
-  res.json(req.user);
-  res.end();
+  res.redirect('/');
 };
 
 module.exports = {
   saveUserToTokenAndCookie,
-  protectedEndpoint,
 };

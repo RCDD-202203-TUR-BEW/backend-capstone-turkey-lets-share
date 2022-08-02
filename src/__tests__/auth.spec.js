@@ -48,10 +48,6 @@ let redirectUri = null;
 describe('Google Auth Endpoints', () => {
   const cookiesAgent = supertest.agent(app);
 
-  afterAll(async () => {
-    await UserModel.deleteMany();
-  });
-
   describe('GET /api/auth/google', () => {
     it('Redirects to google authorization page', (done) => {
       req
@@ -75,7 +71,6 @@ describe('Google Auth Endpoints', () => {
       expect(scope).toEqual(
         expect.arrayContaining(['openid', 'email', 'profile'])
       );
-      // expect(redirectTo).toMatch(URL_REGEX);
       expect(client_id.length).toBeGreaterThan(10);
 
       if (redirectTo) redirectUri = new URL(redirectTo);
@@ -96,7 +91,6 @@ describe('Google Auth Endpoints', () => {
       const res = await runInPatchedServer(
         async () => await cookiesAgent.get(getLoginURL(redirectUri.pathname))
       );
-
       expect(res.status).toBe(302);
       expect(res.header['set-cookie']).toBeDefined();
 
@@ -109,40 +103,13 @@ describe('Google Auth Endpoints', () => {
       expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
 
       const expected = {
-        // name: mockUser.name,
         email: mockUser.email,
         providerId: `google-${mockUser.sub}`,
-        // avatar: mockUser.picture,
         exp: iat + 14 * 24 * 3600,
         iat: expect.any(Number),
       };
 
       expect(auth_cookie).toEqual(expect.objectContaining(expected));
-    });
-  });
-
-  describe('GET /api/auth/me', () => {
-    it('It responds with a user schema json correctly for valid token', async () => {
-      const res = await cookiesAgent.get('/api/auth/me');
-
-      expect(res.status).toBe(200);
-      const expected = {
-        email: expect.any(String),
-      };
-      expect(res.body).toEqual(expect.objectContaining(expected));
-    });
-
-    it('It responds with 401 for invalid token', async () => {
-      const res = await req.get('/api/auth/me');
-
-      expect(res.status).toBe(401);
-      const notExpected = {
-        name: expect.any(String),
-        email: expect.any(String),
-        avatar: expect.any(String),
-      };
-
-      expect(res.body).not.toEqual(expect.objectContaining(notExpected));
     });
   });
 });

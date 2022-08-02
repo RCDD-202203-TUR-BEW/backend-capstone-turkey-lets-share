@@ -18,6 +18,4 @@ router.get(
   authController.saveUserToTokenAndCookie
 );
 
-router.get('/me', authController.protectedEndpoint);
-
 module.exports = router;

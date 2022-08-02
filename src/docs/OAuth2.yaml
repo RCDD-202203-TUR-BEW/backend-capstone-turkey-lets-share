@@ -6,5 +6,5 @@ paths:
       summary: "Authenticates user using google 3rd party authentication service"
       responses:
         "200":
-          description: "Redirects verified userس to the home page"
+          description: "Redirects verified user to the home page"
   
