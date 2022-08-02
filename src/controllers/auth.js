@@ -1,9 +1,13 @@
 const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user');
+
+const registerPage = (_, res) => {
+  res.status(200).render('auth/register');
+};
 
 // eslint-disable-next-line consistent-return
 const register = async (req, res) => {
+  const errorsArray = [];
   const {
     firstName,
     lastName,
@@ -19,39 +23,50 @@ const register = async (req, res) => {
 
   try {
     const usedUsername = await UserModel.findOne({ username });
-    if (!usedUsername) {
-      const usedEmail = await UserModel.findOne({ email });
-      if (!usedEmail) {
-        const passwordHash = await bcrypt.hash(password0, 10);
-
-        await UserModel.create({
-          firstName,
-          lastName,
-          email,
-          username,
-          phoneNumber,
-          age,
-          gender,
-          nationality,
-          refugee,
-          provider: 'Local',
-          providerId: 'Local',
-          passwordHash,
-        });
-
-        return res.status(200).redirect('/api/auth/login');
-      }
-      return res.status(401).send({ error: 'Email already exists' });
+    if (usedUsername) {
+      errorsArray.push('Username is already taken');
     }
-    return res.status(401).send({ error: 'Username already exists' });
+
+    const usedEmail = await UserModel.findOne({ email });
+    if (usedEmail) {
+      errorsArray.push('Email is already taken');
+    }
+
+    if (errorsArray.length > 0) {
+      return res.status(400).json({ error: errorsArray });
+    }
+
+    const passwordHash = await bcrypt.hash(password0, 10);
+    const newUser = await UserModel.create({
+      firstName,
+      lastName,
+      email,
+      username,
+      phoneNumber,
+      age,
+      gender,
+      nationality,
+      refugee,
+      provider: 'Local',
+      providerId: 'Local',
+      passwordHash,
+    });
+
+    return res.status(201).json({ created: newUser });
+    // return res.status(201).redirect('/api/auth/login');
   } catch (err) {
     return res.status(500).send(err);
   }
 };
 
-// const logout = async (req, res) => {};
+// eslint-disable-next-line arrow-body-style
+const logout = async (req, res) => {
+  await res.clearCookie('token');
+  return res.status(200).json({ message: 'Logged out successfully' });
+};
 
 module.exports = {
+  registerPage,
   register,
-  // logout,
+  logout,
 };

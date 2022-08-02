@@ -98,17 +98,13 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      match: [
-        /^[a-zA-Z0-9\-_.]+@[a-z]+\.([a-z]{2,3})+(\.[a-z]{2,3})?$/,
-        `invalid email`,
-      ],
       required: true,
       unique: true,
       lowercase: true,
     },
     username: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
       lowercase: true,
     },
@@ -135,6 +131,7 @@ const userSchema = new mongoose.Schema(
     },
     avaregeRating: {
       type: Number,
+      required: true,
       default: 0,
     },
     profilePhoto: {
@@ -147,16 +144,19 @@ const userSchema = new mongoose.Schema(
     donated: {
       ref: 'Donation',
       type: [objectId],
+      required: true,
       default: [],
     },
     requested: {
       ref: 'Request',
       type: [objectId],
+      required: true,
       default: [],
     },
     received: {
       ref: 'Request',
       type: [objectId],
+      required: true,
       default: [],
     },
     provider: {
@@ -174,14 +174,17 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: [addressSchema],
+      required: true,
       default: [],
     },
     reviews: {
       type: [reviewSchema],
+      required: true,
       default: [],
     },
     reports: {
       type: [reportSchema],
+      required: true,
       default: [],
     },
   },
