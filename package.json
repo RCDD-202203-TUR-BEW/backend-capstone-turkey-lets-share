@@ -8,7 +8,7 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "start-production": "export NODE_ENV=production && nodemon src/app.js",
-    "test": "export NODE_ENV=test && yarn validate && jest --passWithNoTests",
+    "test": "export NODE_ENV=test && yarn validate && jest --passWithNoTests --forceExit",
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\"",
     "validate": "yarn format && yarn lint",

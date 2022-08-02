@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../app');
 const UserModel = require('../models/user');
 const constants = require('../lib/constants');
+const mongoose = require('mongoose');
 const connectDatabase = require('../db/connection');
 
 describe('POST /api/auth/register && POST /api/auth/logout', () => {
@@ -14,6 +15,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
 
   afterAll(async () => {
     await UserModel.findOneAndDelete({ email: 'john@doe.co.uk' });
+    await mongoose.disconnect();
   });
 
   const fakeUser = {
