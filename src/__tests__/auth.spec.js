@@ -18,7 +18,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     await mongoose.disconnect();
   });
 
-  const fakeUser = {
+  const invalidUserInfo = {
     firstName: 'John',
     lastName: '',
     email: 'john@doe.fake.domain.com',
@@ -31,7 +31,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     password1: 'Qwerty-123456789',
   };
 
-  const realUser = {
+  const validUserInfo = {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john@doe.co.uk',
@@ -48,7 +48,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     request(app)
       .post('/api/auth/register')
       .set('Content-Type', 'application/json')
-      .send(realUser)
+      .send(validUserInfo)
       .expect('Content-Type', /json/)
       .expect(201, (err, res) => {
         if (err) return done(err);
@@ -62,7 +62,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     request(app)
       .post('/api/auth/register')
       .set('Content-Type', 'application/json')
-      .send(realUser)
+      .send(validUserInfo)
       .expect('Content-Type', /json/)
       .expect(400, (err, res) => {
         if (err) return done(err);
@@ -76,7 +76,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     request(app)
       .post('/api/auth/register')
       .set('Content-Type', 'application/json')
-      .send(fakeUser)
+      .send(invalidUserInfo)
       .expect(400, (err, res) => {
         if (err) return done(err);
         expect(res.status).toBe(400);

@@ -1,7 +1,7 @@
 paths:
   /api/auth/register:
     post:
-      description: 'Register a new user'
+      description: 'Registers a new user'
       requestBody:
         content:
           application/json:
@@ -84,9 +84,17 @@ paths:
                   }'
       responses:
         '201':
-          description: 'Registers users to the website.'
+          description: 'Created (user)'
         '400':
-          description: 'Bad request.'
+          description: 'Bad request (either bad validation or database error)'
+        '500':
+          description: 'Internal server error'
+  /api/auth/logout:
+    post:
+      description: 'Logs out current user'
+      responses:
+        '200':
+          description: 'OK (logged out)'
 components:
   schemas:
     User:
