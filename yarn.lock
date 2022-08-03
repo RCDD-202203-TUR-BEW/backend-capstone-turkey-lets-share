@@ -1553,9 +1553,9 @@ cookie-signature@1.0.6:
   resolved "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz"
   integrity "sha1-4wOogrNCzD7oylE6eZmXNNqzriw= sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ=="
 
-cookie-signature@^1.1.0:
+cookie-signature@^1.1.0, cookie-signature@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.2.0.tgz#4deed303f5f095e7a02c979e3fcb19157f5eaeea"
   integrity sha512-R0BOPfLGTitaKhgKROKZQN6iyq2iDQcH1DOF8nJoaWapguX5bC2w+Q/I9NmmM5lfcvEarnLZr+cCvmEYYSXvYA==
 
 cookie@0.4.1:
@@ -2359,7 +2359,7 @@ expect@^27.4.6:
 
 express-jwt@^7.7.5:
   version "7.7.5"
-  resolved "https://registry.npmjs.org/express-jwt/-/express-jwt-7.7.5.tgz"
+  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-7.7.5.tgz#5b46e056be33abdfbcbcb3d8ddc79639e6994508"
   integrity sha512-2CMse20Ex2vbqvsuGAcai7TgQuvmFa1n39PwKLaEszTGhuRzckBERII4PwdZIibtwfYUGSNVQzPpf+QcGo2yHw==
   dependencies:
     "@types/express-unless" "^0.5.3"
@@ -4124,6 +4124,11 @@ mongoose@^6.4.5:
     ms "2.1.3"
     sift "16.0.0"
 
+monkeypatch@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/monkeypatch/-/monkeypatch-1.0.0.tgz#a7baaeaebf2e01ee6c8a585615cc4a2663dea145"
+  integrity sha512-6tG0IrCUUIBuAspnbdmOAd+D/AptB/ya9JLujp88NIAuFuTGdGvCKtDkc6pwNOcIJ6nKLm3FjJlaCdx8vr3r2w==
+
 mpath@0.9.0:
   version "0.9.0"
   resolved "https://registry.npmjs.org/mpath/-/mpath-0.9.0.tgz"
@@ -5299,7 +5304,7 @@ superagent@^8.0.0:
 
 supertest@^6.2.4:
   version "6.2.4"
-  resolved "https://registry.npmjs.org/supertest/-/supertest-6.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/supertest/-/supertest-6.2.4.tgz#3dcebe42f7fd6f28dd7ac74c6cba881f7101b2f0"
   integrity sha512-M8xVnCNv+q2T2WXVzxDECvL2695Uv2uUj2O0utxsld/HRyJvOU8W9f1gvsYxSNU4wmIe0/L/ItnpU4iKq0emDA==
   dependencies:
     methods "^1.1.2"

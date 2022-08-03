@@ -110,7 +110,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       match: [
         // eslint-disable-next-line node/no-unsupported-features/es-syntax
-        /^(?=.{2,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+        /^(?=.{2,40}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
         `invalid username`,
       ],
       required: true,
@@ -119,26 +119,20 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: Number,
-      required: true,
-      unique: true,
     },
     age: {
       type: Number,
-      required: true,
     },
     gender: {
       type: String,
-      required: true,
       enum: constants.ENUM_GENDER,
     },
     nationality: {
       type: String,
-      required: true,
       enum: constants.ENUM_NATIONALITY,
     },
     refugee: {
       type: Boolean,
-      required: true,
     },
     avaregeRating: {
       type: Number,

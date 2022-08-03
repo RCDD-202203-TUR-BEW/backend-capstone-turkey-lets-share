@@ -33,4 +33,15 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
   ENUM_POST_STATUS: ['Published', 'Verified'],
+  PUBLIC_PATHS: [
+    '/api/',
+    '/api/about',
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/google',
+    '/api/auth/google/callback',
+    '/',
+  ],
+  TOKEN_EXPIRATION_DURATION: ['14d'],
+  COOKIE_MAX_AGE: [1000 * 60 * 60 * 24 * 14],
 });
