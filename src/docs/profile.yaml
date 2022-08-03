@@ -11,3 +11,5 @@
           description: "User info is fetched"
         "401":
           description: "UnauthorizedError: No authorization token was found"
+        "500":
+          description: "Internal server error"

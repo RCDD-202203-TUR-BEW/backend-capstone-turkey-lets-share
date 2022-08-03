@@ -2,15 +2,35 @@
 const request = require('supertest');
 const app = require('../app');
 const connectDatabase = require('../db/connection');
+const UserModal = require('../models/user');
+
+const validUserExample = {
+  email: 'amjad@gmail.com',
+  password: 'Nilay-123',
+};
 
 beforeAll(async () => {
   await connectDatabase();
+  await UserModal.create({
+    firstName: 'nilo',
+    lastName: 'sihebi',
+    email: 'amjad@gmail.com',
+    username: 'ezgiAndRama',
+    phoneNumber: 5555555,
+    age: 18,
+    gender: 'Female',
+    nationality: 'Syria',
+    refugee: true,
+    provider: 'Local',
+    providerId: 'Local',
+    passwordHash:
+      '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
+  });
 });
 
-const validUserExample = {
-  email: 'niloaydin@domain.com.tr',
-  password: 'Nilay-123',
-};
+afterAll(async () => {
+  await UserModal.deleteMany({});
+});
 
 let jwtToken = null;
 describe('AUTH TESTS', () => {
@@ -45,7 +65,7 @@ describe('AUTH TESTS', () => {
         .expect('Content-Type', /json/)
         .expect(401, (err, res) => {
           if (err) return done(err);
-          expect(res.body.message).toBe('Wrong username or password!');
+          expect(res.body.message).toBe('Wrong email or password!');
           return done();
         });
     });
@@ -60,7 +80,7 @@ describe('AUTH TESTS', () => {
         .expect('Content-Type', /json/)
         .expect(401, (err, res) => {
           if (err) return done(err);
-          expect(res.body.message).toBe('Wrong username or password!');
+          expect(res.body.message).toBe('Wrong email or password!');
           return done();
         });
     });

@@ -1,37 +1,40 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user');
+const constants = require('../lib/constants');
 
-const loginUsers = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const databaseUser = await UserModel.findOne({ email });
+    const currentUser = await UserModel.findOne({ email });
 
-    if (!databaseUser) {
-      return res.status(401).json({ message: 'Wrong username or password!' });
+    if (!currentUser) {
+      return res.status(401).json({ message: 'Wrong email or password!' });
     }
     const validPassword = await bcrypt.compare(
       password,
-      databaseUser.passwordHash
+      currentUser.passwordHash
     );
     if (!validPassword) {
-      return res.status(401).json({ message: 'Wrong username or password!' });
+      return res.status(401).json({ message: 'Wrong email or password!' });
     }
     // eslint-disable-next-line no-underscore-dangle
-    const payload = { userId: databaseUser._id };
+    const payload = { userId: currentUser._id };
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
-      expiresIn: '14d',
+      expiresIn: constants.TOKEN_EXPIRATION_DURATION,
     });
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 14,
+      maxAge: constants.COOKIE_MAX_AGE, // 14 days
     });
     return res.status(201).json({ message: 'User sucesfully signed in!' });
   } catch (error) {
-    return res.status(403).json({ message: error.message });
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return res.sendStatus(500);
   }
 };
 
 module.exports = {
-  loginUsers,
+  login,
 };

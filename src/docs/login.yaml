@@ -9,7 +9,7 @@
     parameters:
     - name: "email"
       in: "body"
-      description: "Esdfsdfsdlogin"
+      description: "login users to the system"
       required: true
       type: "string"
     - name: "password"
@@ -22,4 +22,10 @@
         description: "User sucesfully signed in!"
 
       "401":
-        description: "Wrong username or password!"
+        description: "Wrong email or password!"
+
+      "422":
+        description: "Unprocessable entity"
+
+      "500":
+        description: "Internal server error"

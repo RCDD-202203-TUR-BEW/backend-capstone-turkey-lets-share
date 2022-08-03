@@ -12,7 +12,9 @@ const getProfile = async (req, res) => {
         .json(currentUser);
     }
   } catch (error) {
-    return res.status(403).json({ message: error.message });
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return res.sendStatus(500);
   }
 };
 

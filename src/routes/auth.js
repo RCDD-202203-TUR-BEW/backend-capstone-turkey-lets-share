@@ -11,7 +11,7 @@ router.post(
   '/login',
   userLoginValidationRules,
   errorHandlingForValidation,
-  authController.loginUsers
+  authController.login
 );
 
 module.exports = router;
