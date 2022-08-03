@@ -2,6 +2,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
+const { generateUniqeUsername } = require('../services/utils');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -25,11 +26,7 @@ passport.use(
         if (!user) {
           user = await User.create({
             email: profile.emails[0].value,
-            username:
-              profile.name.familyName +
-              profile.name.givenName +
-              '_' +
-              Math.floor(Math.random() * 89998 + 10000),
+            username: generateUniqeUsername(profile.emails[0].value),
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             profilePhoto: profile.photos[0].value,

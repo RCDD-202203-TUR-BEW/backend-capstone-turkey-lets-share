@@ -16,6 +16,7 @@ router.get(
     session: false,
   }),
   authController.saveUserToTokenAndCookie
+  // Rama was here
 );
 
 module.exports = router;
