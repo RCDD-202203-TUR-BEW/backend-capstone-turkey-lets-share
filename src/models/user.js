@@ -99,19 +99,23 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      trim: true,
       unique: true,
       lowercase: true,
     },
     username: {
       type: String,
       required: true,
+      trim: true,
       unique: true,
       lowercase: true,
     },
     phoneNumber: {
       type: String,
       required: false,
-      unique: false,
+      trim: true,
+      unique: true,
+      sparse: true,
     },
     age: {
       type: Number,
@@ -131,32 +135,25 @@ const userSchema = new mongoose.Schema(
     },
     avaregeRating: {
       type: Number,
-      required: true,
       default: 0,
     },
     profilePhoto: {
       type: String,
-      required: true,
-      default:
-        'https://cdn.dribbble.com/users/6142/screenshots/5679189/media/052967c305a8f96a4b40b79ce5e61b0d.png',
-      // source: https://dribbble.com/shots/5679189-Default-Profile-Image
+      default: constants.DEFAULT_PROFILE_PHOTO,
     },
     donated: {
       ref: 'Donation',
       type: [objectId],
-      required: true,
       default: [],
     },
     requested: {
       ref: 'Request',
       type: [objectId],
-      required: true,
       default: [],
     },
     received: {
       ref: 'Request',
       type: [objectId],
-      required: true,
       default: [],
     },
     provider: {
@@ -174,17 +171,14 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: [addressSchema],
-      required: true,
       default: [],
     },
     reviews: {
       type: [reviewSchema],
-      required: true,
       default: [],
     },
     reports: {
       type: [reportSchema],
-      required: true,
       default: [],
     },
   },

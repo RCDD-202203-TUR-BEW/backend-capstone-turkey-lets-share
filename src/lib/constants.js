@@ -1,5 +1,10 @@
 /* eslint-disable prefer-regex-literals */
 module.exports = Object.freeze({
+  UNIQUE_USERNAME: (email) => `${email.split('@')[0]}_${new Date().valueOf()}`,
+  DASH_TO_UNDERSCORE: (text) => text.replaceAll('-', '_').replaceAll('.', '_'),
+
+  DEFAULT_PROFILE_PHOTO:
+    'https://drive.google.com/uc?export=view&id=1fo02qBRCULoA2bnGigdmVKruGoHrfuFe',
   ENUM_GENDER: ['Female', 'Male', 'Prefer not to say', 'Other'],
   ENUM_NATIONALITY: [
     'Afghanistan',
