@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -22,7 +23,7 @@ app.use('/api/post', postRoutes);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+app.use(cookieParser(process.env.SECRET_KEY));
 // Swagger definition
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -45,7 +46,7 @@ const swaggerDefinition = {
 // options for the swagger docs
 const options = {
   definition: swaggerDefinition,
-  apis: ['./docs/**/*.yaml'],
+  apis: ['./src/docs/**/*.yaml'],
 };
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(options);
@@ -54,7 +55,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  res.send("Hello Let's Share!");
+  res.status(200).send("Hello Let's Share!");
 });
 
 if (process.env.NODE_ENV !== 'test') {
