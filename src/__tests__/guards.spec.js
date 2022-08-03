@@ -1,3 +1,9 @@
+describe('Guard test', () => {
+  it('Guard Test', () => {
+    expect(true).toEqual(true);
+  });
+});
+
 // // eslint-disable-next-line node/no-unpublished-require
 // const request = require('supertest');
 // const app = require('../app');
