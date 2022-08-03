@@ -95,10 +95,10 @@ describe('AUTH TESTS', () => {
           return done();
         });
     });
-    describe('GET /api/auth/profile', () => {
+    describe('GET /api/user/profile', () => {
       it('should return an error if there is no authenticated user', (done) => {
         request(app)
-          .get('/api/auth/profile')
+          .get('/api/user/profile')
           .set('Content-Type', 'application/json')
           .expect('Content-Type', /json/)
           .expect(401, (err, res) => {
@@ -111,33 +111,12 @@ describe('AUTH TESTS', () => {
       });
       it('should return user information if there is an authenticated user', (done) => {
         request(app)
-          .get('/api/auth/profile')
+          .get('/api/user/profile')
           .set('Content-Type', 'application/json')
           .set('Cookie', jwtToken)
           .expect('Content-Type', /json/)
           .expect(200, (err, res) => {
-            // console.log(res.body);
             if (err) return done(err);
-            // const expected = {
-            //   firstName: expect.any(String),
-            //   lastName: expect.any(String),
-            //   email: expect.any(String),
-            //   username: expect.any(String),
-            //   age: expect.any(Number),
-            //   gender: expect.any(String),
-            //   nationality: expect.any(String),
-            //   refugee: expect.any(Boolean),
-            //   averageRating: expect.any(Number),
-            //   profilePhoto: expect.any(String),
-            //   donated: expect.any(Array),
-            //   requested: expect.any(Array),
-            //   provider: expect.any(String),
-            //   providerId: expect.any(String),
-            //   passwordHash: expect.any(String),
-            //   address: expect.any(Array),
-            //   reviews: expect.any(Array),
-            //   reports: expect.any(Array),
-            // };
             expect(res.body).toEqual(
               expect.objectContaining({
                 email: expect.any(String),
