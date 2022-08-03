@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/user');
-const constants = require('../lib/constants');
+const { generateUniqeUsername } = require('../services/utils');
 
 // eslint-disable-next-line consistent-return
 const register = async (req, res) => {
@@ -32,7 +32,7 @@ const register = async (req, res) => {
       firstName,
       lastName,
       email,
-      username: constants.UNIQUE_USERNAME(constants.DASH_TO_UNDERSCORE(email)),
+      username: generateUniqeUsername(email),
       phoneNumber,
       age,
       gender,
@@ -42,6 +42,8 @@ const register = async (req, res) => {
       providerId: 'Local',
       passwordHash,
     });
+
+    console.log(newUser);
 
     return res.status(201).json({ created: newUser });
     // return res.status(201).redirect('/api/auth/login');
