@@ -22,7 +22,6 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     firstName: 'John',
     lastName: '',
     email: 'john@doe.fake.domain.com',
-    username: 'obviously.fake.username',
     phoneNumber: '+44 0123456789876543210',
     age: 21,
     gender: 'Male',
@@ -36,7 +35,6 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john@doe.co.uk',
-    username: 'john.doe',
     phoneNumber: '000123456789',
     age: 21,
     gender: 'Male',
@@ -69,8 +67,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
       .expect(400, (err, res) => {
         if (err) return done(err);
         expect(res.status).toBe(400);
-        expect(res.body.error[0]).toBe('Username is already taken');
-        expect(res.body.error[1]).toBe('Email is already taken');
+        expect(res.body.error[0]).toBe('Email is already taken');
         return done();
       });
   });
@@ -87,8 +84,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
         expect(res.body.error[1]).toBe(constants.PASSWORD_ERROR);
         expect(res.body.error[2]).toBe('Name fields can not be empty');
         expect(res.body.error[3]).toBe('Invalid email format');
-        expect(res.body.error[4]).toBe(constants.USERNAME_ERROR);
-        expect(res.body.error[5]).toBe(constants.PHONE_NUMBER_ERROR);
+        expect(res.body.error[4]).toBe(constants.PHONE_NUMBER_ERROR);
         return done();
       });
   });
