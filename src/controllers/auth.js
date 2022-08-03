@@ -43,8 +43,6 @@ const register = async (req, res) => {
       passwordHash,
     });
 
-    console.log(newUser);
-
     return res.status(201).json({ created: newUser });
     // return res.status(201).redirect('/api/auth/login');
   } catch (err) {
