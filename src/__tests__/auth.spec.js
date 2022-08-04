@@ -53,7 +53,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
       .expect(201, (err, res) => {
         if (err) return done(err);
         expect(res.status).toBe(201);
-        expect(res.body.created).toHaveProperty('passwordHash');
+        expect(res.body).toHaveProperty('username');
         return done();
       });
   });
@@ -67,7 +67,7 @@ describe('POST /api/auth/register && POST /api/auth/logout', () => {
       .expect(400, (err, res) => {
         if (err) return done(err);
         expect(res.status).toBe(400);
-        expect(res.body.error[0]).toBe('Email is already taken');
+        expect(res.body.error).toBe('Email is already taken');
         return done();
       });
   });

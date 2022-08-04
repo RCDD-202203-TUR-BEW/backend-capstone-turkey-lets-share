@@ -4,7 +4,6 @@ const { generateUniqeUsername } = require('../services/utils');
 
 // eslint-disable-next-line consistent-return
 const register = async (req, res) => {
-  const errorsArray = [];
   const {
     firstName,
     lastName,
@@ -20,11 +19,7 @@ const register = async (req, res) => {
   try {
     const usedEmail = await UserModel.findOne({ email });
     if (usedEmail) {
-      errorsArray.push('Email is already taken');
-    }
-
-    if (errorsArray.length > 0) {
-      return res.status(400).json({ error: errorsArray });
+      return res.status(400).json({ error: 'Email is already taken' });
     }
 
     const passwordHash = await bcrypt.hash(password0, 10);
@@ -43,8 +38,15 @@ const register = async (req, res) => {
       passwordHash,
     });
 
-    return res.status(201).json({ created: newUser });
-    // return res.status(201).redirect('/api/auth/login');
+    const shownUser = {
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      username: newUser.username,
+      phoneNumber: newUser.phoneNumber,
+    };
+
+    return res.status(201).json(shownUser);
   } catch (err) {
     return res.status(500).send(err);
   }
