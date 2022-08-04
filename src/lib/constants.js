@@ -40,6 +40,8 @@ module.exports = Object.freeze({
     '/api/auth/register',
     '/api/auth/google',
     '/api/auth/google/callback',
+    '/api/auth/facebook',
+    '/api/auth/facebook/callback',
     '/',
   ],
   TOKEN_EXPIRATION_DURATION: ['14d'],

@@ -18,4 +18,16 @@ router.get(
   authController.saveUserToTokenAndCookie
 );
 
+router.get('/facebook', passport.authorize('facebook', { scope: ['email'] }));
+router.get('/facebook', passport.authenticate('facebook'));
+
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', {
+    session: false,
+    failureRedirect: '/api/auth/facebook',
+  }),
+  authController.saveUserToTokenAndCookie
+);
+
 module.exports = router;
