@@ -86,7 +86,7 @@ paths:
         '201':
           description: 'Created (user)'
         '400':
-          description: 'Bad request (either bad validation or database error)'
+          description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
   /api/auth/logout:
