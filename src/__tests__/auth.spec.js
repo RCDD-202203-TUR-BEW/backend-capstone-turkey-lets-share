@@ -59,8 +59,8 @@ beforeAll(async () => {
 });
 
 afterAll(async (drop = false) => {
-  drop && (await mongoose.connection.dropDatabase());
   await UserModel.deleteMany({});
+  drop && (await mongoose.connection.dropDatabase());
   await mongoose.disconnect();
   await mongoose.connection.close();
 });
