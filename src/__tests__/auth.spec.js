@@ -42,8 +42,7 @@ const validUserExample = {
 };
 
 beforeAll(async () => {
-  await connectDatabase();
-  await UserModel.findOneAndDelete({ email: 'john@doe.co.uk' });
+  connectDatabase();
   await UserModel.create({
     firstName: 'nilo',
     lastName: 'sihebi',
