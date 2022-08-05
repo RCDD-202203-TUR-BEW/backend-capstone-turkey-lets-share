@@ -27,7 +27,7 @@ const PRIVATE_ROUTES = [
 ];
 
 function authorize(req, res, next) {
-  const token = req.signedCookies['auth-token'];
+  const { token } = req.signedCookies;
   const route = { method: req.method.toString().toLowerCase(), path: req.path };
   if (!token) {
     if (PUBLIC_AUTH_ROUTES.includes(route) || PUBLIC_ROUTES.includes(route)) {
