@@ -99,7 +99,7 @@ describe('AUTH TESTS', () => {
       password1: 'Qwerty-123',
     };
 
-    it('POST /api/auth/register should register users with correct validation', (done) => {
+    it('should register users with correct validation', (done) => {
       supertest(app)
         .post('/api/auth/register')
         .set('Content-Type', 'application/json')
@@ -113,7 +113,7 @@ describe('AUTH TESTS', () => {
         });
     });
 
-    it('POST /api/auth/register should not register users if username/email is already taken', (done) => {
+    it('should not register users if username/email is already taken', (done) => {
       supertest(app)
         .post('/api/auth/register')
         .set('Content-Type', 'application/json')
@@ -127,7 +127,7 @@ describe('AUTH TESTS', () => {
         });
     });
 
-    it('POST /api/auth/register middleware should not pass user to the controller when validation is not passed', (done) => {
+    it('should not pass user to the controller when validation is not passed', (done) => {
       supertest(app)
         .post('/api/auth/register')
         .set('Content-Type', 'application/json')
@@ -146,7 +146,7 @@ describe('AUTH TESTS', () => {
   });
 
   describe('POST /api/auth/logout', () => {
-    it('POST /api/auth/logout', (done) => {
+    it('should log user out', (done) => {
       supertest(app)
         .post('/api/auth/logout')
         .expect(401, (err, res) => {
