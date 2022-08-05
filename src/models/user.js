@@ -124,10 +124,12 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: false,
+      enum: constants.ENUM_GENDER,
     },
     nationality: {
       type: String,
       required: false,
+      enum: constants.ENUM_NATIONALITY,
     },
     refugee: {
       type: Boolean,
