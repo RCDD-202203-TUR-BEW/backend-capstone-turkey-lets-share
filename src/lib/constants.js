@@ -42,7 +42,7 @@ module.exports = Object.freeze({
   ),
   NAME_REGEX: new RegExp(/^$|\s+/),
   EMAIL_REGEX: new RegExp(
-    /^[a-zA-Z0-9\-_.]+@[a-z]+\.([a-z]{2,3})+(\.[a-z]{2,3})?$/
+    /^[a-zA-Z0-9-_.]+@[a-z]+\.[a-z]{2,3}(\.[a-z]{2,3})?$/
   ),
   USERNAME_REGEX: new RegExp(/^[a-zA-Z0-9\-_.]{2,20}$/),
   PHONE_NUMBER_REGEX: new RegExp(/^[+]?[0-9]{1,3}[-\s]?[0-9]{1,3}[0-9]{4,9}$/),
