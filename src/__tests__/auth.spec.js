@@ -282,7 +282,7 @@ function parseCookies(cookies) {
 describe('AUTH TESTS', () => {
   describe('POST /api/auth/login', () => {
     it('should return a token in a cookie and success message ', (done) => {
-      supertest(app)
+      req
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -301,7 +301,7 @@ describe('AUTH TESTS', () => {
         });
     });
     it('should return an error when email thats not registered is used', (done) => {
-      supertest(app)
+      req
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -316,7 +316,7 @@ describe('AUTH TESTS', () => {
         });
     });
     it('should return an error when password thats not registered is used', (done) => {
-      supertest(app)
+      req
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -331,7 +331,7 @@ describe('AUTH TESTS', () => {
         });
     });
     it('should return an error when no password is passed', (done) => {
-      supertest(app)
+      req
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -346,7 +346,7 @@ describe('AUTH TESTS', () => {
         });
     });
     it('should return an error when no email is passed', (done) => {
-      supertest(app)
+      req
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
@@ -363,7 +363,7 @@ describe('AUTH TESTS', () => {
     });
     describe('GET /api/user/profile', () => {
       it('should return an error if there is no authenticated user', (done) => {
-        supertest(app)
+        req
           .get('/api/user/profile')
           .set('Content-Type', 'application/json')
           .expect('Content-Type', /json/)
@@ -376,7 +376,7 @@ describe('AUTH TESTS', () => {
           });
       });
       it('should return user information if there is an authenticated user', (done) => {
-        supertest(app)
+        req
           .get('/api/user/profile')
           .set('Content-Type', 'application/json')
           .set('Cookie', jwtToken)
