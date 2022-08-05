@@ -44,7 +44,7 @@ const saveUserToTokenAndCookie = (req, res) => {
     avatar: profilePicture,
   };
   const token = jwt.sign(payload, process.env.SECRET_KEY, {
-    expiresIn: constants.TOKEN_EXPIRATION_DURATION[0],
+    expiresIn: constants.TOKEN_EXPIRATION_DURATION,
   });
   res.cookie('token', token, {
     httpOnly: true,

@@ -33,7 +33,6 @@ const mockUser = {
   email_verified: true,
   locale: 'en-GB',
 };
-
 const validUserExample = {
   email: 'amjad@gmail.com',
   password: 'Nilay-123',
@@ -65,13 +64,12 @@ afterAll(async (drop = false) => {
   await mongoose.connection.close();
 });
 
+let redirectUri = null;
 let jwtToken = null;
 
-let redirectUri = null;
+const cookiesAgent = supertest.agent(app);
 
 describe('Google Auth Endpoints', () => {
-  const cookiesAgent = supertest.agent(app);
-
   describe('GET /api/auth/google', () => {
     it('Redirects to google authorization page', (done) => {
       req
@@ -279,6 +277,7 @@ function parseCookies(cookies) {
       .join('; '),
   ];
 }
+
 describe('AUTH TESTS', () => {
   describe('POST /api/auth/login', () => {
     it('should return a token in a cookie and success message ', (done) => {
