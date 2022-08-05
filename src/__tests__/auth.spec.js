@@ -20,8 +20,11 @@ const monkeypatch = require('monkeypatch');
 const supertest = require('supertest');
 const app = require('../app');
 const req = require('supertest')(app);
-const db = require('../db/connection');
 const UserModel = require('../models/user');
+const constants = require('../lib/constants');
+const connectDatabase = require('../db/connection');
+
+const cookiesAgent = supertest.agent(app);
 
 const mockUser = {
   sub: '12345678',
@@ -39,7 +42,7 @@ const validUserExample = {
 };
 
 beforeAll(async () => {
-  await db();
+  connectDatabase();
   await UserModel.create({
     firstName: 'nilo',
     lastName: 'sihebi',
@@ -67,7 +70,211 @@ afterAll(async (drop = false) => {
 let redirectUri = null;
 let jwtToken = null;
 
-const cookiesAgent = supertest.agent(app);
+describe('AUTH TESTS', () => {
+  describe('POST /api/auth/register', () => {
+    const invalidUserInfo = {
+      firstName: 'John',
+      lastName: '',
+      email: 'john@doe.fake.domain.com',
+      phoneNumber: '+44 0123456789876543210',
+      age: 21,
+      gender: 'Male',
+      nationality: 'Other',
+      refugee: false,
+      password0: 'qwerty-123',
+      password1: 'Qwerty-123456789',
+    };
+
+    const validUserInfo = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@doe.co.uk',
+      phoneNumber: '000123456789',
+      age: 21,
+      gender: 'Male',
+      nationality: 'Other',
+      refugee: false,
+      password0: 'Qwerty-123',
+      password1: 'Qwerty-123',
+    };
+
+    it('should register users with correct validation', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(validUserInfo)
+        .expect('Content-Type', /json/)
+        .expect(201, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(201);
+          expect(res.body).toHaveProperty('username');
+          return done();
+        });
+    });
+
+    it('should not register users if username/email is already taken', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(validUserInfo)
+        .expect('Content-Type', /json/)
+        .expect(400, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(400);
+          expect(res.body.error).toBe('Email is already taken');
+          return done();
+        });
+    });
+
+    it('should not pass user to the controller when validation is not passed', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(invalidUserInfo)
+        .expect(400, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(400);
+          expect(res.body.error[0]).toBe('Password fields do not match');
+          expect(res.body.error[1]).toBe(constants.PASSWORD_ERROR);
+          expect(res.body.error[2]).toBe('Name fields can not be empty');
+          expect(res.body.error[3]).toBe('Invalid email format');
+          expect(res.body.error[4]).toBe(constants.PHONE_NUMBER_ERROR);
+          return done();
+        });
+    });
+  });
+
+  describe('POST /api/auth/logout', () => {
+    it('should log user out', (done) => {
+      supertest(app)
+        .post('/api/auth/logout')
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(401);
+          expect(res.body.message).toBe(
+            'Invalid Token: No authorization token was found'
+          );
+          return done();
+        });
+    });
+  });
+
+  describe('POST /api/auth/login', () => {
+    it('should return a token in a cookie and success message ', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(201, (err, res) => {
+          if (err) return done(err);
+          expect(res.headers['set-cookie']).toBeDefined();
+          expect(res.headers['set-cookie']).toBeTruthy();
+          expect(res.body.message).toBe('User sucesfully signed in!');
+          // eslint-disable-next-line prefer-destructuring
+          jwtToken = res.headers['set-cookie'][0].split(';')[0];
+
+          return done();
+        });
+    });
+    it('should return an error when email thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: 'wrongemail@wrongemail.com',
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when password thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: 'wrongpasswordthaticreatedfortestpurposes',
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when no password is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
+
+          return done();
+        });
+    });
+    it('should return an error when no email is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(
+            res.body.errors.find((error) => error.param === 'email')
+          ).toBeDefined();
+          return done();
+        });
+    });
+    describe('GET /api/user/profile', () => {
+      it('should return an error if there is no authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(401, (err, res) => {
+            if (err) return done(err);
+            expect(res.body.message).toBe(
+              'Invalid Token: No authorization token was found'
+            );
+            return done();
+          });
+      });
+      it('should return user information if there is an authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .set('Cookie', jwtToken)
+          .expect('Content-Type', /json/)
+          .expect(200, (err, res) => {
+            if (err) return done(err);
+            expect(res.body).toEqual(
+              expect.objectContaining({
+                email: expect.any(String),
+              })
+            );
+
+            return done();
+          });
+      });
+    });
+  });
+});
 
 describe('Google Auth Endpoints', () => {
   describe('GET /api/auth/google', () => {
@@ -277,120 +484,3 @@ function parseCookies(cookies) {
       .join('; '),
   ];
 }
-
-describe('AUTH TESTS', () => {
-  describe('POST /api/auth/login', () => {
-    it('should return a token in a cookie and success message ', (done) => {
-      req
-        .post('/api/auth/login')
-        .set('Content-Type', 'application/json')
-        .send({
-          email: validUserExample.email,
-          password: validUserExample.password,
-        })
-        .expect('Content-Type', /json/)
-        .expect(201, (err, res) => {
-          if (err) return done(err);
-          expect(res.headers['set-cookie']).toBeDefined();
-          expect(res.headers['set-cookie']).toBeTruthy();
-          expect(res.body.message).toBe('User sucesfully signed in!');
-          // eslint-disable-next-line prefer-destructuring
-          jwtToken = res.headers['set-cookie'][0].split(';')[0];
-          return done();
-        });
-    });
-    it('should return an error when email thats not registered is used', (done) => {
-      req
-        .post('/api/auth/login')
-        .set('Content-Type', 'application/json')
-        .send({
-          email: 'wrongemail@wrongemail.com',
-          password: validUserExample.password,
-        })
-        .expect('Content-Type', /json/)
-        .expect(401, (err, res) => {
-          if (err) return done(err);
-          expect(res.body.message).toBe('Wrong email or password!');
-          return done();
-        });
-    });
-    it('should return an error when password thats not registered is used', (done) => {
-      req
-        .post('/api/auth/login')
-        .set('Content-Type', 'application/json')
-        .send({
-          email: validUserExample.email,
-          password: 'wrongpasswordthaticreatedfortestpurposes',
-        })
-        .expect('Content-Type', /json/)
-        .expect(401, (err, res) => {
-          if (err) return done(err);
-          expect(res.body.message).toBe('Wrong email or password!');
-          return done();
-        });
-    });
-    it('should return an error when no password is passed', (done) => {
-      req
-        .post('/api/auth/login')
-        .set('Content-Type', 'application/json')
-        .send({
-          email: validUserExample.email,
-        })
-        .expect('Content-Type', /json/)
-        .expect(422, (err, res) => {
-          if (err) return done(err);
-          expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
-
-          return done();
-        });
-    });
-    it('should return an error when no email is passed', (done) => {
-      req
-        .post('/api/auth/login')
-        .set('Content-Type', 'application/json')
-        .send({
-          password: validUserExample.password,
-        })
-        .expect('Content-Type', /json/)
-        .expect(422, (err, res) => {
-          if (err) return done(err);
-          expect(
-            res.body.errors.find((error) => error.param === 'email')
-          ).toBeDefined();
-          return done();
-        });
-    });
-    describe('GET /api/user/profile', () => {
-      it('should return an error if there is no authenticated user', (done) => {
-        req
-          .get('/api/user/profile')
-          .set('Content-Type', 'application/json')
-          .expect('Content-Type', /json/)
-          .expect(401, (err, res) => {
-            if (err) return done(err);
-            expect(res.body.message).toBe(
-              'Invalid Token: No authorization token was found'
-            );
-            return done();
-          });
-      });
-      it('should return user information if there is an authenticated user', (done) => {
-        req
-          .get('/api/user/profile')
-          .set('Content-Type', 'application/json')
-          .set('Cookie', jwtToken)
-          .expect('Content-Type', /json/)
-          .expect(200, (err, res) => {
-            if (err) return done(err);
-            expect(res.body).toEqual(
-              expect.objectContaining({
-                email: expect.any(String),
-              })
-            );
-
-            return done();
-          });
-      });
-    });
-  });
-});

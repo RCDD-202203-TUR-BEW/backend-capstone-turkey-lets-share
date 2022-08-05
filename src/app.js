@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 require('dotenv').config();
 const { expressjwt: jwt } = require('express-jwt');
