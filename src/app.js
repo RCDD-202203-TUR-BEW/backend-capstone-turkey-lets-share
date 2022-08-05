@@ -7,7 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 
 const bodyParser = require('body-parser');
 const connectToMongo = require('./db/connection');
-
+const authorize = require('./middleware/guard');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
@@ -24,6 +24,7 @@ app.use('/api/post', postRoutes);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET_KEY));
+app.use(authorize);
 // Swagger definition
 const swaggerDefinition = {
   openapi: '3.0.0',
