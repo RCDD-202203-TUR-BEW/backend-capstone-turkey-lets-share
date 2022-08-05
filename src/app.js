@@ -80,7 +80,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  res.send("Hello Let's Share!");
+  res.json({ message: "Hello Let's Share!" });
 });
 
 // If I delete the next, the code is not working. Why?
