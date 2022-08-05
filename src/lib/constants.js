@@ -33,7 +33,6 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
   ENUM_POST_STATUS: ['Published', 'Verified'],
-
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14, // This calculation translates to 14 days
 });

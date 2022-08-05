@@ -13,8 +13,7 @@ const getProfile = async (req, res) => {
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log(error);
-    return res.sendStatus(500);
+    return res.sendStatus(500).json({ message: error.message });
   }
 };
 
