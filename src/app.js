@@ -27,6 +27,8 @@ const publicPaths = [
   '/api/about',
   '/api/auth/login',
   '/api/auth/register',
+  '/api/auth/google',
+  '/api/auth/google/callback',
 ];
 
 app.use(
