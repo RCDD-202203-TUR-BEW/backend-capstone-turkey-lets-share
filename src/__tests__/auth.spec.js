@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-continue */
 /* eslint-disable consistent-return */
 /* eslint-disable no-shadow */
@@ -32,22 +33,43 @@ const mockUser = {
   email_verified: true,
   locale: 'en-GB',
 };
+const validUserExample = {
+  email: 'amjad@gmail.com',
+  password: 'Nilay-123',
+};
 
 beforeAll(async () => {
   await db();
+  await UserModel.create({
+    firstName: 'nilo',
+    lastName: 'sihebi',
+    email: 'amjad@gmail.com',
+    username: 'ezgiAndRama',
+    phoneNumber: 5555555,
+    age: 18,
+    gender: 'Female',
+    nationality: 'Syria',
+    refugee: true,
+    provider: 'Local',
+    providerId: 'Local',
+    passwordHash:
+      '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
+  });
 });
 
 afterAll(async (drop = false) => {
+  await UserModel.deleteMany({});
   drop && (await mongoose.connection.dropDatabase());
   await mongoose.disconnect();
   await mongoose.connection.close();
 });
 
 let redirectUri = null;
+let jwtToken = null;
+
+const cookiesAgent = supertest.agent(app);
 
 describe('Google Auth Endpoints', () => {
-  const cookiesAgent = supertest.agent(app);
-
   describe('GET /api/auth/google', () => {
     it('Redirects to google authorization page', (done) => {
       req
@@ -197,6 +219,7 @@ function runTestServer() {
     res.json(mockUser);
   });
 
+  // eslint-disable-next-line prettier/prettier
   const server = app.listen(5005, () => {});
 
   return async () => await server.close();
@@ -254,3 +277,120 @@ function parseCookies(cookies) {
       .join('; '),
   ];
 }
+
+describe('AUTH TESTS', () => {
+  describe('POST /api/auth/login', () => {
+    it('should return a token in a cookie and success message ', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(201, (err, res) => {
+          if (err) return done(err);
+          expect(res.headers['set-cookie']).toBeDefined();
+          expect(res.headers['set-cookie']).toBeTruthy();
+          expect(res.body.message).toBe('User sucesfully signed in!');
+          // eslint-disable-next-line prefer-destructuring
+          jwtToken = res.headers['set-cookie'][0].split(';')[0];
+          return done();
+        });
+    });
+    it('should return an error when email thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: 'wrongemail@wrongemail.com',
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when password thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: 'wrongpasswordthaticreatedfortestpurposes',
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when no password is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
+
+          return done();
+        });
+    });
+    it('should return an error when no email is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(
+            res.body.errors.find((error) => error.param === 'email')
+          ).toBeDefined();
+          return done();
+        });
+    });
+    describe('GET /api/user/profile', () => {
+      it('should return an error if there is no authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(401, (err, res) => {
+            if (err) return done(err);
+            expect(res.body.message).toBe(
+              'Invalid Token: No authorization token was found'
+            );
+            return done();
+          });
+      });
+      it('should return user information if there is an authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .set('Cookie', jwtToken)
+          .expect('Content-Type', /json/)
+          .expect(200, (err, res) => {
+            if (err) return done(err);
+            expect(res.body).toEqual(
+              expect.objectContaining({
+                email: expect.any(String),
+              })
+            );
+
+            return done();
+          });
+      });
+    });
+  });
+});

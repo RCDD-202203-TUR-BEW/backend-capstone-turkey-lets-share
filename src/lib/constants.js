@@ -42,6 +42,6 @@ module.exports = Object.freeze({
     '/api/auth/google/callback',
     '/',
   ],
-  TOKEN_EXPIRATION_DURATION: ['14d'],
-  COOKIE_MAX_AGE: [1000 * 60 * 60 * 24 * 14],
+  TOKEN_EXPIRATION_DURATION: '14d',
+  COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
 });
