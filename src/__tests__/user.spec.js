@@ -5,6 +5,9 @@ const app = require('../app');
 const UserModel = require('../models/user');
 const connectDatabase = require('../db/connection');
 
+const validUserId = '62eb038c20b4f5b0bd8c7676';
+const invalidUserId = '62ee5c280262c62f56124dfd';
+
 beforeAll(async () => {
   connectDatabase();
 });
@@ -16,9 +19,6 @@ afterAll(async () => {
 });
 
 describe('GET /api/user/:id', () => {
-  const validUserId = '62eb038c20b4f5b0bd8c7676';
-  const invalidUserId = '62ee5c280262c62f56124dfd';
-
   it('should return a single user', (done) => {
     supertest(app)
       .get(`/api/user/${validUserId}`)
