@@ -1,6 +1,8 @@
 paths:
   /api/auth/register:
     post:
+      tags:
+        - register
       description: 'Registers a new user'
       requestBody:
         content:
@@ -91,10 +93,14 @@ paths:
           description: 'Internal server error'
   /api/auth/logout:
     post:
+      tags:
+        - logout
       description: 'Logs out current user'
       responses:
         '200':
           description: 'OK (logged out)'
+        '401':
+          description: 'Unauthorized (one needs to be logged in)'
 components:
   schemas:
     User:

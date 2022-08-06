@@ -1,0 +1,20 @@
+paths:
+  /api/user/62ee5c280262c62f56124dfd:
+    get:
+      tags:
+        - get users
+      description: 'Registers a new user'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+      responses:
+        '200':
+          description: 'OK (shows user)'
+        '404':
+          description: 'Not Found (user was not found)'
+        '401':
+          description: 'Unauthorized (one needs to be logged in)'
+        '500':
+          description: 'Internal server error'
