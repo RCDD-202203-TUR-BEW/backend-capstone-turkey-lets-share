@@ -16,7 +16,7 @@ const getProfile = async (req, res) => {
   }
 };
 
-const getUser = async (req, res) => {
+const getSingleUser = async (req, res) => {
   try {
     const foundUser = await UserModel.findById(req.params.id);
     if (foundUser) {
@@ -45,5 +45,5 @@ const getUser = async (req, res) => {
 
 module.exports = {
   getProfile,
-  getUser,
+  getSingleUser,
 };

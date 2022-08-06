@@ -11,6 +11,8 @@ paths:
           required: true
           description: 'ID of the user'
           examples:
+            'real ID of an available user':
+              value: '62eb038c20b4f5b0bd8c7676'
             'real ID of a deleted user':
               value: '62ee5c280262c62f56124dfd'
             'custom':
