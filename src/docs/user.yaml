@@ -25,4 +25,4 @@ paths:
         '401':
           description: 'Unauthorized (one needs to be logged in)'
         '500':
-          description: 'Internal server error (ID is not a valid ObjectId)'
+          description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
