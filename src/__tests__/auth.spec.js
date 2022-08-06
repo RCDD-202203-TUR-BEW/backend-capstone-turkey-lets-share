@@ -33,6 +33,16 @@ const mockUser = {
   locale: 'en-GB',
 };
 
+const facebookMockUser =  {
+    id: '3229203963961068',
+    name: 'Muslim Omar',
+    last_name: 'Omar',
+    first_name: 'Muslim',
+    picture: { data: [''] },
+    // Hint: since you were using the same email for testing google auth, and the email field is unique, it gave dup_coll error, so I had to change it.
+    email: 'nilay.aydinfb@gmail.com'
+  };
+
 beforeAll(async () => {
   await db();
 });
@@ -68,9 +78,7 @@ describe('Google Auth Endpoints', () => {
       const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
       const client_id = uri.searchParams.get('client_id') ?? '';
 
-      expect(scope).toEqual(
-        expect.arrayContaining(['openid', 'email', 'profile'])
-      );
+      expect(scope).toEqual(expect.arrayContaining(['openid', 'email', 'profile']));
       expect(client_id.length).toBeGreaterThan(10);
 
       if (redirectTo) redirectUri = new URL(redirectTo);
@@ -177,7 +185,6 @@ function getLoginURL(base) {
   return `${base}?${params.toString()}`;
 }
 
-
 describe('Facebook Auth Endpoints', () => {
   const cookiesAgent = supertest.agent(app);
 
@@ -201,9 +208,7 @@ describe('Facebook Auth Endpoints', () => {
       const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
       const client_id = uri.searchParams.get('client_id') ?? '';
 
-      expect(scope).toEqual(
-        expect.arrayContaining(['email'])
-      );
+      expect(scope).toEqual(expect.arrayContaining(['email']));
       expect(client_id.length).toBeGreaterThan(10);
 
       if (redirectTo) redirectUri = new URL(redirectTo);
@@ -218,40 +223,45 @@ describe('Facebook Auth Endpoints', () => {
       expect(res.header['set-cookie']).not.toBeDefined();
     });
 
-    // it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
-    //   expect(redirectUri).not.toBeNull();
+    it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
+      expect(redirectUri).not.toBeNull();
 
-    //   const res = await runFacebookRequestInPatchedServer(
-    //     async () => await cookiesAgent.get(getFacebookLoginURL(redirectUri.pathname))
-    //   );
-    //   expect(res.status).toBe(302);
-    //   expect(res.header['set-cookie']).toBeDefined();
+      const res = await runFacebookRequestInPatchedServer(
+        async () =>
+          await cookiesAgent.get(getFacebookLoginURL(redirectUri.pathname))
+      );
 
-    //   const [cookies] = parseCookies(res.header['set-cookie']);
+      expect(res.status).toBe(302);
+      expect(res.header['set-cookie']).toBeDefined();
 
-    //   const auth_cookie = getJWTCookie(cookies);
+      const [cookies] = parseCookies(res.header['set-cookie']);
 
-    //   const iat = auth_cookie.iat;
+      const auth_cookie = getJWTCookie(cookies);
 
-    //   expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
+      const iat = auth_cookie.iat;
 
-    //   const expected = {
-    //     email: mockUser.email,
-    //     providerId: `facebook-${mockUser.sub}`,
-    //     exp: iat + 14 * 24 * 3600,
-    //     iat: expect.any(Number),
-    //   };
+      expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
 
-    //   expect(auth_cookie).toEqual(expect.objectContaining(expected));
-    // });
+      const expected = {
+        email: facebookMockUser.email,
+        providerId: `facebook-${facebookMockUser.id}`,
+        exp: iat + 14 * 24 * 3600,
+        iat: expect.any(Number),
+      };
+
+      expect(auth_cookie).toEqual(expect.objectContaining(expected));
+    });
   });
 });
 
 async function runFacebookRequestInPatchedServer(cb) {
-  const undo = patch__facebook_request({
-    [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
-    [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
-  });
+  const undo = patch__facebook_request(
+    {
+      [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
+      [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
+      [`http://127.0.0.1/v3.2/me`]: (path) => path.endsWith('/v3.2/me'),
+    }
+  );
 
   let shutdownServer = runTestServer();
 
@@ -279,6 +289,7 @@ function patch__facebook_request(redirects, debug = false) {
       for (let url of Object.keys(redirects)) {
         const matcher = redirects[url];
         url = new URL(url);
+
         if (matcher(path.split('?')[0])) {
           if (debug) console.log('Redirecting to test server: ', url.href);
           opts.host = url.host;
@@ -297,7 +308,6 @@ function patch__facebook_request(redirects, debug = false) {
     https.request.unpatch();
   };
 }
-
 
 function getFacebookLoginURL(base) {
   const params = Object.entries({
@@ -328,7 +338,12 @@ function runTestServer() {
   });
 
   app.get('/userinfo', (req, res) => {
+
     res.json(mockUser);
+  });
+
+  app.use('/v3.2/me', (req, res) => {
+    res.json(facebookMockUser);
   });
 
   const server = app.listen(5005, () => {});
