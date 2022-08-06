@@ -1,30 +1,9 @@
 const jwt = require('jsonwebtoken');
+const constants = require('../lib/constants');
 
 const config = process.env;
-const PUBLIC_AUTH_ROUTES = [
-  { method: 'get', path: '/api/auth/login' },
-  { method: 'get', path: '/api/auth/register' },
-  { method: 'get', path: '/api/auth/google' },
-  { method: 'get', path: '/api/auth/google/callback' },
-  { method: 'get', path: '/api/auth/facebook' },
-  { method: 'get', path: '/api/auth/facebook/callback' },
-];
 
-const PUBLIC_ROUTES = [
-  { method: 'get', path: '/api/' },
-  { method: 'get', path: '/api/about' },
-  { method: 'get', path: '/api/posts' },
-  { method: 'get', path: '/api/posts' },
-  { method: 'get', path: '/api/posts/?filter&&?search' },
-  { method: 'get', path: '/api/post/:id' },
-];
-const PRIVATE_ROUTES = [
-  { method: 'post', path: '/api/post' },
-  { method: 'put', path: '/api/post/:id' },
-  { method: 'delete', path: '/api/post/:id' },
-  { method: 'get', path: '/api/auth/profile' },
-  { method: 'get', path: '/api/auth/logout' },
-];
+const { PUBLIC_AUTH_ROUTES, PUBLIC_ROUTES, PRIVATE_ROUTES } = constants;
 
 function authorize(req, res, next) {
   const { token } = req.signedCookies;

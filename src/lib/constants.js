@@ -33,4 +33,28 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
   ENUM_POST_STATUS: ['Published', 'Verified'],
+  PUBLIC_AUTH_ROUTES: [
+    { method: 'get', path: '/api/auth/login' },
+    { method: 'get', path: '/api/auth/register' },
+    { method: 'get', path: '/api/auth/google' },
+    { method: 'get', path: '/api/auth/google/callback' },
+    { method: 'get', path: '/api/auth/facebook' },
+    { method: 'get', path: '/api/auth/facebook/callback' },
+  ],
+
+  PUBLIC_ROUTES: [
+    { method: 'get', path: '/api/' },
+    { method: 'get', path: '/api/about' },
+    { method: 'get', path: '/api/posts' },
+    { method: 'get', path: '/api/posts' },
+    { method: 'get', path: '/api/posts/?filter&&?search' },
+    { method: 'get', path: '/api/post/:id' },
+  ],
+  PRIVATE_ROUTES: [
+    { method: 'post', path: '/api/post' },
+    { method: 'put', path: '/api/post/:id' },
+    { method: 'delete', path: '/api/post/:id' },
+    { method: 'get', path: '/api/auth/profile' },
+    { method: 'get', path: '/api/auth/logout' },
+  ],
 });
