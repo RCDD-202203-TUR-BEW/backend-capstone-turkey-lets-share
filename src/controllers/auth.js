@@ -39,7 +39,7 @@ const register = async (req, res) => {
       passwordHash,
     });
 
-    const shownUser = {
+    const shownInfo = {
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
@@ -47,7 +47,7 @@ const register = async (req, res) => {
       phoneNumber: newUser.phoneNumber,
     };
 
-    return res.status(201).json(shownUser);
+    return res.status(201).json(shownInfo);
   } catch (err) {
     return res.status(500).send(err);
   }

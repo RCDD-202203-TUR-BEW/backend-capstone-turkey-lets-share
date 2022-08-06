@@ -12,11 +12,38 @@ const getProfile = async (req, res) => {
         .json(currentUser);
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
     return res.sendStatus(500).json({ message: error.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const foundUser = await UserModel.findById(req.params.id);
+    if (foundUser) {
+      const shownInfo = {
+        profilePhoto: foundUser.profilePhoto,
+        firstName: foundUser.firstName,
+        lastName: foundUser.lastName,
+        username: foundUser.username,
+        avaregeRating: foundUser.avaregeRating,
+        reviews: foundUser.reviews,
+        donated: foundUser.donated,
+        requested: foundUser.requested,
+        received: foundUser.received,
+      };
+      return res
+        .setHeader('Content-Type', 'application/json')
+        .status(200)
+        .json(shownInfo);
+    }
+
+    return res.status(404).json({ message: 'User not found' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
   getProfile,
+  getUser,
 };
