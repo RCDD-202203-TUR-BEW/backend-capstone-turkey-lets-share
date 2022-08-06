@@ -1,14 +1,20 @@
 paths:
-  /api/user/62ee5c280262c62f56124dfd:
+  /api/user/{id}:
     get:
       tags:
         - get users
-      description: 'Registers a new user'
-      content:
-        application/json:
+      parameters:
+        - in: path
+          name: id
           schema:
-            type: object
-            properties:
+            type: string
+          required: true
+          description: 'ID of the user'
+          examples:
+            'real ID of a deleted user':
+              value: '62ee5c280262c62f56124dfd'
+            'custom':
+              value: ''
       responses:
         '200':
           description: 'OK (shows user)'
@@ -17,4 +23,4 @@ paths:
         '401':
           description: 'Unauthorized (one needs to be logged in)'
         '500':
-          description: 'Internal server error'
+          description: 'Internal server error (ID is not a valid ObjectId)'
