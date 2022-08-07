@@ -28,12 +28,6 @@ beforeAll(async () => {
   validUserId = newUser._id;
 });
 
-afterAll(async () => {
-  await UserModel.deleteMany({});
-  await mongoose.disconnect();
-  await mongoose.connection.close();
-});
-
 describe('GET /api/user/:id', () => {
   it('should return a token to be used in the next tests ', (done) => {
     supertest(app)
