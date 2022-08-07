@@ -20,6 +20,10 @@ const getSingleUser = async (req, res) => {
   try {
     const foundUser = await UserModel.findById(req.params.id);
     if (foundUser) {
+      if (req.user.userId === foundUser.id) {
+        return res.status(200).json({ message: 'Redirecting to profile...' });
+      }
+
       const shownInfo = {
         profilePhoto: foundUser.profilePhoto,
         firstName: foundUser.firstName,
