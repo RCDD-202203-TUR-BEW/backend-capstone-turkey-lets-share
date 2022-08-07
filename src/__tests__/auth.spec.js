@@ -26,6 +26,16 @@ const connectDatabase = require('../db/connection');
 
 const cookiesAgent = supertest.agent(app);
 
+const createUser = {
+  firstName: 'john',
+  lastName: 'doe',
+  email: 'john.doe@outlook.com',
+  username: 'john.doe',
+  provider: 'Local',
+  providerId: 'Local',
+  passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
+};
+
 const mockUser = {
   sub: '12345678',
   name: 'Nilay Aydin',
@@ -58,6 +68,8 @@ beforeAll(async () => {
     passwordHash:
       '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
   });
+
+  await UserModel.create(createUser);
 });
 
 afterAll(async (drop = false) => {
@@ -67,8 +79,9 @@ afterAll(async (drop = false) => {
   await mongoose.connection.close();
 });
 
-let redirectUri = null;
-let jwtToken = null;
+let redirectUri;
+let jwtToken;
+let token;
 
 describe('AUTH TESTS', () => {
   describe('POST /api/auth/register', () => {
@@ -106,7 +119,7 @@ describe('AUTH TESTS', () => {
         .expect('Content-Type', /json/)
         .expect(201, (err, res) => {
           if (err) return done(err);
-          expect(res.status).toBe(201);
+
           expect(res.body).toHaveProperty('username');
           return done();
         });
@@ -120,7 +133,7 @@ describe('AUTH TESTS', () => {
         .expect('Content-Type', /json/)
         .expect(400, (err, res) => {
           if (err) return done(err);
-          expect(res.status).toBe(400);
+
           expect(res.body.error).toBe('Email is already taken');
           return done();
         });
@@ -133,7 +146,7 @@ describe('AUTH TESTS', () => {
         .send(invalidUserInfo)
         .expect(400, (err, res) => {
           if (err) return done(err);
-          expect(res.status).toBe(400);
+
           expect(res.body.error[0]).toBe('Password fields do not match');
           expect(res.body.error[1]).toBe(constants.PASSWORD_ERROR);
           expect(res.body.error[2]).toBe('Name fields can not be empty');
@@ -145,15 +158,29 @@ describe('AUTH TESTS', () => {
   });
 
   describe('POST /api/auth/logout', () => {
+    it('should return a token to be used in the next tests ', (done) => {
+      supertest(app)
+        .post('/api/auth/login')
+        .send({ email: createUser.email, password: 'Qwerty-123' })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).toBe(201);
+          token = res.headers['set-cookie'][0].split(';')[0];
+          done();
+        });
+    });
+
     it('should log user out', (done) => {
       supertest(app)
         .post('/api/auth/logout')
-        .expect(401, (err, res) => {
+        .set('Cookie', token)
+        .expect(200, (err, res) => {
           if (err) return done(err);
-          expect(res.status).toBe(401);
-          expect(res.body.message).toBe(
-            'Invalid Token: No authorization token was found'
-          );
+
+          expect(res.body.message).toBe('Logged out successfully');
           return done();
         });
     });

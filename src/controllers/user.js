@@ -31,10 +31,7 @@ const getSingleUser = async (req, res) => {
         requested: foundUser.requested,
         received: foundUser.received,
       };
-      return res
-        .setHeader('Content-Type', 'application/json')
-        .status(200)
-        .json(shownInfo);
+      return res.status(200).json(shownInfo);
     }
 
     return res.status(404).json({ message: 'User not found' });
