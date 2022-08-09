@@ -1,36 +1,28 @@
 /* eslint-disable no-console */
 const express = require('express');
 require('dotenv').config();
+
+const cookieParser = require('cookie-parser');
 const { expressjwt: jwt } = require('express-jwt');
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-const cookieParser = require('cookie-parser');
-const { encryptCookieNodeMiddleware } = require('encrypt-cookie');
-
-// eslint-disable-next-line no-unused-vars
 const bodyParser = require('body-parser');
 const connectToMongo = require('./db/connection');
-
+const authorize = require('./middleware/guard');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const constants = require('./lib/constants');
 
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
-app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
+// app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-const publicPaths = [
-  '/api/',
-  '/api/about',
-  '/api/auth/login',
-  '/api/auth/register',
-  '/api/auth/google',
-  '/api/auth/google/callback',
-];
+const { PUBLIC_ROUTES } = constants;
 
 app.use(
   '/api',
@@ -41,13 +33,14 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: publicPaths,
+    path: PUBLIC_ROUTES,
   })
 );
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+// DYNAMIC MIDDLEWARE
+// app.use(authorize);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
