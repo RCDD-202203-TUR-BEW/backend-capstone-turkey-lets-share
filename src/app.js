@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
 const express = require('express');
 require('dotenv').config();
+
 const cookieParser = require('cookie-parser');
+const { expressjwt: jwt } = require('express-jwt');
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -11,20 +14,37 @@ const authorize = require('./middleware/guard');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const constants = require('./lib/constants');
 
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
-app.use(bodyParser.json());
+app.use(cookieParser(process.env.SECRET_KEY));
+// app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
+const { PUBLIC_ROUTES } = constants;
+
+app.use(
+  '/api',
+  jwt({
+    secret: process.env.SECRET_KEY,
+    algorithms: ['HS256'],
+    getToken: (req) => req.signedCookies.token ?? req.cookies.token,
+
+    requestProperty: 'user',
+  }).unless({
+    path: PUBLIC_ROUTES,
+  })
+);
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+// DYNAMIC MIDDLEWARE
+// app.use(authorize);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser(process.env.SECRET_KEY));
-app.use(authorize);
 // Swagger definition
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -56,11 +76,31 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  res.status(200).send("Hello Let's Share!");
+  res.json({ message: "Hello Let's Share!" });
 });
+
+// If I delete the next, the code is not working. Why?
+
+// eslint-disable-next-line no-unused-vars
+function errorHandler(err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({
+      error: true,
+      message: `Invalid Token: ${err.message}`,
+    });
+  } else {
+    res.status(500).json({
+      error: true,
+      message: 'Internal server error occured',
+    });
+  }
+}
+
+app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
+    // eslint-disable-next-line no-console
     console.log(`Server listening on port ${port}`);
     connectToMongo();
   });

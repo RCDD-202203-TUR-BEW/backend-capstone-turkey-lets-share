@@ -1,20 +1,149 @@
 paths:
-  /:
-    get:
-      description: 'Simple index API route'
+  /api/auth/register:
+    post:
+      description: 'Registers a new user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string,
+                lastName:
+                  type: string,
+                email:
+                  type: string,
+                phoneNumber:
+                  type: string,
+                age:
+                  type: integer,
+                gender:
+                  type: string,
+                nationality:
+                  type: string,
+                refugee:
+                  type: boolean,
+                password0:
+                  type: string,
+                password1:
+                  type: string,
+            examples:
+              'SLIGHTLY BAD PATH (does invoke the database, and will be handled by Mongoose)':
+                value: '{
+                  "firstName" : "Nilay",
+                  "lastName": "Aydin",
+                  "email": "niloaydin@domain.com.tr",
+                  "phoneNumber": "+679-123456789012",
+                  "age": 25,
+                  "gender": "Female",
+                  "nationality": "Turkey",
+                  "refugee": false,
+                  "password0": "Nilay-123",
+                  "password1": "Nilay-123"
+                  }'
+              'TOTALLY BAD PATH (does not invoke the database, and will be handled by the validation)':
+                value: '{
+                  "firstName" : "Nilay",
+                  "lastName": "",
+                  "email": "nilo-aydin@fake.domain.com",
+                  "phoneNumber": "+679 1234567890123",
+                  "age": 25,
+                  "gender": "Female",
+                  "nationality": "Turkey",
+                  "refugee": false,
+                  "password0": "Nilay-123",
+                  "password1": "Nilay-123456789"
+                  }'
+              'GOOD PATH':
+                value: '{
+                  "firstName" : "Nilay",
+                  "lastName": "Aydin",
+                  "email": "nilo-aydin@domain.com.tr",
+                  "phoneNumber": "+679 123456789012",
+                  "age": 25,
+                  "gender": "Female",
+                  "nationality": "Turkey",
+                  "refugee": false,
+                  "password0": "Nilay-123",
+                  "password1": "Nilay-123"
+                  }'
+              'CUSTOM':
+                value: '{
+                  "firstName" : "String",
+                  "lastName": "String",
+                  "email": "String",
+                  "phoneNumber": "min 6, max 15 digits without country code;
+                  min 5, max 12 digits + a space or dash + 1-3 digits country code",
+                  "age": 99,
+                  "gender": "String",
+                  "nationality": "String",
+                  "refugee": false,
+                  "password0": "String",
+                  "password1": "String"
+                  }'
+      responses:
+        '201':
+          description: 'Created (user)'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
+  /api/auth/logout:
+    post:
+      description: 'Logs out current user'
       responses:
         '200':
-          description: 'Returns a simple description string.'
+          description: 'OK (logged out)'
 components:
   schemas:
-    user:
+    User:
       type: object
       required:
       properties:
-        id:
-          type: integer
-          description: The auto-generated id of user.
-        createdAt:
+        firstName:
           type: string
-          format: date
-          description: The date of the record creation.
+        lastName:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+          description: 'Generateed automatically'
+        phoneNumber:
+          type: string
+          description: 'Required unless null'
+        age:
+          type: integer
+        gender:
+          type: string
+        nationality:
+          type: string
+        refugee:
+          type: boolean
+        avaregeRating:
+          type: number
+        profilePhoto:
+          type: string
+        donated:
+          type: [ObjectId]
+        requested:
+          type: [ObjectId]
+        received:
+          type: [ObjectId]
+        provider:
+          type: string
+        providerId:
+          type: string
+        passwordHash:
+          type: string
+        address:
+          type: object
+        reviews:
+          type: object
+        reports:
+          type: object
+        createdAt:
+          type: date
+        updatedAt:
+          type: date
