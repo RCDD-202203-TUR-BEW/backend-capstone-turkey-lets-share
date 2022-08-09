@@ -78,8 +78,8 @@ module.exports = Object.freeze({
     { method: 'get', path: '/' },
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/posts' },
-    { method: 'get', path: '/api/posts' },
+    { method: 'get', path: '/api/post' },
+
     { method: 'get', path: '/api/posts?search&category' },
     { method: 'get', path: '/api/post/:id' },
   ],
@@ -87,7 +87,7 @@ module.exports = Object.freeze({
     { method: 'post', path: '/api/post' },
     { method: 'put', path: '/api/post/:id' },
     { method: 'delete', path: '/api/post/:id' },
-    { method: 'get', path: '/api/auth/profile' },
+    { method: 'get', path: '/api/user/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],
 

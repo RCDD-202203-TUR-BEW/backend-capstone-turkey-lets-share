@@ -22,7 +22,7 @@ const port = process.env.NODE_LOCAL_PORT || 3000;
 app.use(cookieParser(process.env.SECRET_KEY));
 // app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-const { PUBLIC_ROUTES } = constants;
+// const { PUBLIC_ROUTES } = constants;
 
 app.use(
   '/api',
@@ -33,7 +33,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: PUBLIC_ROUTES,
+    path: '/api/post',
   })
 );
 
