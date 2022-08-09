@@ -158,7 +158,7 @@ describe('AUTH TESTS', () => {
   });
 
   describe('POST /api/auth/logout', () => {
-    it('should return a token to be used in the next tests ', (done) => {
+    it('should return a token when correct user is logged in', (done) => {
       supertest(app)
         .post('/api/auth/login')
         .send({ email: createUser.email, password: 'Qwerty-123' })

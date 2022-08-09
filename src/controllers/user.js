@@ -24,17 +24,7 @@ const getSingleUser = async (req, res) => {
         return res.status(200).json({ message: 'Redirecting to profile...' });
       }
 
-      const shownInfo = {
-        profilePhoto: foundUser.profilePhoto,
-        firstName: foundUser.firstName,
-        lastName: foundUser.lastName,
-        username: foundUser.username,
-        avaregeRating: foundUser.avaregeRating,
-        reviews: foundUser.reviews,
-        donated: foundUser.donated,
-        requested: foundUser.requested,
-        received: foundUser.received,
-      };
+      const shownInfo = { ...foundUser, passwordHash: undefined };
       return res.status(200).json(shownInfo);
     }
 
