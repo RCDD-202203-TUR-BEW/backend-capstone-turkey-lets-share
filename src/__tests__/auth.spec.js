@@ -13,481 +13,474 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable import/order */
 /* eslint-disable node/no-unpublished-require */
+const mongoose = require('mongoose');
+const http = require('node:http');
+const https = require('node:https');
+const monkeypatch = require('monkeypatch');
+const supertest = require('supertest');
+const app = require('../app');
+const req = require('supertest')(app);
+const UserModel = require('../models/user');
+const constants = require('../lib/constants');
+const connectDatabase = require('../db/connection');
 
-describe('Auth test', () => {
-  it('Auth Test', () => {
-    expect(true).toEqual(true);
+const cookiesAgent = supertest.agent(app);
+
+const mockUser = {
+  sub: '12345678',
+  name: 'Nilay Aydin',
+  given_name: 'Nilay',
+  family_name: 'Aydin',
+  picture: 'https://lh3.googleusercontent.com/a-/AOh1',
+  email: 'nilay.aydin@gmail.com',
+  email_verified: true,
+  locale: 'en-GB',
+};
+const validUserExample = {
+  email: 'amjad@gmail.com',
+  password: 'Nilay-123',
+};
+
+beforeAll(async () => {
+  connectDatabase();
+  await UserModel.create({
+    firstName: 'nilo',
+    lastName: 'sihebi',
+    email: 'amjad@gmail.com',
+    username: 'ezgiAndRama',
+    phoneNumber: 5555555,
+    age: 18,
+    gender: 'Female',
+    nationality: 'Syria',
+    refugee: true,
+    provider: 'Local',
+    providerId: 'Local',
+    passwordHash:
+      '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
   });
 });
 
-// const mongoose = require('mongoose');
-// const http = require('node:http');
-// const https = require('node:https');
-// const monkeypatch = require('monkeypatch');
-// const supertest = require('supertest');
-// const app = require('../app');
-// const req = require('supertest')(app);
-// const UserModel = require('../models/user');
-// const constants = require('../lib/constants');
-// const connectDatabase = require('../db/connection');
+afterAll(async (drop = false) => {
+  await UserModel.deleteMany({});
+  drop && (await mongoose.connection.dropDatabase());
+  await mongoose.disconnect();
+  await mongoose.connection.close();
+});
 
-// const cookiesAgent = supertest.agent(app);
+let redirectUri = null;
+let jwtToken = null;
 
-// const mockUser = {
-//   sub: '12345678',
-//   name: 'Nilay Aydin',
-//   given_name: 'Nilay',
-//   family_name: 'Aydin',
-//   picture: 'https://lh3.googleusercontent.com/a-/AOh1',
-//   email: 'nilay.aydin@gmail.com',
-//   email_verified: true,
-//   locale: 'en-GB',
-// };
-// const validUserExample = {
-//   email: 'amjad@gmail.com',
-//   password: 'Nilay-123',
-// };
+describe('AUTH TESTS', () => {
+  describe('POST /api/auth/register', () => {
+    const invalidUserInfo = {
+      firstName: 'John',
+      lastName: '',
+      email: 'john@doe.fake.domain.com',
+      phoneNumber: '+44 0123456789876543210',
+      age: 21,
+      gender: 'Male',
+      nationality: 'Other',
+      refugee: false,
+      password0: 'qwerty-123',
+      password1: 'Qwerty-123456789',
+    };
 
-// beforeAll(async () => {
-//   connectDatabase();
-//   await UserModel.create({
-//     firstName: 'nilo',
-//     lastName: 'sihebi',
-//     email: 'amjad@gmail.com',
-//     username: 'ezgiAndRama',
-//     phoneNumber: 5555555,
-//     age: 18,
-//     gender: 'Female',
-//     nationality: 'Syria',
-//     refugee: true,
-//     provider: 'Local',
-//     providerId: 'Local',
-//     passwordHash:
-//       '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
-//   });
-// });
+    const validUserInfo = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@doe.co.uk',
+      phoneNumber: '000123456789',
+      age: 21,
+      gender: 'Male',
+      nationality: 'Other',
+      refugee: false,
+      password0: 'Qwerty-123',
+      password1: 'Qwerty-123',
+    };
 
-// afterAll(async (drop = false) => {
-//   await UserModel.deleteMany({});
-//   drop && (await mongoose.connection.dropDatabase());
-//   await mongoose.disconnect();
-//   await mongoose.connection.close();
-// });
+    it('should register users with correct validation', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(validUserInfo)
+        .expect('Content-Type', /json/)
+        .expect(201, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(201);
+          expect(res.body).toHaveProperty('username');
+          return done();
+        });
+    });
 
-// let redirectUri = null;
-// let jwtToken = null;
+    it('should not register users if username/email is already taken', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(validUserInfo)
+        .expect('Content-Type', /json/)
+        .expect(400, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(400);
+          expect(res.body.error).toBe('Email is already taken');
+          return done();
+        });
+    });
 
-// describe('AUTH TESTS', () => {
-//   describe('POST /api/auth/register', () => {
-//     const invalidUserInfo = {
-//       firstName: 'John',
-//       lastName: '',
-//       email: 'john@doe.fake.domain.com',
-//       phoneNumber: '+44 0123456789876543210',
-//       age: 21,
-//       gender: 'Male',
-//       nationality: 'Other',
-//       refugee: false,
-//       password0: 'qwerty-123',
-//       password1: 'Qwerty-123456789',
-//     };
+    it('should not pass user to the controller when validation is not passed', (done) => {
+      supertest(app)
+        .post('/api/auth/register')
+        .set('Content-Type', 'application/json')
+        .send(invalidUserInfo)
+        .expect(400, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(400);
+          expect(res.body.error[0]).toBe('Password fields do not match');
+          expect(res.body.error[1]).toBe(constants.PASSWORD_ERROR);
+          expect(res.body.error[2]).toBe('Name fields can not be empty');
+          expect(res.body.error[3]).toBe('Invalid email format');
+          expect(res.body.error[4]).toBe(constants.PHONE_NUMBER_ERROR);
+          return done();
+        });
+    });
+  });
 
-//     const validUserInfo = {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//       email: 'john@doe.co.uk',
-//       phoneNumber: '000123456789',
-//       age: 21,
-//       gender: 'Male',
-//       nationality: 'Other',
-//       refugee: false,
-//       password0: 'Qwerty-123',
-//       password1: 'Qwerty-123',
-//     };
+  describe('POST /api/auth/logout', () => {
+    it('should log user out', (done) => {
+      supertest(app)
+        .post('/api/auth/logout')
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.status).toBe(401);
+          expect(res.body.message).toBe(
+            'Invalid Token: No authorization token was found'
+          );
+          return done();
+        });
+    });
+  });
 
-//     it('should register users with correct validation', (done) => {
-//       supertest(app)
-//         .post('/api/auth/register')
-//         .set('Content-Type', 'application/json')
-//         .send(validUserInfo)
-//         .expect('Content-Type', /json/)
-//         .expect(201, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.status).toBe(201);
-//           expect(res.body).toHaveProperty('username');
-//           return done();
-//         });
-//     });
+  describe('POST /api/auth/login', () => {
+    it('should return a token in a cookie and success message ', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(201, (err, res) => {
+          if (err) return done(err);
+          expect(res.headers['set-cookie']).toBeDefined();
+          expect(res.headers['set-cookie']).toBeTruthy();
+          expect(res.body.message).toBe('User sucesfully signed in!');
+          // eslint-disable-next-line prefer-destructuring
+          jwtToken = res.headers['set-cookie'][0].split(';')[0];
 
-//     it('should not register users if username/email is already taken', (done) => {
-//       supertest(app)
-//         .post('/api/auth/register')
-//         .set('Content-Type', 'application/json')
-//         .send(validUserInfo)
-//         .expect('Content-Type', /json/)
-//         .expect(400, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.status).toBe(400);
-//           expect(res.body.error).toBe('Email is already taken');
-//           return done();
-//         });
-//     });
+          return done();
+        });
+    });
+    it('should return an error when email thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: 'wrongemail@wrongemail.com',
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when password thats not registered is used', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+          password: 'wrongpasswordthaticreatedfortestpurposes',
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.message).toBe('Wrong email or password!');
+          return done();
+        });
+    });
+    it('should return an error when no password is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          email: validUserExample.email,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
 
-//     it('should not pass user to the controller when validation is not passed', (done) => {
-//       supertest(app)
-//         .post('/api/auth/register')
-//         .set('Content-Type', 'application/json')
-//         .send(invalidUserInfo)
-//         .expect(400, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.status).toBe(400);
-//           expect(res.body.error[0]).toBe('Password fields do not match');
-//           expect(res.body.error[1]).toBe(constants.PASSWORD_ERROR);
-//           expect(res.body.error[2]).toBe('Name fields can not be empty');
-//           expect(res.body.error[3]).toBe('Invalid email format');
-//           expect(res.body.error[4]).toBe(constants.PHONE_NUMBER_ERROR);
-//           return done();
-//         });
-//     });
-//   });
+          return done();
+        });
+    });
+    it('should return an error when no email is passed', (done) => {
+      req
+        .post('/api/auth/login')
+        .set('Content-Type', 'application/json')
+        .send({
+          password: validUserExample.password,
+        })
+        .expect('Content-Type', /json/)
+        .expect(422, (err, res) => {
+          if (err) return done(err);
+          expect(
+            res.body.errors.find((error) => error.param === 'email')
+          ).toBeDefined();
+          return done();
+        });
+    });
+    describe('GET /api/user/profile', () => {
+      it('should return an error if there is no authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(401, (err, res) => {
+            if (err) return done(err);
+            expect(res.body.message).toBe(
+              'Invalid Token: No authorization token was found'
+            );
+            return done();
+          });
+      });
+      it('should return user information if there is an authenticated user', (done) => {
+        req
+          .get('/api/user/profile')
+          .set('Content-Type', 'application/json')
+          .set('Cookie', jwtToken)
+          .expect('Content-Type', /json/)
+          .expect(200, (err, res) => {
+            if (err) return done(err);
+            expect(res.body).toEqual(
+              expect.objectContaining({
+                email: expect.any(String),
+              })
+            );
 
-//   describe('POST /api/auth/logout', () => {
-//     it('should log user out', (done) => {
-//       supertest(app)
-//         .post('/api/auth/logout')
-//         .expect(401, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.status).toBe(401);
-//           expect(res.body.message).toBe(
-//             'Invalid Token: No authorization token was found'
-//           );
-//           return done();
-//         });
-//     });
-//   });
+            return done();
+          });
+      });
+    });
+  });
+});
 
-//   describe('POST /api/auth/login', () => {
-//     it('should return a token in a cookie and success message ', (done) => {
-//       req
-//         .post('/api/auth/login')
-//         .set('Content-Type', 'application/json')
-//         .send({
-//           email: validUserExample.email,
-//           password: validUserExample.password,
-//         })
-//         .expect('Content-Type', /json/)
-//         .expect(201, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.headers['set-cookie']).toBeDefined();
-//           expect(res.headers['set-cookie']).toBeTruthy();
-//           expect(res.body.message).toBe('User sucesfully signed in!');
-//           // eslint-disable-next-line prefer-destructuring
-//           jwtToken = res.headers['set-cookie'][0].split(';')[0];
+describe('Google Auth Endpoints', () => {
+  describe('GET /api/auth/google', () => {
+    it('Redirects to google authorization page', (done) => {
+      req
+        .get('/api/auth/google')
+        .expect(302)
+        .expect('location', /google\.com/)
+        .end(done);
+    });
 
-//           return done();
-//         });
-//     });
-//     it('should return an error when email thats not registered is used', (done) => {
-//       req
-//         .post('/api/auth/login')
-//         .set('Content-Type', 'application/json')
-//         .send({
-//           email: 'wrongemail@wrongemail.com',
-//           password: validUserExample.password,
-//         })
-//         .expect('Content-Type', /json/)
-//         .expect(401, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.body.message).toBe('Wrong email or password!');
-//           return done();
-//         });
-//     });
-//     it('should return an error when password thats not registered is used', (done) => {
-//       req
-//         .post('/api/auth/login')
-//         .set('Content-Type', 'application/json')
-//         .send({
-//           email: validUserExample.email,
-//           password: 'wrongpasswordthaticreatedfortestpurposes',
-//         })
-//         .expect('Content-Type', /json/)
-//         .expect(401, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.body.message).toBe('Wrong email or password!');
-//           return done();
-//         });
-//     });
-//     it('should return an error when no password is passed', (done) => {
-//       req
-//         .post('/api/auth/login')
-//         .set('Content-Type', 'application/json')
-//         .send({
-//           email: validUserExample.email,
-//         })
-//         .expect('Content-Type', /json/)
-//         .expect(422, (err, res) => {
-//           if (err) return done(err);
-//           expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
+    it('Redirects with correct scope and credentials', async () => {
+      const res = await req.get('/api/auth/google');
+      const location = res.header.location;
 
-//           return done();
-//         });
-//     });
-//     it('should return an error when no email is passed', (done) => {
-//       req
-//         .post('/api/auth/login')
-//         .set('Content-Type', 'application/json')
-//         .send({
-//           password: validUserExample.password,
-//         })
-//         .expect('Content-Type', /json/)
-//         .expect(422, (err, res) => {
-//           if (err) return done(err);
-//           expect(
-//             res.body.errors.find((error) => error.param === 'email')
-//           ).toBeDefined();
-//           return done();
-//         });
-//     });
-//     describe('GET /api/user/profile', () => {
-//       it('should return an error if there is no authenticated user', (done) => {
-//         req
-//           .get('/api/user/profile')
-//           .set('Content-Type', 'application/json')
-//           .expect('Content-Type', /json/)
-//           .expect(401, (err, res) => {
-//             if (err) return done(err);
-//             expect(res.body.message).toBe(
-//               'Invalid Token: No authorization token was found'
-//             );
-//             return done();
-//           });
-//       });
-//       it('should return user information if there is an authenticated user', (done) => {
-//         req
-//           .get('/api/user/profile')
-//           .set('Content-Type', 'application/json')
-//           .set('Cookie', jwtToken)
-//           .expect('Content-Type', /json/)
-//           .expect(200, (err, res) => {
-//             if (err) return done(err);
-//             expect(res.body).toEqual(
-//               expect.objectContaining({
-//                 email: expect.any(String),
-//               })
-//             );
+      expect(location).not.toBeNull();
 
-//             return done();
-//           });
-//       });
-//     });
-//   });
-// });
+      const uri = new URL(location);
+      const scope = uri.searchParams.get('scope')?.split(' ') ?? [];
+      const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
+      const client_id = uri.searchParams.get('client_id') ?? '';
 
-// describe('Google Auth Endpoints', () => {
-//   describe('GET /api/auth/google', () => {
-//     it('Redirects to google authorization page', (done) => {
-//       req
-//         .get('/api/auth/google')
-//         .expect(302)
-//         .expect('location', /google\.com/)
-//         .end(done);
-//     });
+      expect(scope).toEqual(
+        expect.arrayContaining(['openid', 'email', 'profile'])
+      );
+      expect(client_id.length).toBeGreaterThan(10);
 
-//     it('Redirects with correct scope and credentials', async () => {
-//       const res = await req.get('/api/auth/google');
-//       const location = res.header.location;
+      if (redirectTo) redirectUri = new URL(redirectTo);
+    });
+  });
 
-//       expect(location).not.toBeNull();
+  describe(`GET REDIRECT_URI`, () => {
+    it('Redirects to google sign in page without cookie for incorrect credentials', async () => {
+      expect(redirectUri).not.toBeNull();
+      const res = await req.get(redirectUri.pathname);
+      expect(res.status).toBe(302);
+      expect(res.header['set-cookie']).not.toBeDefined();
+    });
 
-//       const uri = new URL(location);
-//       const scope = uri.searchParams.get('scope')?.split(' ') ?? [];
-//       const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
-//       const client_id = uri.searchParams.get('client_id') ?? '';
+    it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
+      expect(redirectUri).not.toBeNull();
 
-//       expect(scope).toEqual(
-//         expect.arrayContaining(['openid', 'email', 'profile'])
-//       );
-//       expect(client_id.length).toBeGreaterThan(10);
+      const res = await runInPatchedServer(
+        async () => await cookiesAgent.get(getLoginURL(redirectUri.pathname))
+      );
+      expect(res.status).toBe(302);
+      expect(res.header['set-cookie']).toBeDefined();
 
-//       if (redirectTo) redirectUri = new URL(redirectTo);
-//     });
-//   });
+      const [cookies] = parseCookies(res.header['set-cookie']);
 
-//   describe(`GET REDIRECT_URI`, () => {
-//     it('Redirects to google sign in page without cookie for incorrect credentials', async () => {
-//       expect(redirectUri).not.toBeNull();
-//       const res = await req.get(redirectUri.pathname);
-//       expect(res.status).toBe(302);
-//       expect(res.header['set-cookie']).not.toBeDefined();
-//     });
+      const auth_cookie = getJWTCookie(cookies);
 
-//     it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
-//       expect(redirectUri).not.toBeNull();
+      const iat = auth_cookie.iat;
 
-//       const res = await runInPatchedServer(
-//         async () => await cookiesAgent.get(getLoginURL(redirectUri.pathname))
-//       );
-//       expect(res.status).toBe(302);
-//       expect(res.header['set-cookie']).toBeDefined();
+      expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
 
-//       const [cookies] = parseCookies(res.header['set-cookie']);
+      const expected = {
+        email: mockUser.email,
+        providerId: `google-${mockUser.sub}`,
+        exp: iat + 14 * 24 * 3600,
+        iat: expect.any(Number),
+      };
 
-//       const auth_cookie = getJWTCookie(cookies);
+      expect(auth_cookie).toEqual(expect.objectContaining(expected));
+    });
+  });
+});
 
-//       const iat = auth_cookie.iat;
+async function runInPatchedServer(cb) {
+  const undo = patch__google_request({
+    [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
+    [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
+  });
 
-//       expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
+  let shutdownServer = runTestServer();
 
-//       const expected = {
-//         email: mockUser.email,
-//         providerId: `google-${mockUser.sub}`,
-//         exp: iat + 14 * 24 * 3600,
-//         iat: expect.any(Number),
-//       };
+  const ret = await cb();
 
-//       expect(auth_cookie).toEqual(expect.objectContaining(expected));
-//     });
-//   });
-// });
+  shutdownServer();
+  undo();
 
-// async function runInPatchedServer(cb) {
-//   const undo = patch__google_request({
-//     [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
-//     [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
-//   });
+  return ret;
+}
 
-//   let shutdownServer = runTestServer();
+function patch__google_request(redirects, debug = false) {
+  monkeypatch(https, 'request', (orig, opts, cb) => {
+    const { host, path } = opts;
 
-//   const ret = await cb();
+    if (/google[a-z0-9]*\.com/.test(host)) {
+      if (debug)
+        console.log(
+          'Intercepted google call to: ',
+          opts.method ?? 'GET',
+          opts.host,
+          opts.path
+        );
 
-//   shutdownServer();
-//   undo();
+      for (let url of Object.keys(redirects)) {
+        const matcher = redirects[url];
+        url = new URL(url);
+        if (matcher(path.split('?')[0])) {
+          if (debug) console.log('Redirecting to test server: ', url.href);
+          opts.host = url.host;
+          opts.port = 5005;
+          opts.path = url.pathname;
+          opts.headers.Host = url.origin;
 
-//   return ret;
-// }
+          return http.request(opts, cb);
+        }
+      }
+    }
+    return orig(opts, cb);
+  });
 
-// function patch__google_request(redirects, debug = false) {
-//   monkeypatch(https, 'request', (orig, opts, cb) => {
-//     const { host, path } = opts;
+  return () => {
+    https.request.unpatch();
+  };
+}
 
-//     if (/google[a-z0-9]*\.com/.test(host)) {
-//       if (debug)
-//         console.log(
-//           'Intercepted google call to: ',
-//           opts.method ?? 'GET',
-//           opts.host,
-//           opts.path
-//         );
+function getLoginURL(base) {
+  const params = Object.entries({
+    code: 'TEST_CODE',
+    scope: 'email profile openid',
+  }).reduce((a, p) => {
+    a.append(...p);
+    return a;
+  }, new URLSearchParams());
 
-//       for (let url of Object.keys(redirects)) {
-//         const matcher = redirects[url];
-//         url = new URL(url);
-//         if (matcher(path.split('?')[0])) {
-//           if (debug) console.log('Redirecting to test server: ', url.href);
-//           opts.host = url.host;
-//           opts.port = 5005;
-//           opts.path = url.pathname;
-//           opts.headers.Host = url.origin;
+  return `${base}?${params.toString()}`;
+}
 
-//           return http.request(opts, cb);
-//         }
-//       }
-//     }
-//     return orig(opts, cb);
-//   });
+// This is a testing server that
+// serves google identical profile and tokens
+function runTestServer() {
+  const app = require('express')();
+  const token = {
+    access_token: 'TEST_ACCESS_TOKEN',
+  };
 
-//   return () => {
-//     https.request.unpatch();
-//   };
-// }
+  app.get('/token', (req, res) => {
+    res.json(token);
+  });
 
-// function getLoginURL(base) {
-//   const params = Object.entries({
-//     code: 'TEST_CODE',
-//     scope: 'email profile openid',
-//   }).reduce((a, p) => {
-//     a.append(...p);
-//     return a;
-//   }, new URLSearchParams());
+  app.post('/token', (req, res) => {
+    res.json(token);
+  });
 
-//   return `${base}?${params.toString()}`;
-// }
+  app.get('/userinfo', (req, res) => {
+    res.json(mockUser);
+  });
 
-// // This is a testing server that
-// // serves google identical profile and tokens
-// function runTestServer() {
-//   const app = require('express')();
-//   const token = {
-//     access_token: 'TEST_ACCESS_TOKEN',
-//   };
+  // eslint-disable-next-line prettier/prettier
+  const server = app.listen(5005, () => {});
 
-//   app.get('/token', (req, res) => {
-//     res.json(token);
-//   });
+  return async () => await server.close();
+}
 
-//   app.post('/token', (req, res) => {
-//     res.json(token);
-//   });
+// receives cookies object {name: value}
+function getJWTCookie(cookies) {
+  const entries = Object.entries(cookies);
 
-//   app.get('/userinfo', (req, res) => {
-//     res.json(mockUser);
-//   });
+  for (let [, value] of entries) {
+    try {
+      value = parseJWTCookie(value);
+      return value;
+    } catch (err) {
+      continue;
+    }
+  }
+}
+function parseJWTCookie(value) {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+  const { SECRET_KEY } = process.env;
 
-//   // eslint-disable-next-line prettier/prettier
-//   const server = app.listen(5005, () => {});
+  const { decryptAesGcm } = require('encrypt-cookie');
+  const jwt = require('jsonwebtoken');
+  value = decryptAesGcm(value, SECRET_KEY) || value;
 
-//   return async () => await server.close();
-// }
+  if (value.substr(0, 2) === 's:') {
+    // Unsign cookie
+    const { unsign } = require('cookie-signature');
+    value = unsign(value, SECRET_KEY);
+  }
 
-// // receives cookies object {name: value}
-// function getJWTCookie(cookies) {
-//   const entries = Object.entries(cookies);
+  const decoded = jwt.verify(value, SECRET_KEY);
+  return decoded;
+}
 
-//   for (let [, value] of entries) {
-//     try {
-//       value = parseJWTCookie(value);
-//       return value;
-//     } catch (err) {
-//       continue;
-//     }
-//   }
-// }
-// function parseJWTCookie(value) {
-//   if (typeof value !== 'string') {
-//     return undefined;
-//   }
-//   const { SECRET_KEY } = process.env;
-
-//   const { decryptAesGcm } = require('encrypt-cookie');
-//   const jwt = require('jsonwebtoken');
-//   value = decryptAesGcm(value, SECRET_KEY) || value;
-
-//   if (value.substr(0, 2) === 's:') {
-//     // Unsign cookie
-//     const { unsign } = require('cookie-signature');
-//     value = unsign(value, SECRET_KEY);
-//   }
-
-//   const decoded = jwt.verify(value, SECRET_KEY);
-//   return decoded;
-// }
-
-// // parses set-cookie array
-// function parseCookies(cookies) {
-//   const parser = require('cookie');
-//   const obj = {};
-//   cookies.forEach((c) => {
-//     try {
-//       c = parser.parse(c.split(/; */)[0]);
-//       Object.assign(obj, c);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   });
-//   return [
-//     obj,
-//     Object.entries(obj)
-//       .map((e) => parser.serialize(...e))
-//       .join('; '),
-//   ];
-// }
+// parses set-cookie array
+function parseCookies(cookies) {
+  const parser = require('cookie');
+  const obj = {};
+  cookies.forEach((c) => {
+    try {
+      c = parser.parse(c.split(/; */)[0]);
+      Object.assign(obj, c);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  return [
+    obj,
+    Object.entries(obj)
+      .map((e) => parser.serialize(...e))
+      .join('; '),
+  ];
+}

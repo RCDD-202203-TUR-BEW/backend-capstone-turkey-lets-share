@@ -67,24 +67,24 @@ module.exports = Object.freeze({
   PUBLIC_AUTH_ROUTES: [
     { method: 'get', path: '/api/auth/login' },
     { method: 'get', path: '/api/auth/register' },
-    { method: 'get', path: '/api/auth/logout' },
     { method: 'get', path: '/api/auth/google' },
     { method: 'get', path: '/api/auth/google/callback' },
-    { method: 'get', path: '/api/auth/facebook' },
-    { method: 'get', path: '/api/auth/facebook/callback' },
+    // { method: 'get', path: '/api/auth/facebook' },
+    // { method: 'get', path: '/api/auth/facebook/callback' },
   ],
 
   PUBLIC_ROUTES: [
     { method: 'get', path: '/' },
+
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/posts' },
-    { method: 'get', path: '/api/posts' },
-    { method: 'get', path: '/api/posts?search&category' },
+    { method: 'get', path: '/api/post' },
+    { method: 'get', path: '/api/post?search&category' },
     { method: 'get', path: '/api/post/:id' },
   ],
   PRIVATE_ROUTES: [
     { method: 'post', path: '/api/post' },
+    { method: 'post', path: '/api/auth/logout' },
     { method: 'put', path: '/api/post/:id' },
     { method: 'delete', path: '/api/post/:id' },
     { method: 'get', path: '/api/auth/profile' },
