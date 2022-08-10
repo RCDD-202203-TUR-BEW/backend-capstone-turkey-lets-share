@@ -75,7 +75,6 @@ module.exports = Object.freeze({
 
   PUBLIC_ROUTES: [
     { method: 'get', path: '/' },
-
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
     { method: 'get', path: '/api/post' },
