@@ -63,15 +63,34 @@ module.exports = Object.freeze({
     <li>Can include a space or a dash (-) after country code</li>
     <li>Can be in the format "+90 1234567890" or "901234567890"</li>
   </ul>`,
-  PUBLIC_PATHS: [
-    '/api/',
-    '/api/about',
-    '/api/auth/login',
-    '/api/auth/register',
-    '/api/auth/google',
-    '/api/auth/google/callback',
-    '/',
+
+  PUBLIC_AUTH_ROUTES: [
+    { method: 'get', path: '/api/auth/login' },
+    { method: 'get', path: '/api/auth/register' },
+    { method: 'get', path: '/api/auth/logout' },
+    { method: 'get', path: '/api/auth/google' },
+    { method: 'get', path: '/api/auth/google/callback' },
+    { method: 'get', path: '/api/auth/facebook' },
+    { method: 'get', path: '/api/auth/facebook/callback' },
   ],
+
+  PUBLIC_ROUTES: [
+    { method: 'get', path: '/' },
+    { method: 'get', path: '/api/' },
+    { method: 'get', path: '/api/about' },
+    { method: 'get', path: '/api/posts' },
+    { method: 'get', path: '/api/posts' },
+    { method: 'get', path: '/api/posts?search&category' },
+    { method: 'get', path: '/api/post/:id' },
+  ],
+  PRIVATE_ROUTES: [
+    { method: 'post', path: '/api/post' },
+    { method: 'put', path: '/api/post/:id' },
+    { method: 'delete', path: '/api/post/:id' },
+    { method: 'get', path: '/api/auth/profile' },
+    { method: 'get', path: '/api/auth/logout' },
+  ],
+
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
 });
