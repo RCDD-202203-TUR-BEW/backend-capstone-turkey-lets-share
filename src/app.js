@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const cookieParser = require('cookie-parser');
 const { expressjwt: jwt } = require('express-jwt');
-
+const { encryptCookieNodeMiddleware } = require('encrypt-cookie');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -20,10 +20,12 @@ const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
-// app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
+app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-const { PUBLIC_ROUTES } = constants;
+const { PUBLIC_AUTH_ROUTES } = constants;
 
+const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
+// console.log(publicAuthPaths);
 app.use(
   '/api',
   jwt({
@@ -33,7 +35,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: PUBLIC_ROUTES,
+    path: publicAuthPaths,
   })
 );
 
