@@ -98,41 +98,42 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      match: [
-        /^[a-zA-Z0-9\-_.]+@[a-z]+\.([a-z]{2,3})+(\.[a-z]{2,3})?$/,
-        `invalid email`,
-      ],
       required: true,
+      trim: true,
       unique: true,
       lowercase: true,
     },
     username: {
       type: String,
-      match: [
-        // eslint-disable-next-line node/no-unsupported-features/es-syntax
-        /^(?=.{2,40}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-        `invalid username`,
-      ],
       required: true,
+      trim: true,
       unique: true,
       lowercase: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
+      required: false,
+      trim: true,
+      unique: true,
+      sparse: true,
     },
     age: {
       type: Number,
+      required: false,
     },
     gender: {
       type: String,
+      required: false,
       enum: constants.ENUM_GENDER,
     },
     nationality: {
       type: String,
+      required: false,
       enum: constants.ENUM_NATIONALITY,
     },
     refugee: {
       type: Boolean,
+      required: false,
     },
     avaregeRating: {
       type: Number,
@@ -140,10 +141,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePhoto: {
       type: String,
-      required: true,
-      default:
-        'https://cdn.dribbble.com/users/6142/screenshots/5679189/media/052967c305a8f96a4b40b79ce5e61b0d.png',
-      // source: https://dribbble.com/shots/5679189-Default-Profile-Image
+      default: constants.DEFAULT_PROFILE_PHOTO,
     },
     donated: {
       ref: 'Donation',
