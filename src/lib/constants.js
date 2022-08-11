@@ -36,6 +36,18 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
   ENUM_POST_STATUS: ['Published', 'Verified'],
+
+  PUBLIC_PATHS: [
+    '/api/',
+    '/api/about',
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/google',
+    '/api/auth/google/callback',
+    '/api/auth/facebook',
+    '/api/auth/facebook/callback',
+    '/',
+
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
