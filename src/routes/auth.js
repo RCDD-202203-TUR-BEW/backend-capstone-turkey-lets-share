@@ -18,8 +18,11 @@ router.get(
   authController.saveUserToTokenAndCookie
 );
 
-router.get('/facebook', passport.authorize('facebook', { scope: ['email'] }));
-router.get('/facebook', passport.authenticate('facebook'));
+router.get(
+  '/facebook',
+  passport.authorize('facebook', { scope: ['email'] }),
+  passport.authenticate('facebook')
+);
 
 router.get(
   '/facebook/callback',

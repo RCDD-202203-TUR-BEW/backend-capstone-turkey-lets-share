@@ -33,15 +33,14 @@ const mockUser = {
   locale: 'en-GB',
 };
 
-const facebookMockUser =  {
-    id: '3229203963961068',
-    name: 'Muslim Omar',
-    last_name: 'Omar',
-    first_name: 'Muslim',
-    picture: { data: [''] },
-    // Hint: since you were using the same email for testing google auth, and the email field is unique, it gave dup_coll error, so I had to change it.
-    email: 'nilay.aydinfb@gmail.com'
-  };
+const facebookMockUser = {
+  id: '3229203963961068',
+  name: 'Muslim Omar',
+  last_name: 'Omar',
+  first_name: 'Muslim',
+  picture: { data: [''] },
+  email: 'nilay.aydinfb@gmail.com',
+};
 
 beforeAll(async () => {
   await db();
@@ -78,7 +77,9 @@ describe('Google Auth Endpoints', () => {
       const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
       const client_id = uri.searchParams.get('client_id') ?? '';
 
-      expect(scope).toEqual(expect.arrayContaining(['openid', 'email', 'profile']));
+      expect(scope).toEqual(
+        expect.arrayContaining(['openid', 'email', 'profile'])
+      );
       expect(client_id.length).toBeGreaterThan(10);
 
       if (redirectTo) redirectUri = new URL(redirectTo);
@@ -255,13 +256,11 @@ describe('Facebook Auth Endpoints', () => {
 });
 
 async function runFacebookRequestInPatchedServer(cb) {
-  const undo = patch__facebook_request(
-    {
-      [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
-      [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
-      [`http://127.0.0.1/v3.2/me`]: (path) => path.endsWith('/v3.2/me'),
-    }
-  );
+  const undo = patch__facebook_request({
+    [`http://127.0.0.1/token`]: (path) => path.endsWith('token'),
+    [`http://127.0.0.1/userinfo`]: (path) => path.endsWith('userinfo'),
+    [`http://127.0.0.1/v3.2/me`]: (path) => path.endsWith('/v3.2/me'),
+  });
 
   let shutdownServer = runTestServer();
 
@@ -338,7 +337,6 @@ function runTestServer() {
   });
 
   app.get('/userinfo', (req, res) => {
-
     res.json(mockUser);
   });
 
