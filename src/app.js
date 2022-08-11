@@ -13,7 +13,7 @@ const connectToMongo = require('./db/connection');
 const authorize = require('./middleware/guard');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+const productRoutes = require('./routes/product');
 const constants = require('./lib/constants');
 
 const app = express();
@@ -45,7 +45,7 @@ app.use(express.json());
 // app.use(authorize);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/post', postRoutes);
+app.use('/api/product', productRoutes);
 
 // Swagger definition
 const swaggerDefinition = {

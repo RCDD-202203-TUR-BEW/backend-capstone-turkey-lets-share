@@ -600,7 +600,6 @@ function runTestServer() {
     res.json(facebookMockUser);
   });
 
-
   // eslint-disable-next-line prettier/prettier
 
   const server = app.listen(5005, () => {});
