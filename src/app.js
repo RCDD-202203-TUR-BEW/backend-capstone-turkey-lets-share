@@ -17,7 +17,7 @@ const productRoutes = require('./routes/product');
 const constants = require('./lib/constants');
 
 const app = express();
-const port = process.env.NODE_LOCAL_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
