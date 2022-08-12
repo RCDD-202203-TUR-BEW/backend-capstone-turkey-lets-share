@@ -17,7 +17,7 @@ const validateUpdate = (req, res, next) => {
       errorsArray.push('Password and password confirmation are required');
     }
     if (!(password === passwordConfirmation)) {
-      errorsArray.push('Password and password confirmation do not match');
+      errorsArray.push('Password and Password confirmation do not match');
     }
   }
   if (phoneNumber) {

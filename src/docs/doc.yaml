@@ -2,7 +2,7 @@ paths:
   /api/auth/register:
     post:
       tags:
-        - register
+        - Authentication
       description: 'Registers a new user'
       requestBody:
         content:
@@ -94,13 +94,60 @@ paths:
   /api/auth/logout:
     post:
       tags:
-        - logout
+        - Authentication
       description: 'Logs out current user'
       responses:
         '200':
           description: 'OK (logged out)'
         '401':
           description: 'Unauthorized (one needs to be logged in)'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: 'Logs user into the system'
+      operationId: 'loginUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'email'
+          in: 'body'
+          description: 'login users to the system'
+          required: true
+          type: 'string'
+        - name: 'password'
+          in: 'body'
+          description: 'Password for login'
+          required: true
+          type: 'string'
+      responses:
+        '201':
+          description: 'User sucesfully signed in!'
+
+        '401':
+          description: 'Wrong email or password!'
+
+        '422':
+          description: 'Unprocessable entity'
+
+        '500':
+          description: 'Internal server error'
+  /api/auth/profile:
+    get:
+      tags:
+        - Authentication
+      summary: 'Returns the information of the logged in user'
+      description: 'Should return the information of current user'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'User info is fetched'
+        '401':
+          description: 'UnauthorizedError: No authorization token was found'
+        '500':
+          description: 'Internal server error'
 components:
   schemas:
     User:

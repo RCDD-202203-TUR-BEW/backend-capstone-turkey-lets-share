@@ -2,7 +2,7 @@ paths:
   /api/user/{id}:
     get:
       tags:
-        - get users
+        - User
       parameters:
         - in: path
           name: id
@@ -28,3 +28,92 @@ paths:
           description: 'Unauthorized (one needs to be logged in)'
         '500':
           description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
+    patch:
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'ID of the user'
+          examples:
+            'real ID of an available user':
+              value: '62eb038c20b4f5b0bd8c7676'
+            'real ID of a deleted user':
+              value: '62ee5c280262c62f56124dfd'
+            'some fake ObjectId':
+              value: 'fake5c280262c62f56124dfd'
+            'custom':
+              value: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string,
+                lastName:
+                  type: string,
+                phoneNumber:
+                  type: string,
+                age:
+                  type: integer,
+                gender:
+                  type: string,
+                nationality:
+                  type: string,
+                refugee:
+                  type: boolean,
+                password:
+                  type: string,
+                passwordConfirmation:
+                  type: string,
+            examples:
+              'CORRECT INFO SENT FOR UPDATE':
+                value: '{
+                  "firstName" : "Nilay",
+                  "lastName": "Aydin",
+                  "phoneNumber": "+679-123456789012",
+                  "age": 25,
+                  "gender": "Female",
+                  "nationality": "Turkey",
+                  "refugee": false,
+                  "address":{"country":"Germany"},
+                  "password": "Nilay-123",
+                  "passwordConfirmation": "Nilay-123"
+                  }'
+              'PASSWORD CONFORMATION NOT PROVIDED':
+                value: '{
+                  "password": "Nilay-123"
+                  }'
+              'PASSWORDS DOESNOT MATCH':
+                value: '{
+                  "password": "Nilay-123",
+                  "passwordConfirmation": "Nilay-123456"
+                  }'
+              'PHONENUMBER NOT INCORRECT FORMAT':
+                value: '{
+                  "phoneNumber": "+60"
+                  }'
+              'AGE IS NOT A NUMBER':
+                value: '{
+                  "age": "25"
+                  }'
+              'ADDRESS IS NOT AN OBJECT':
+                value: '{
+                  "address": "Germany"
+                  }'
+      summary: 'Updates information of the user'
+      description: 'Should update the info of the current user'
+      produces:
+        - 'application/json'
+      responses:
+        '201':
+          description: 'User Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
