@@ -28,7 +28,7 @@ const getProducts = async (req, res) => {
     }
 
     if (location) {
-      filter.location = { $regex: location, $options: 'i' };
+      filter.location = { $regex: search, $options: 'i' };
     }
 
     if (shippingOptions) {
@@ -39,9 +39,9 @@ const getProducts = async (req, res) => {
       filter.postType = postType;
     }
 
-    const filteredPosts = await ProductModel.find(filter);
+    const filteredProducts = await ProductModel.find(filter);
 
-    return res.status(200).json(filteredPosts);
+    return res.status(200).json(filteredProducts);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

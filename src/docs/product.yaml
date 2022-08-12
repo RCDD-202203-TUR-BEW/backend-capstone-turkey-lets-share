@@ -1,0 +1,42 @@
+paths:
+    /api/product:
+        get:
+            tags:
+                - Product
+            summary: Gets all products and provides filtering and searching features
+            description: If there is no query, this endpoints gets all the products. If there is query, this endpoint gets the products which fits query in qustion.
+            operationId: getProducts
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - name: category
+                  in: query
+                  type: string
+                  example: Books
+                - name: productCondition
+                  in: query
+                  type: string
+                  example: Underused
+                - name: search
+                  in: query
+                  type: string
+                  example: computer
+                - name: location
+                  in: query
+                  type: string
+                  example: Istanbul
+                - name: shippingOptions
+                  in: query
+                  type: string
+                  example: Meetup
+                - name: postType
+                  in: query
+                  type: string
+                  example: donated
+            responses:
+                200:
+                    description: Returns a list of the matching products.
+                500:
+                    description: Internal server error
