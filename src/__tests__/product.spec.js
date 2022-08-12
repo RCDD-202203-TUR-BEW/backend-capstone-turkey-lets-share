@@ -50,8 +50,6 @@ let donatePostId;
 
 beforeAll(async () => {
   connectDatabase();
-  await ProductModel.deleteMany();
-
   newUser = await UserModel.create(createCurrentUser);
 });
 
