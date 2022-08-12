@@ -25,7 +25,6 @@ module.exports = Object.freeze({
     'Toys',
     'Other',
   ],
-  ENUM_REQUEST_STATUS: ['Requested', 'Confirmed', 'Rejected'],
   ENUM_PRODUCT_CONDITION: ['New', 'Underused', 'Overused'],
   ENUM_SHIPPING_OPTION: [
     'Meet up',
@@ -35,7 +34,6 @@ module.exports = Object.freeze({
     'To be determined',
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
-  ENUM_POST_STATUS: ['Published', 'Verified'],
 
   PUBLIC_PATHS: [
     '/api/',
@@ -81,23 +79,23 @@ module.exports = Object.freeze({
     { method: 'get', path: '/api/auth/register' },
     { method: 'get', path: '/api/auth/google' },
     { method: 'get', path: '/api/auth/google/callback' },
-    // { method: 'get', path: '/api/auth/facebook' },
-    // { method: 'get', path: '/api/auth/facebook/callback' },
+    { method: 'get', path: '/api/auth/facebook' },
+    { method: 'get', path: '/api/auth/facebook/callback' },
   ],
 
   PUBLIC_ROUTES: [
     { method: 'get', path: '/' },
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/post' },
-    { method: 'get', path: '/api/post?search&category' },
-    { method: 'get', path: '/api/post/:id' },
+    { method: 'get', path: '/api/product' },
+    { method: 'get', path: '/api/product?search&category' },
+    { method: 'get', path: '/api/product/:id' },
   ],
   PRIVATE_ROUTES: [
-    { method: 'post', path: '/api/post' },
+    { method: 'post', path: '/api/product' },
     { method: 'post', path: '/api/auth/logout' },
-    { method: 'put', path: '/api/post/:id' },
-    { method: 'delete', path: '/api/post/:id' },
+    { method: 'put', path: '/api/product/:id' },
+    { method: 'delete', path: '/api/product/:id' },
     { method: 'get', path: '/api/auth/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],

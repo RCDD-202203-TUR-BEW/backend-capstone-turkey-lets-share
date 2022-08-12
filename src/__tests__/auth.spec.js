@@ -442,74 +442,74 @@ function getLoginURL(base) {
   return `${base}?${params.toString()}`;
 }
 
-// describe('Facebook Auth Endpoints', () => {
-//   const cookiesAgent = supertest.agent(app);
+describe('Facebook Auth Endpoints', () => {
+  const cookiesAgent = supertest.agent(app);
 
-//   describe('GET /api/auth/facebook', () => {
-//     it('Redirects to Facebook authorization page', (done) => {
-//       req
-//         .get('/api/auth/facebook')
-//         .expect(302)
-//         .expect('location', /facebook\.com/)
-//         .end(done);
-//     });
+  describe('GET /api/auth/facebook', () => {
+    it('Redirects to Facebook authorization page', (done) => {
+      req
+        .get('/api/auth/facebook')
+        .expect(302)
+        .expect('location', /facebook\.com/)
+        .end(done);
+    });
 
-//     it('Redirects with correct scope and credentials', async () => {
-//       const res = await req.get('/api/auth/facebook');
-//       const location = res.header.location;
+    it('Redirects with correct scope and credentials', async () => {
+      const res = await req.get('/api/auth/facebook');
+      const location = res.header.location;
 
-//       expect(location).not.toBeNull();
+      expect(location).not.toBeNull();
 
-//       const uri = new URL(location);
-//       const scope = uri.searchParams.get('scope')?.split(' ') ?? [];
-//       const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
-//       const client_id = uri.searchParams.get('client_id') ?? '';
+      const uri = new URL(location);
+      const scope = uri.searchParams.get('scope')?.split(' ') ?? [];
+      const redirectTo = uri.searchParams.get('redirect_uri') ?? '';
+      const client_id = uri.searchParams.get('client_id') ?? '';
 
-//       expect(scope).toEqual(expect.arrayContaining(['email']));
-//       expect(client_id.length).toBeGreaterThan(10);
+      expect(scope).toEqual(expect.arrayContaining(['email']));
+      expect(client_id.length).toBeGreaterThan(10);
 
-//       if (redirectTo) redirectUri = new URL(redirectTo);
-//     });
-//   });
+      if (redirectTo) redirectUri = new URL(redirectTo);
+    });
+  });
 
-//   describe(`GET REDIRECT_URI`, () => {
-//     it('Redirects to Facebook sign in page without cookie for incorrect credentials', async () => {
-//       expect(redirectUri).not.toBeNull();
-//       const res = await req.get(redirectUri.pathname);
-//       expect(res.status).toBe(302);
-//       expect(res.header['set-cookie']).not.toBeDefined();
-//     });
+  describe(`GET REDIRECT_URI`, () => {
+    it('Redirects to Facebook sign in page without cookie for incorrect credentials', async () => {
+      expect(redirectUri).not.toBeNull();
+      const res = await req.get(redirectUri.pathname);
+      expect(res.status).toBe(302);
+      expect(res.header['set-cookie']).not.toBeDefined();
+    });
 
-//     it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
-//       expect(redirectUri).not.toBeNull();
+    it('Redirects to the profile page with a valid JWT cookie for correct credentials', async () => {
+      expect(redirectUri).not.toBeNull();
 
-//       const res = await runFacebookRequestInPatchedServer(
-//         async () =>
-//           await cookiesAgent.get(getFacebookLoginURL(redirectUri.pathname))
-//       );
+      const res = await runFacebookRequestInPatchedServer(
+        async () =>
+          await cookiesAgent.get(getFacebookLoginURL(redirectUri.pathname))
+      );
 
-//       expect(res.status).toBe(302);
-//       expect(res.header['set-cookie']).toBeDefined();
+      expect(res.status).toBe(302);
+      expect(res.header['set-cookie']).toBeDefined();
 
-//       const [cookies] = parseCookies(res.header['set-cookie']);
+      const [cookies] = parseCookies(res.header['set-cookie']);
 
-//       const auth_cookie = getJWTCookie(cookies);
+      const auth_cookie = getJWTCookie(cookies);
 
-//       const iat = auth_cookie.iat;
+      const iat = auth_cookie.iat;
 
-//       expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
+      expect(iat).toBeLessThanOrEqual(Date.now() / 1000);
 
-//       const expected = {
-//         email: facebookMockUser.email,
-//         providerId: `facebook-${facebookMockUser.id}`,
-//         exp: iat + 14 * 24 * 3600,
-//         iat: expect.any(Number),
-//       };
+      const expected = {
+        email: facebookMockUser.email,
+        providerId: `facebook-${facebookMockUser.id}`,
+        exp: iat + 14 * 24 * 3600,
+        iat: expect.any(Number),
+      };
 
-//       expect(auth_cookie).toEqual(expect.objectContaining(expected));
-//     });
-//   });
-// });
+      expect(auth_cookie).toEqual(expect.objectContaining(expected));
+    });
+  });
+});
 
 async function runFacebookRequestInPatchedServer(cb) {
   const undo = patch__facebook_request({
