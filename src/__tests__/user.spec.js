@@ -6,6 +6,11 @@
 // const app = require('../app');
 // const UserModel = require('../models/user');
 // const connectDatabase = require('../db/connection');
+describe('Main test suite', () => {
+  it('App Test', () => {
+    expect(true).toEqual(true);
+  });
+});
 
 // const createCurrentUser = {
 //   firstName: 'adnan',
