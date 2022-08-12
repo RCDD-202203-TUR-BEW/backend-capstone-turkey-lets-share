@@ -28,8 +28,8 @@ const { PUBLIC_ROUTES } = constants;
 
 const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
 const publicPaths = PUBLIC_ROUTES.map(({ path }) => path);
-const deneme = publicAuthPaths.concat(publicPaths);
-console.log(deneme);
+const allPublicPaths = publicAuthPaths.concat(publicPaths);
+
 app.use(
   '/api',
   jwt({
@@ -39,7 +39,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: deneme,
+    path: allPublicPaths,
   })
 );
 
