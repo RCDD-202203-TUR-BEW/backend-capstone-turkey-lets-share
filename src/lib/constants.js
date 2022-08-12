@@ -25,7 +25,6 @@ module.exports = Object.freeze({
     'Toys',
     'Other',
   ],
-  ENUM_REQUEST_STATUS: ['Requested', 'Confirmed', 'Rejected'],
   ENUM_PRODUCT_CONDITION: ['New', 'Underused', 'Overused'],
   ENUM_SHIPPING_OPTION: [
     'Meet up',
@@ -35,14 +34,25 @@ module.exports = Object.freeze({
     'To be determined',
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
-  ENUM_POST_STATUS: ['Published', 'Verified'],
+
+  PUBLIC_PATHS: [
+    '/api/',
+    '/api/about',
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/google',
+    '/api/auth/google/callback',
+    '/api/auth/facebook',
+    '/api/auth/facebook/callback',
+    '/',
+  ],
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
   ),
   NAME_REGEX: new RegExp(/^$|\s+/),
   EMAIL_REGEX: new RegExp(
-    /^[a-zA-Z0-9-_.]+@[a-z]+\.[a-z]{2,3}(\.[a-z]{2,3})?$/
+    /^[a-zA-Z0-9-_.]+@[a-z]+\.[a-z]{2,15}(\.[a-z]{2,3})?(\.[a-z]{2,3})?$/
   ),
   USERNAME_REGEX: new RegExp(/^[a-zA-Z0-9\-_.]{2,20}$/),
   PHONE_NUMBER_REGEX: new RegExp(/^[+]?[0-9]{1,3}[-\s]?[0-9]{1,3}[0-9]{4,9}$/),
@@ -67,7 +77,6 @@ module.exports = Object.freeze({
   PUBLIC_AUTH_ROUTES: [
     { method: 'get', path: '/api/auth/login' },
     { method: 'get', path: '/api/auth/register' },
-    { method: 'get', path: '/api/auth/logout' },
     { method: 'get', path: '/api/auth/google' },
     { method: 'get', path: '/api/auth/google/callback' },
     { method: 'get', path: '/api/auth/facebook' },
@@ -78,16 +87,16 @@ module.exports = Object.freeze({
     { method: 'get', path: '/' },
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/post' },
-
-    { method: 'get', path: '/api/posts?search&category' },
-    { method: 'get', path: '/api/post/:id' },
+    { method: 'get', path: '/api/product' },
+    { method: 'get', path: '/api/product?search&category' },
+    { method: 'get', path: '/api/product/:id' },
   ],
   PRIVATE_ROUTES: [
-    { method: 'post', path: '/api/post' },
-    { method: 'put', path: '/api/post/:id' },
-    { method: 'delete', path: '/api/post/:id' },
-    { method: 'get', path: '/api/user/profile' },
+    { method: 'post', path: '/api/product' },
+    { method: 'post', path: '/api/auth/logout' },
+    { method: 'put', path: '/api/product/:id' },
+    { method: 'delete', path: '/api/product/:id' },
+    { method: 'get', path: '/api/auth/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],
 

@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 const express = require('express');
 require('dotenv').config();
 
 const cookieParser = require('cookie-parser');
 const { expressjwt: jwt } = require('express-jwt');
-
+const { encryptCookieNodeMiddleware } = require('encrypt-cookie');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -13,17 +14,19 @@ const connectToMongo = require('./db/connection');
 const authorize = require('./middleware/guard');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+const productRoutes = require('./routes/product');
 const constants = require('./lib/constants');
 
 const app = express();
 const port = process.env.NODE_LOCAL_PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
-// app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
+app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-// const { PUBLIC_ROUTES } = constants;
+const { PUBLIC_AUTH_ROUTES } = constants;
 
+const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
+// console.log(publicAuthPaths);
 app.use(
   '/api',
   jwt({
@@ -33,7 +36,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: '/api/post',
+    path: publicAuthPaths,
   })
 );
 
@@ -43,7 +46,7 @@ app.use(express.json());
 // app.use(authorize);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/post', postRoutes);
+app.use('/api/product', productRoutes);
 
 // Swagger definition
 const swaggerDefinition = {

@@ -1,25 +1,27 @@
+/* eslint-disable no-unused-vars */
 describe('Guard test', () => {
   it('Guard Test', () => {
     expect(true).toEqual(true);
   });
 });
 
-// // eslint-disable-next-line node/no-unpublished-require
-// const request = require('supertest');
-// const app = require('../app');
+// eslint-disable-next-line node/no-unpublished-require
+const request = require('supertest');
+const app = require('../app');
 
-// const authorize = require('../middleware/guard');
+const authorize = require('../middleware/guard');
 
 // describe('Guard Routes Middleware', () => {
 //   describe('When there is a logged in User', () => {
 //     const agent = request.agent(app);
-//     test('GET /auth/login should give 403 and redirect to /', async () => {
-//       const res = await agent.get('/api/auth/login');
+//     test('POST /auth/login should give 403 and redirect to /', async () => {
+//       const res = await agent.post('/api/auth/login');
+//       console.log(res.body);
 //       expect(res.statusCode).toBe(403);
 //       expect(res.body.message).toBe('Already Logged in');
 //     });
-//     test('GET /auth/register should give 403 and redirect to /', async () => {
-//       const res = await agent.get('/api/auth/register');
+//     test('POST /auth/register should give 403 and redirect to /', async () => {
+//       const res = await agent.post('/api/auth/register');
 //       expect(res.statusCode).toBe(403);
 //       expect(res.body.message).toBe('Already Logged in');
 //     });
