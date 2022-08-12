@@ -2,7 +2,7 @@ paths:
   /api/auth/register:
     post:
       tags:
-        - register
+        - Local auth
       description: 'Registers a new user'
       requestBody:
         content:
@@ -94,7 +94,7 @@ paths:
   /api/auth/logout:
     post:
       tags:
-        - logout
+        - Local auth
       description: 'Logs out current user'
       responses:
         '200':

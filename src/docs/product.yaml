@@ -1,0 +1,89 @@
+paths:
+  /api/post:
+    post:
+      tags:
+        - CRUD posts
+      descriptions: 'Creating a new post'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string,
+                description:
+                  type: string,
+                photos:
+                  type: array,
+                category:
+                  type: string,
+                location:
+                  type: string,
+                productCondition:
+                  type: string,
+                shippingOptions:
+                  type: string,
+                postType:
+                  type: string,
+                donor:
+                  type: string,
+                beneficiary:
+                  type: string,
+                isEvent:
+                  type: boolean
+            examples:
+              1:
+                value: '{
+                  "title": "Red couch",
+                  "description": "I have an underused couch I don''t need anymore",
+                  "photos": ["redCouch0.jpg", "redCouch1.jpg"],
+                  "category": "Furniture",
+                  "location": "Istanbul, Kadikoy",
+                  "productCondition": "Underused",
+                  "shippingOptions": "Meet up",
+                  "postType": "Donate",
+                  "isEvent": false
+                  }'
+      responses:
+        '201':
+          description: 'Created (post)'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
+components:
+  schemas:
+    Post:
+      type: object
+      required:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        photos:
+          type: [string]
+        category:
+          type: string
+        location:
+          type: string
+        productCondition:
+          type: string
+        shippingOptions:
+          type: string
+        postType:
+          type: string
+        postStatus:
+          type: string
+        donor:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        beneficiary:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        orderRequests:
+          type: array of ObjectIds
+        isEvent:
+          type: boolean,
+          default: false

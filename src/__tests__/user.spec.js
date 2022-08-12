@@ -10,8 +10,8 @@ const connectDatabase = require('../db/connection');
 const createCurrentUser = {
   firstName: 'adnan',
   lastName: 'khaldar',
-  email: 'adnan@outlook.com',
-  username: 'adnan',
+  email: 'adnan0@outlook.com',
+  username: 'adnan0',
   provider: 'Local',
   providerId: 'Local',
   passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
