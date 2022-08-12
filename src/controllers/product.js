@@ -28,7 +28,7 @@ const getProducts = async (req, res) => {
     }
 
     if (location) {
-      filter.location = { $regex: search, $options: 'i' };
+      filter.location = { $regex: location, $options: 'i' };
     }
 
     if (shippingOptions) {
