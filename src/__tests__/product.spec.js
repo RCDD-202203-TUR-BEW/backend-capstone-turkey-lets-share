@@ -20,7 +20,7 @@ const createCurrentUser = {
   passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
 };
 
-const createRequestPost = {
+const createRequestProduct = {
   title: 'test',
   description: 'test',
   photos: ['test'],
@@ -31,7 +31,7 @@ const createRequestPost = {
   postType: 'Request',
 };
 
-const createDonatePost = {
+const createDonateProduct = {
   title: 'test',
   description: 'test',
   photos: ['test'],
@@ -55,7 +55,7 @@ beforeAll(async () => {
   newUser = await UserModel.create(createCurrentUser);
 });
 
-describe('POST /api/product && GET /api/product && DELETE /api/product/:id', () => {
+describe('POST /api/product', () => {
   it('should return a token when correct user is logged in', (done) => {
     supertest(app)
       .post('/api/auth/login')
@@ -71,11 +71,11 @@ describe('POST /api/product && GET /api/product && DELETE /api/product/:id', () 
       });
   });
 
-  it('should create a new request-post', (done) => {
+  it('should create a new product with the postType property set to "Request"', (done) => {
     supertest(app)
       .post('/api/product')
       .set('Cookie', token)
-      .send(createRequestPost)
+      .send(createRequestProduct)
 
       .expect('Content-Type', /json/)
       .expect(201, (err, res) => {
@@ -87,9 +87,9 @@ describe('POST /api/product && GET /api/product && DELETE /api/product/:id', () 
       });
   });
 
-  it('should check if request-post was created', (done) => {
+  it('should check if "Request" post was created', (done) => {
     supertest(app)
-      .get(`/api/user/profile`)
+      .get('/api/user/profile')
       .set('Cookie', token)
 
       .expect('Content-Type', /json/)
@@ -103,11 +103,11 @@ describe('POST /api/product && GET /api/product && DELETE /api/product/:id', () 
       });
   });
 
-  it('should create a new donate-post', (done) => {
+  it('should create a new product with the postType property set to "Donate"', (done) => {
     supertest(app)
       .post('/api/product')
       .set('Cookie', token)
-      .send(createDonatePost)
+      .send(createDonateProduct)
 
       .expect('Content-Type', /json/)
       .expect(201, (err, res) => {
@@ -119,7 +119,7 @@ describe('POST /api/product && GET /api/product && DELETE /api/product/:id', () 
       });
   });
 
-  it('should check if donate-post was created', (done) => {
+  it('should check if "Donate" post was created', (done) => {
     supertest(app)
       .get(`/api/user/profile`)
       .set('Cookie', token)

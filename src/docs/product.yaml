@@ -1,9 +1,9 @@
 paths:
-  /api/post:
+  /api/product:
     post:
       tags:
-        - CRUD posts
-      descriptions: 'Creating a new post'
+        - CRUD products
+      descriptions: 'Adds a new product'
       requestBody:
         content:
           application/json:
@@ -27,13 +27,13 @@ paths:
                 postType:
                   type: string,
                 donor:
-                  type: string,
+                  type: ObjectId,
                 beneficiary:
-                  type: string,
+                  type: ObjectId,
                 isEvent:
                   type: boolean
             examples:
-              1:
+              'Red couch':
                 value: '{
                   "title": "Red couch",
                   "description": "I have an underused couch I don''t need anymore",
@@ -45,25 +45,36 @@ paths:
                   "postType": "Donate",
                   "isEvent": false
                   }'
+              'custom':
+                value: '{
+                  "title": "string",
+                  "description": "string",
+                  "photos": ["array of strings"],
+                  "category": "string, enum",
+                  "location": "string, string",
+                  "productCondition": "string, enum",
+                  "shippingOptions": "string, enum",
+                  "postType": "Donate || Request",
+                  "isEvent": false
+                  }'
       responses:
         '201':
-          description: 'Created (post)'
+          description: 'Created (a new product)'
         '400':
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
 components:
   schemas:
-    Post:
+    Product:
       type: object
-      required:
       properties:
         title:
           type: string
         description:
           type: string
         photos:
-          type: [string]
+          type: array of strings
         category:
           type: string
         location:
@@ -74,8 +85,8 @@ components:
           type: string
         postType:
           type: string
-        postStatus:
-          type: string
+        isTransactionCompleted:
+          type: Boolean
         donor:
           type: ObjectId
           description: 'Added automatically according to postType'

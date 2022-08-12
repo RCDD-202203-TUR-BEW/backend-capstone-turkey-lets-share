@@ -3,9 +3,9 @@ const objectId = require('mongoose').Types.ObjectId;
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 
-const createProduct = async (req, res) => {
+const addNewProduct = async (req, res) => {
   try {
-    const newPost = await ProductModel.create({
+    const newProduct = await ProductModel.create({
       title: req.body.title,
       description: req.body.description,
       photos: req.body.photos,
@@ -19,27 +19,27 @@ const createProduct = async (req, res) => {
       isEvent: req.body.isEvent,
     });
 
-    if (newPost.postType === 'Donate') {
+    if (newProduct.postType === 'Donate') {
       await UserModel.findByIdAndUpdate(req.user.userId, {
-        $push: { donated: newPost._id },
+        $push: { donated: newProduct._id },
       });
     }
-    if (newPost.postType === 'Request') {
-      newPost.donor = null;
-      newPost.beneficiary = objectId(req.user.userId);
-      await newPost.save();
+    if (newProduct.postType === 'Request') {
+      newProduct.donor = null;
+      newProduct.beneficiary = objectId(req.user.userId);
+      await newProduct.save();
 
       await UserModel.findByIdAndUpdate(req.user.userId, {
-        $push: { requested: newPost._id },
+        $push: { requested: newProduct._id },
       });
     }
 
-    return res.status(201).json(newPost);
+    return res.status(201).json(newProduct);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
-  createProduct,
+  addNewProduct,
 };

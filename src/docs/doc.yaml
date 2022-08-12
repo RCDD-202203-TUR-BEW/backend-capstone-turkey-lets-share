@@ -2,7 +2,7 @@ paths:
   /api/auth/register:
     post:
       tags:
-        - Local auth
+        - Authentication
       description: 'Registers a new user'
       requestBody:
         content:
@@ -94,7 +94,7 @@ paths:
   /api/auth/logout:
     post:
       tags:
-        - Local auth
+        - Authentication
       description: 'Logs out current user'
       responses:
         '200':
@@ -130,11 +130,11 @@ components:
         profilePhoto:
           type: string
         donated:
-          type: [ObjectId]
+          type: array of ObjectIds
         requested:
-          type: [ObjectId]
+          type: array of ObjectIds
         received:
-          type: [ObjectId]
+          type: array of ObjectIds
         provider:
           type: string
         providerId:
@@ -142,7 +142,7 @@ components:
         passwordHash:
           type: string
         address:
-          type: object
+          type: nested object
         createdAt:
           type: date
         updatedAt:
