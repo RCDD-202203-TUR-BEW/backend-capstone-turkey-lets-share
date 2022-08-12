@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/profile', userController.getProfile);
 
-router.get('/:userId/products', userController.getUserPosts);
+router.get('/:userId/products', userController.getUserProducts);
 
 router.get('/:id', userController.getSingleUser);
 

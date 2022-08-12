@@ -18,7 +18,7 @@ const getProfile = async (req, res) => {
   }
 };
 
-const getUserPosts = async (req, res) => {
+const getUserProducts = async (req, res) => {
   try {
     let { postType } = req.query;
     const { search } = req.query;
@@ -29,16 +29,13 @@ const getUserPosts = async (req, res) => {
       if (typeof postType !== 'object') postType = postType.split();
 
       postType.forEach((type) => {
-
         if (type === 'donated') {
           filterQueries.$or.push({ donor: req.params.userId });
-
         } else if (type === 'requested') {
           filterQueries.$or.push({
             beneficiary: req.params.userId,
             isTransactionCompleted: false,
           });
-
         } else if (type === 'received') {
           filterQueries.$or.push({
             beneficiary: req.params.userId,
@@ -90,6 +87,6 @@ const getSingleUser = async (req, res) => {
 
 module.exports = {
   getProfile,
-  getUserPosts,
+  getUserProducts,
   getSingleUser,
 };
