@@ -7,20 +7,24 @@ const addressSchema = new mongoose.Schema({
   country: {
     type: String,
     required: true,
+    trim: true,
   },
   city: {
     type: String,
     required: true,
+    trim: true,
   },
   address0: {
     type: String,
     required: true,
     maxLength: 100,
+    trim: true,
   },
   address1: {
     type: String,
     required: false,
     maxLength: 100,
+    trim: true,
   },
   zip: {
     type: String,
@@ -29,62 +33,15 @@ const addressSchema = new mongoose.Schema({
       /^\d{5}(?:[-\s]\d{4})?$/,
       `Zip code must be in the format 12345 or 12345-1234`,
     ],
+    trim: true,
   },
   description: {
     type: String,
     required: false,
     maxLength: 200,
+    trim: true,
   },
 });
-
-const reviewSchema = new mongoose.Schema(
-  {
-    reviewerId: {
-      ref: 'User',
-      type: objectId,
-      required: true,
-    },
-    rating: {
-      type: Number,
-      required: true,
-      enum: [1, 2, 3, 4, 5],
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: false,
-    },
-  },
-  { timestamps: true }
-);
-
-const reportSchema = new mongoose.Schema(
-  {
-    reporterId: {
-      ref: 'User',
-      type: objectId,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    status: {
-      type: String,
-      required: true,
-      enum: constants.ENUM_REPORT_STATUS,
-      default: 'Pending',
-    },
-  },
-  { timestamps: true }
-);
 
 const userSchema = new mongoose.Schema(
   {
@@ -135,26 +92,22 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
     },
-    avaregeRating: {
-      type: Number,
-      default: 0,
-    },
     profilePhoto: {
       type: String,
       default: constants.DEFAULT_PROFILE_PHOTO,
     },
     donated: {
-      ref: 'Donation',
+      ref: 'Product',
       type: [objectId],
       default: [],
     },
     requested: {
-      ref: 'Request',
+      ref: 'Product',
       type: [objectId],
       default: [],
     },
     received: {
-      ref: 'Request',
+      ref: 'Product',
       type: [objectId],
       default: [],
     },
@@ -173,14 +126,6 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: [addressSchema],
-      default: [],
-    },
-    reviews: {
-      type: [reviewSchema],
-      default: [],
-    },
-    reports: {
-      type: [reportSchema],
       default: [],
     },
   },
