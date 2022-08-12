@@ -25,7 +25,7 @@ app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 const { PUBLIC_AUTH_ROUTES } = constants;
 
 const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
-// console.log(publicAuthPaths);
+
 app.use(
   '/api',
   jwt({
