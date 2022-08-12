@@ -21,7 +21,6 @@ const port = process.env.NODE_LOCAL_PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
-
 const { PUBLIC_AUTH_ROUTES } = constants;
 
 const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
