@@ -1,14 +1,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable prettier/prettier */
-const mongoose = require('mongoose');
 const UserModel = require('../models/user');
-const PostModel = require('../models/post');
+const ProductModel = require('../models/product');
 
 // eslint-disable-next-line consistent-return
 const getProfile = async (req, res) => {
   try {
     if (req.user) {
-      const currentUser = await UserModel.findByuserId(req.user.useruserId);
+      const currentUser = await UserModel.findById(req.user.userId);
       return res
         .setHeader('Content-Type', 'application/json')
         .status(200)
@@ -37,15 +36,14 @@ const getUserPosts = async (req, res) => {
         } else if (type === 'requested') {
           filterQueries.$or.push({
             beneficiary: req.params.userId,
-            postStatus: 'Published',
+            isTransactionCompleted: false,
           });
 
         } else if (type === 'received') {
           filterQueries.$or.push({
             beneficiary: req.params.userId,
-            postStatus: 'Verified',
+            isTransactionCompleted: true,
           });
-          
         }
       });
 
@@ -58,15 +56,33 @@ const getUserPosts = async (req, res) => {
     }
 
     if (filter.$and.length === 0) {
-      const userPosts = await PostModel.find({
+      const userPosts = await ProductModel.find({
         $or: [{ donor: req.params.userId }, { beneficiary: req.params.userId }],
       });
 
       return res.json(userPosts);
     }
 
-    const userPosts = await PostModel.find(filter);
+    const userPosts = await ProductModel.find(filter);
     return res.json(userPosts);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getSingleUser = async (req, res) => {
+  try {
+    const foundUser = await UserModel.findById(req.params.id);
+    if (foundUser) {
+      if (req.user.userId === foundUser.id) {
+        return res.status(200).json({ message: 'Redirecting to profile...' });
+      }
+
+      const shownInfo = { ...foundUser, passwordHash: undefined };
+      return res.status(200).json(shownInfo);
+    }
+
+    return res.status(404).json({ message: 'User not found' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -75,4 +91,5 @@ const getUserPosts = async (req, res) => {
 module.exports = {
   getProfile,
   getUserPosts,
+  getSingleUser,
 };

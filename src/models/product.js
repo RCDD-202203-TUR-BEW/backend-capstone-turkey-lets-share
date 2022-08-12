@@ -3,37 +3,19 @@ const constants = require('../lib/constants');
 
 const objectId = mongoose.Schema.Types.ObjectId;
 
-const orderRequestSchema = new mongoose.Schema(
-  {
-    requestUser: {
-      ref: 'User',
-      type: objectId,
-    },
-    requestDescription: {
-      type: String,
-      maxLength: 400,
-      required: true,
-    },
-    requestStatus: {
-      type: String,
-      enum: constants.ENUM_REQUEST_STATUS,
-      default: 'Requested',
-    },
-  },
-  { timestamps: true }
-);
-
-const postSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       maxLength: 75,
       required: true,
+      trim: true,
     },
     description: {
       type: String,
       maxLength: 400,
       required: true,
+      trim: true,
     },
     photos: {
       type: [String],
@@ -47,6 +29,7 @@ const postSchema = new mongoose.Schema(
     location: {
       type: String,
       required: true,
+      trim: true,
     },
     productCondition: {
       type: String,
@@ -63,9 +46,8 @@ const postSchema = new mongoose.Schema(
       enum: constants.ENUM_POST_TYPE,
       required: true,
     },
-    postStatus: {
-      type: String,
-      enum: constants.ENUM_POST_STATUS,
+    isTransactionCompleted: {
+      type: Boolean,
     },
     donor: {
       ref: 'User',
@@ -76,7 +58,9 @@ const postSchema = new mongoose.Schema(
       type: objectId,
     },
     orderRequests: {
-      type: [orderRequestSchema],
+      ref: 'User',
+      type: [objectId],
+      default: [],
       maxLength: 5,
     },
     isEvent: {
@@ -87,4 +71,4 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Product', productSchema);

@@ -30,4 +30,19 @@ router.post(
 router.post('/register', registerMiddleware, authController.register);
 router.post('/logout', authController.logout);
 
+router.get(
+  '/facebook',
+  passport.authorize('facebook', { scope: ['email'] }),
+  passport.authenticate('facebook')
+);
+
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', {
+    session: false,
+    failureRedirect: '/api/auth/facebook',
+  }),
+  authController.saveUserToTokenAndCookie
+);
+
 module.exports = router;

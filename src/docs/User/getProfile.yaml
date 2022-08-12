@@ -1,7 +1,7 @@
-  /api/auth/profile:
+  /api/user/profile:
     get:
       tags:
-      - "profile"
+      - "User"
       summary: "Returns the information of the logged in user"
       description: "Should return the information of current user"
       produces:

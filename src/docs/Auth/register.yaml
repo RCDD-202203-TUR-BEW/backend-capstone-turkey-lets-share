@@ -1,6 +1,8 @@
 paths:
   /api/auth/register:
     post:
+      tags:
+      - "Authentication"
       description: 'Registers a new user'
       requestBody:
         content:
@@ -91,6 +93,8 @@ paths:
           description: 'Internal server error'
   /api/auth/logout:
     post:
+      tags:
+      - "Authentication"
       description: 'Logs out current user'
       responses:
         '200':

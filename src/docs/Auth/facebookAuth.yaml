@@ -1,0 +1,9 @@
+paths:
+  /api/auth/facebook:
+    get:
+      tags:
+      - "Authentication"
+      summary: "Authenticates user using Facebook 3rd party authentication service"
+      responses:
+        "200":
+          description: "Redirects verified user to the profile page"
