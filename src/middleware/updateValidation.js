@@ -45,7 +45,7 @@ const validateUpdate = (req, res, next) => {
     }
   }
   if (age) {
-    if (typeof age !== 'number') {
+    if (!constants.AGE_REGEX.test(age)) {
       errorsArray.push('Age is not a number');
     }
   }

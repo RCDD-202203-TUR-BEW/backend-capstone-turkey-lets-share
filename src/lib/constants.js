@@ -56,6 +56,7 @@ module.exports = Object.freeze({
   ),
   USERNAME_REGEX: new RegExp(/^[a-zA-Z0-9\-_.]{2,20}$/),
   PHONE_NUMBER_REGEX: new RegExp(/^[+]?[0-9]{1,3}[-\s]?[0-9]{1,3}[0-9]{4,9}$/),
+  AGE_REGEX: new RegExp(/^[0-9]+$/),
   PASSWORD_ERROR: `<ul>
     <li>At least one upper case letter</li>
     <li>At least one lower case letter</li>
