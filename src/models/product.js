@@ -67,6 +67,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    publisher: {
+      ref: 'User',
+      type: objectId,
+    },
   },
   { timestamps: true }
 );

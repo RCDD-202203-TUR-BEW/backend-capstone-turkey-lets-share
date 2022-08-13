@@ -125,8 +125,6 @@ components:
           type: string
         refugee:
           type: boolean
-        avaregeRating:
-          type: number
         profilePhoto:
           type: string
         donated:
@@ -142,10 +140,6 @@ components:
         passwordHash:
           type: string
         address:
-          type: object
-        reviews:
-          type: object
-        reports:
           type: object
         createdAt:
           type: date

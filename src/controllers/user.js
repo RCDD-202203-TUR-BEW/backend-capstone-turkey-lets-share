@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable consistent-return */
 /* eslint-disable prettier/prettier */
 const UserModel = require('../models/user');
@@ -20,47 +21,51 @@ const getProfile = async (req, res) => {
 
 const getUserProducts = async (req, res) => {
   try {
-    let { postType } = req.query;
-    const { search } = req.query;
-    const filter = { $and: [] };
-    const filterQueries = { $or: [] };
+    let { postType, search } = req.query;
+    const filteringQueries = { $or: [] };
+    const finalQuery = { $and: [] };
 
     if (postType) {
       if (typeof postType !== 'object') postType = postType.split();
 
       postType.forEach((type) => {
-        if (type === 'donated') {
-          filterQueries.$or.push({ donor: req.params.userId });
-        } else if (type === 'requested') {
-          filterQueries.$or.push({
-            beneficiary: req.params.userId,
+        if (type === 'Donated') {
+          filteringQueries.$or.push({
+            publisher: req.params.userId,
+            postType: 'Donate',
+          });
+        } else if (type === 'Requested') {
+          filteringQueries.$or.push({
+            publisher: req.params.userId,
+            postType: 'Request',
             isTransactionCompleted: false,
           });
-        } else if (type === 'received') {
-          filterQueries.$or.push({
+        } else if (type === 'Received') {
+          filteringQueries.$or.push({
             beneficiary: req.params.userId,
+            postType: 'Request',
             isTransactionCompleted: true,
           });
         }
       });
 
-      if (filterQueries.$or.length !== 0) {
-        filter.$and.push(filterQueries);
+      if (filteringQueries.$or.length !== 0) {
+        finalQuery.$and.push(filteringQueries);
       }
       if (search) {
-        filter.$and.push({ title: { $regex: search, $options: 'i' } });
+        finalQuery.$and.push({ title: { $regex: search, $options: 'i' } });
       }
     }
 
-    if (filter.$and.length === 0) {
+    if (finalQuery.$and.length === 0) {
       const userPosts = await ProductModel.find({
-        $or: [{ donor: req.params.userId }, { beneficiary: req.params.userId }],
+        publisher: req.params.userId,
       });
 
       return res.json(userPosts);
     }
 
-    const userPosts = await ProductModel.find(filter);
+    const userPosts = await ProductModel.find(finalQuery);
     return res.json(userPosts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
