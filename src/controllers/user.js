@@ -34,7 +34,26 @@ const getSingleUser = async (req, res) => {
   }
 };
 
+const deleteProfile = async (req, res) => {
+  try {
+    const foundUser = await UserModel.findById(req.params.id);
+    if (foundUser) {
+      if (req.user.userId === foundUser.id) {
+        await UserModel.findByIdAndDelete(req.params.id);
+        return res.status(200).json({ message: 'User deleted' });
+      }
+
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    return res.status(404).json({ message: 'User not found' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProfile,
   getSingleUser,
+  deleteProfile,
 };
