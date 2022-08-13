@@ -38,6 +38,14 @@ const getSingleUser = async (req, res) => {
 // eslint-disable-next-line consistent-return
 const updateUser = async (req, res) => {
   const bodyParams = Object.keys(req.body); // ['name', 'email', 'password']
+  const restrictedParams = [
+    '_id',
+    'email',
+    'provider',
+    'donated',
+    'requested',
+    'received',
+  ];
   try {
     const foundUser = await UserModel.findById(req.params.id);
     if (foundUser) {
@@ -46,7 +54,14 @@ const updateUser = async (req, res) => {
           const passwordHash = await bcrypt.hash(req.body.password, 10);
           foundUser.passwordHash = passwordHash;
         }
+
+        // eslint-disable-next-line consistent-return
         bodyParams.forEach((param) => {
+          if (restrictedParams.includes(param)) {
+            return res
+              .status(400)
+              .json({ message: `Cannot update field ${param}` });
+          }
           foundUser[param] = req.body[param];
         });
 
