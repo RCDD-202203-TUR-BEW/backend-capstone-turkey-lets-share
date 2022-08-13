@@ -12,9 +12,10 @@ const validateUpdate = (req, res, next) => {
   } = req.body;
   const errorsArray = [];
   const properties = Object.keys(req.body);
+  const emptyOrWhitespace = /^$|\s+/;
   // eslint-disable-next-line consistent-return
   properties.forEach((property) => {
-    if (req.body[property] === '') {
+    if (emptyOrWhitespace.test(req.body[property])) {
       errorsArray.push(`${property} Cannot be empty`);
     }
   });
