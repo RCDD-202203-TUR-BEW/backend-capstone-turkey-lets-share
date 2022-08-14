@@ -49,7 +49,6 @@ const updateProduct = async (req, res) => {
 
     for (let i = 0; i < updatedValidKeys.length; i += 1) {
       const key = updatedValidKeys[i];
-      console.log(key);
       product[key] = updatedProduct[key];
     }
     product.save();
