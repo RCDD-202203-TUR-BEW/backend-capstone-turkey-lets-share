@@ -19,14 +19,12 @@ paths:
                     example: 62e2f022552347123617a73f
                 - name: postType
                   in: query
+                  description: The postType takes one or more of these values [Donated, Requested, Received]
                   schema:
                     type: array
                     items:
                       type: string
-                      enum:
-                              - Donated
-                              - Recieved
-                              - Requested
+                      unique: true
                 - name: SearchTitles
                   in: query
                   type: string

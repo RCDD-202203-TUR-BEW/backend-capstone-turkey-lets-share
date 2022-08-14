@@ -82,7 +82,6 @@ app.get('/', (req, res) => {
 });
 
 // If I delete the next, the code is not working. Why?
-// Shihebi is the best hahahaha
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
