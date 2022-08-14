@@ -79,8 +79,8 @@ describe('GET /api/user/:id', () => {
       .expect(200, (err, res) => {
         if (err) return done(err);
 
-        expect(res.body._doc).toHaveProperty('donated');
-        expect(res.body._doc.username).toBe(createRandomUser.username);
+        expect(res.body).toHaveProperty('donated');
+        expect(res.body.username).toBe(createRandomUser.username);
         return done();
       });
   });
