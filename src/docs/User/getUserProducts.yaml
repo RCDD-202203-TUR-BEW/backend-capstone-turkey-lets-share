@@ -23,7 +23,11 @@ paths:
                     type: array
                     items:
                       type: string
-                - name: Search
+                      enum:
+                              - Donated
+                              - Recieved
+                              - Requested
+                - name: SearchTitles
                   in: query
                   type: string
             responses:

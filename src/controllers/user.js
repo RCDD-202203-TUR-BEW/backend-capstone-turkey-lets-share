@@ -21,7 +21,7 @@ const getProfile = async (req, res) => {
 
 const getUserProducts = async (req, res) => {
   try {
-    let { postType, search } = req.query;
+    let { postType, SearchTitles } = req.query;
     const filteringQueries = { $or: [] };
     const finalQuery = { $and: [] };
 
@@ -52,8 +52,8 @@ const getUserProducts = async (req, res) => {
       if (filteringQueries.$or.length !== 0) {
         finalQuery.$and.push(filteringQueries);
       }
-      if (search) {
-        finalQuery.$and.push({ title: { $regex: search, $options: 'i' } });
+      if (SearchTitles) {
+        finalQuery.$and.push({ title: { $regex: SearchTitles, $options: 'i' } });
       }
     }
 
