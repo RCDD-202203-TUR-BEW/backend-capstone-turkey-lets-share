@@ -53,7 +53,9 @@ const getUserProducts = async (req, res) => {
         finalQuery.$and.push(filteringQueries);
       }
       if (SearchTitles) {
-        finalQuery.$and.push({ title: { $regex: SearchTitles, $options: 'i' } });
+        finalQuery.$and.push({
+          title: { $regex: SearchTitles, $options: 'i' },
+        });
       }
     }
 

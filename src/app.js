@@ -22,10 +22,11 @@ const port = process.env.PORT || 3000;
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-const { PUBLIC_AUTH_ROUTES } = constants;
+const publicAuthPaths = constants.PUBLIC_AUTH_ROUTES.map(({ path }) => path);
+const publicPaths = constants.PUBLIC_ROUTES.map(({ path }) => path);
+const allPublicPaths = publicAuthPaths.concat(publicPaths);
 
-const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
-
+console.log(publicPaths)
 app.use(
   '/api',
   jwt({
@@ -35,7 +36,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: publicAuthPaths,
+    path: allPublicPaths,
   })
 );
 
