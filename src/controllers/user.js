@@ -64,11 +64,11 @@ const getUserProducts = async (req, res) => {
         publisher: req.params.userId,
       });
 
-      return res.json(userPosts);
+      return res.status(200).json(userPosts);
     }
 
     const userPosts = await ProductModel.find(finalQuery);
-    return res.json(userPosts);
+    return res.status(200).json(userPosts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable prefer-regex-literals */
 module.exports = Object.freeze({
   DEFAULT_PROFILE_PHOTO:
