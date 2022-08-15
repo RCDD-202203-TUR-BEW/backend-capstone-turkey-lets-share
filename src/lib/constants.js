@@ -74,7 +74,6 @@ module.exports = Object.freeze({
     <li>Can include a space or a dash (-) after country code</li>
     <li>Can be in the format "+90 1234567890" or "901234567890"</li>
   </ul>`,
-
   PUBLIC_AUTH_ROUTES: [
     { method: 'get', path: '/api/auth/login' },
     { method: 'get', path: '/api/auth/register' },
@@ -83,7 +82,6 @@ module.exports = Object.freeze({
     { method: 'get', path: '/api/auth/facebook' },
     { method: 'get', path: '/api/auth/facebook/callback' },
   ],
-
   PUBLIC_ROUTES: [
     { method: 'get', path: '/' },
     { method: 'get', path: '/api/' },
@@ -100,7 +98,6 @@ module.exports = Object.freeze({
     { method: 'get', path: '/api/auth/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],
-
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
 });
