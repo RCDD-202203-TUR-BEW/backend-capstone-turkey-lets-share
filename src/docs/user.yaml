@@ -31,20 +31,6 @@ paths:
     delete:
       tags:
         - User
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: 'ID of the user'
-          examples:
-            'real ID of an available user':
-              value: '62eb038c20b4f5b0bd8c7676'
-            'some fake ObjectId':
-              value: 'fake5c280262c62f56124dfd'
-            'custom':
-              value: ''
       responses:
         '201':
           description: 'User Deleted'
