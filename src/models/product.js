@@ -49,6 +49,10 @@ const productSchema = new mongoose.Schema(
     isTransactionCompleted: {
       type: Boolean,
     },
+    publisher: {
+      ref: 'User',
+      type: objectId,
+    },
     donor: {
       ref: 'User',
       type: objectId,

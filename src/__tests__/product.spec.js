@@ -132,4 +132,30 @@ describe('POST /api/product', () => {
         return done();
       });
   });
+
+  it('should delete the product with the postType property set to "Request"', (done) => {
+    supertest(app)
+      .delete(`/api/product/${requestPostId}`)
+      .set('Cookie', token)
+      .expect(200, (err, res) => {
+        if (err) return done(err);
+
+        expect(newUser.requested.length).toBe(0);
+        expect(res.body.message).toBe('Product deleted successfully');
+        return done();
+      });
+  });
+
+  it('should delete the product with the postType property set to "Donate"', (done) => {
+    supertest(app)
+      .delete(`/api/product/${donatePostId}`)
+      .set('Cookie', token)
+      .expect(200, (err, res) => {
+        if (err) return done(err);
+
+        expect(newUser.donated.length).toBe(0);
+        expect(res.body.message).toBe('Product deleted successfully');
+        return done();
+      });
+  });
 });

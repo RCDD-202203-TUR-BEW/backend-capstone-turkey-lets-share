@@ -14,6 +14,7 @@ const addNewProduct = async (req, res) => {
       productCondition: req.body.productCondition,
       shippingOptions: req.body.shippingOptions,
       postType: req.body.postType,
+      publisher: req.user.userId,
       donor: req.user.userId,
       beneficiary: null,
       isEvent: req.body.isEvent,
@@ -40,6 +41,38 @@ const addNewProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const singlePost = await ProductModel.findById(req.params.id);
+
+    if (singlePost) {
+      if (String(singlePost.publisher) === req.user.userId) {
+        if (singlePost.postType === 'Donate') {
+          await UserModel.findByIdAndUpdate(req.user.userId, {
+            $pull: { donated: singlePost._id },
+          });
+        }
+        if (singlePost.postType === 'Request') {
+          await UserModel.findByIdAndUpdate(req.user.userId, {
+            $pull: { requested: singlePost._id },
+          });
+        }
+        await singlePost.deleteOne();
+        return res
+          .status(200)
+          .json({ message: 'Product deleted successfully' });
+      }
+      return res
+        .status(401)
+        .json({ message: 'You are not authorized to perform this actions' });
+    }
+    return res.status(404).json({ message: 'Product not found' });
+  } catch (error) {
+    return res.sendStatus(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addNewProduct,
+  deleteProduct,
 };
