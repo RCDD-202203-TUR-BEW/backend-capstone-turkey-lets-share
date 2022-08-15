@@ -21,6 +21,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const req = require('supertest')(app);
 const UserModel = require('../models/user');
+const ProductModel = require('../models/product');
 const constants = require('../lib/constants');
 const connectDatabase = require('../db/connection');
 
@@ -83,6 +84,8 @@ beforeAll(async () => {
 
 afterAll(async (drop = false) => {
   await UserModel.deleteMany({});
+  await ProductModel.deleteMany({});
+
   drop && (await mongoose.connection.dropDatabase());
   await mongoose.disconnect();
   await mongoose.connection.close();
