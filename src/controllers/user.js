@@ -1,7 +1,8 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable prettier/prettier */
 const UserModel = require('../models/user');
 
-// eslint-disable-next-line consistent-return
 const getProfile = async (req, res) => {
   try {
     if (req.user) {
