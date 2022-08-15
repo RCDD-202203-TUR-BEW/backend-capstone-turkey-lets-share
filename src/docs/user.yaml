@@ -31,10 +31,15 @@ paths:
     delete:
       tags:
         - User
+      description: 'Delete a user with the given ID'
       responses:
-        '201':
+        '200':
           description: 'User Deleted'
         '400':
           description: 'Bad request (either validation or database error)'
+        '401':
+          description: 'Not authorized'
+        '404':
+          description: 'User not found'
         '500':
           description: 'Internal server error'
