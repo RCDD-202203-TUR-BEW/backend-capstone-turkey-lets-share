@@ -40,6 +40,9 @@ const getProducts = async (req, res) => {
     }
 
     const filteredProducts = await ProductModel.find(filter);
+    if (filteredProducts.length === 0) {
+      return res.status(400).json({ message: 'Your search is not found!' });
+    }
 
     return res.status(200).json(filteredProducts);
   } catch (err) {
