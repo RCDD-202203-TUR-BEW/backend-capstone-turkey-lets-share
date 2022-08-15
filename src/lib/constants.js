@@ -46,6 +46,7 @@ module.exports = Object.freeze({
     '/api/auth/facebook/callback',
     '/',
   ],
+  AGE_REGEX: new RegExp(/^[1-9]{1}\d{1}$/),
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
