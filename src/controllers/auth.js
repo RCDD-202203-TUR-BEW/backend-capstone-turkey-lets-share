@@ -77,7 +77,7 @@ const login = async (req, res) => {
       httpOnly: true,
       maxAge: constants.COOKIE_MAX_AGE, // 14 days
     });
-    return res.status(201).json({ message: 'User sucesfully signed in!' });
+    return res.status(201).json({ message: 'User successfully signed in!' });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);

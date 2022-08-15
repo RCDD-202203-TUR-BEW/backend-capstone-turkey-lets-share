@@ -91,6 +91,41 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      description: 'Log a user in'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string,
+                password:
+                  type: string,
+            examples:
+              'REAL USER':
+                value: '{
+                  "email": "tester@domain.com",
+                  "password": "Qwerty-123"
+                  }'
+              'CUSTOM':
+                value: '{
+                  "email" : "String",
+                  "password": "String"
+                  }'
+      responses:
+        '201':
+          description: 'Created (User successfully signed in!)'
+        '401':
+          description: 'Unauthorized (Wrong email or password!)'
+        '422':
+          description: 'Unprocessable entity'
+        '500':
+          description: 'Internal server error'
   /api/auth/logout:
     post:
       tags:

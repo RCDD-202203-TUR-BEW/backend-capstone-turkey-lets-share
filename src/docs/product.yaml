@@ -112,6 +112,9 @@ components:
           type: string
         isTransactionCompleted:
           type: Boolean
+        publisher:
+          type: ObjectId
+          description: 'Added automatically when posting'
         donor:
           type: ObjectId
           description: 'Added automatically according to postType'
