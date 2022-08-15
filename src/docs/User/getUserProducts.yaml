@@ -31,5 +31,7 @@ paths:
             responses:
                 200:
                     description: Returns a list of the matching products.
+                400:
+                    description: Your search was not found!
                 500:
-                    description: Internal server error
+                    description: Internal server error.

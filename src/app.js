@@ -26,7 +26,6 @@ const publicAuthPaths = constants.PUBLIC_AUTH_ROUTES.map(({ path }) => path);
 const publicPaths = constants.PUBLIC_ROUTES.map(({ path }) => path);
 const allPublicPaths = publicAuthPaths.concat(publicPaths);
 
-console.log(publicPaths);
 app.use(
   '/api',
   jwt({

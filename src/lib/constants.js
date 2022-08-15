@@ -107,4 +107,9 @@ module.exports = Object.freeze({
 
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
+  POST_TYPE_SELECTOR: {
+    Donated: { postType: 'Donate' },
+    Requested: { postType: 'Request', isTransactionCompleted: false },
+    Received: { postType: 'Request', isTransactionCompleted: true },
+  },
 });

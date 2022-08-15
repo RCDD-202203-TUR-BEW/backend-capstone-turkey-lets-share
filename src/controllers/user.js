@@ -3,6 +3,7 @@
 /* eslint-disable prettier/prettier */
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
+const constants = require('../lib/constants');
 
 // eslint-disable-next-line consistent-return
 const getProfile = async (req, res) => {
@@ -26,32 +27,19 @@ const getUserProducts = async (req, res) => {
     const finalQuery = { $and: [] };
 
     if (postType) {
-      if (typeof postType !== 'object') postType = postType.split();
+      if (!Array.isArray(postType)) postType = postType.split();
 
       postType.forEach((type) => {
-        if (type === 'Donated') {
-          filteringQueries.$or.push({
-            publisher: req.params.userId,
-            postType: 'Donate',
-          });
-        } else if (type === 'Requested') {
-          filteringQueries.$or.push({
-            publisher: req.params.userId,
-            postType: 'Request',
-            isTransactionCompleted: false,
-          });
-        } else if (type === 'Received') {
-          filteringQueries.$or.push({
-            beneficiary: req.params.userId,
-            postType: 'Request',
-            isTransactionCompleted: true,
-          });
-        }
+        filteringQueries.$or.push({
+          publisher: req.params.userId,
+          ...constants.POST_TYPE_SELECTOR[type]
+        });
       });
 
       if (filteringQueries.$or.length !== 0) {
         finalQuery.$and.push(filteringQueries);
       }
+
       if (SearchTitles) {
         finalQuery.$and.push({
           title: { $regex: SearchTitles, $options: 'i' },
@@ -64,11 +52,18 @@ const getUserProducts = async (req, res) => {
         publisher: req.params.userId,
       });
 
+      if (userPosts.length === 0) {
+        return res.status(400).json({ message: 'Your search was not found!' });
+      }
       return res.status(200).json(userPosts);
     }
 
     const userPosts = await ProductModel.find(finalQuery);
+    if (userPosts.length === 0) {
+      return res.status(400).json({ message: 'Your search was not found!' });
+    }
     return res.status(200).json(userPosts);
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
