@@ -18,13 +18,13 @@ const getProfile = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   try {
-    const foundUser = await UserModel.findById(req.params.id);
-    if (foundUser) {
-      if (req.user.userId === foundUser.id) {
+    const User = await UserModel.findById(req.params.id);
+    if (User) {
+      if (req.user.userId === User.id) {
         return res.status(200).json({ message: 'Redirecting to profile...' });
       }
 
-      const shownInfo = { ...foundUser, passwordHash: undefined };
+      const shownInfo = { ...User, passwordHash: undefined };
       return res.status(200).json(shownInfo);
     }
 

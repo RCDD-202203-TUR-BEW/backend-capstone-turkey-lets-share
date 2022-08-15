@@ -6,5 +6,5 @@ const router = express.Router();
 
 router.get('/profile', userController.getProfile);
 router.get('/:id', userController.getSingleUser);
-router.delete('/delete', authorize, userController.deleteProfile);
+router.delete('/profile/delete', authorize, userController.deleteProfile);
 module.exports = router;
