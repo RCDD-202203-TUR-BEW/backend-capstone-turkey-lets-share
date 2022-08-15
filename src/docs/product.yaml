@@ -1,64 +1,62 @@
-/api/product/{id}:
+/api/product/{productid}:
   patch:
     tags:
-      - 'Product'
-    summary: 'Updating an existing product of logged in user'
+      - Product
+    summary: Updating an existing product of logged in user
     parameters:
-      - name: userId
+      - name: productId
         in: path
         required: true
         schema:
           type: string
           example: 62f661cf728303c5bead3b6d
-      - name: 'title'
-        in: 'body'
-        type: 'string'
-      - name: 'description'
-        in: 'body'
-        type: 'string'
-      - name: 'photos'
-        in: 'body'
-        type: 'array'
-        items:
-          type: 'string'
-      - name: 'category'
-        in: 'body'
-        type: 'string'
-        enum:
-          - 'Books'
-          - 'Clothing'
-          - 'Electronics'
-          - 'Food'
-          - 'Furniture'
-          - 'Kitchenware'
-          - 'Linens'
-          - 'Toys'
-          - 'Other'
-      - name: 'location'
-        in: 'body'
-        type: 'string'
-      - name: 'productCondition'
-        in: 'body'
-        type: 'string'
-        enum:
-          - 'New'
-          - 'Underused'
-          - 'Overused'
-      - name: 'shippingOptions'
-        in: 'body'
-        type: 'string'
-        enum:
-          - 'Meet up'
-          - 'Drop off'
-          - 'Free shipping'
-          - 'Paid shipping'
-          - 'To be determined'
-      - name: 'postType'
-        in: 'body'
-        type: 'string'
-        enum:
-          - 'Donate'
-          - 'Request'
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              photos:
+                type: array
+                items:
+                  type: string
+              category:
+                type: string
+                enum:
+                  - 'Books'
+                  - 'Clothing'
+                  - 'Electronics'
+                  - 'Food'
+                  - 'Furniture'
+                  - 'Kitchenware'
+                  - 'Linens'
+                  - 'Toys'
+                  - 'Other'
+              location:
+                type: string
+              productCondition:
+                type: string
+                enum:
+                  - 'New'
+                  - 'Underused'
+                  - 'Overused'
+              shippingOptions:
+                type: string
+                enum:
+                  - 'Meet up'
+                  - 'Drop off'
+                  - 'Free shipping'
+                  - 'Paid shipping'
+                  - 'To be determined'
+              postType:
+                type: string
+                enum:
+                  - 'Donate'
+                  - 'Request'
     responses:
       '200':
         description: OK
