@@ -14,10 +14,12 @@ paths:
                 - name: category
                   in: query
                   type: string
+                  enum: ['Books', 'Clothing', 'Electronics', 'Food', 'Furniture', 'Kitchenware', 'Linens', 'Toys', 'Other']
                   example: Books
                 - name: productCondition
                   in: query
-                  type: string
+                  type: string,
+                  enum: ['New', 'Underused', 'Overused']
                   example: Underused
                 - name: search
                   in: query
@@ -30,11 +32,13 @@ paths:
                 - name: shippingOptions
                   in: query
                   type: string
-                  example: Meetup
+                  enum: ['Meet up', 'Drop off', 'Free shipping', 'Paid shipping', 'To be determined']
+                  example: Meet up
                 - name: postType
                   in: query
                   type: string
-                  example: donated
+                  enum: ['Request', 'Donate']
+                  example: Donate
             responses:
                 200:
                     description: Returns a list of the matching products.
