@@ -1,8 +1,9 @@
-/api/product/{productid}:
+/api/product/{productId}:
   patch:
     tags:
       - Product
     summary: Updating an existing product of logged in user
+    operationId: updateProduct
     parameters:
       - name: productId
         in: path
