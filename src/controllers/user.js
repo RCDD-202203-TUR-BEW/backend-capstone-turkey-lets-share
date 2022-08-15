@@ -19,13 +19,13 @@ const getProfile = async (req, res) => {
 
 const getSingleUser = async (req, res) => {
   try {
-    const foundUser = await UserModel.findById(req.params.id);
-    if (foundUser) {
-      if (req.user.userId === foundUser.id) {
+    const User = await UserModel.findById(req.params.id);
+    if (User) {
+      if (req.user.userId === User.id) {
         return res.status(200).json({ message: 'Redirecting to profile...' });
       }
 
-      const shownInfo = { ...foundUser, passwordHash: undefined };
+      const shownInfo = { ...User, passwordHash: undefined };
       return res.status(200).json(shownInfo);
     }
 
@@ -47,27 +47,25 @@ const updateUser = async (req, res) => {
     'received',
   ];
   try {
-    const foundUser = await UserModel.findById(req.params.id);
-    if (foundUser) {
-      if (req.user.userId === String(foundUser.id)) {
-        if (req.body.password) {
-          const passwordHash = await bcrypt.hash(req.body.password, 10);
-          foundUser.passwordHash = passwordHash;
-        }
-
-        // eslint-disable-next-line consistent-return
-        bodyParams.forEach((param) => {
-          if (restrictedParams.includes(param)) {
-            return res
-              .status(400)
-              .json({ message: `Cannot update field ${param}` });
-          }
-          foundUser[param] = req.body[param];
-        });
-
-        await foundUser.save();
-        return res.status(200).json({ message: 'User updated' });
+    const User = await UserModel.findById(req.user.userId);
+    if (User) {
+      if (req.body.password) {
+        const passwordHash = await bcrypt.hash(req.body.password, 10);
+        User.passwordHash = passwordHash;
       }
+
+      // eslint-disable-next-line consistent-return
+      bodyParams.forEach((param) => {
+        if (restrictedParams.includes(param)) {
+          return res
+            .status(400)
+            .json({ message: `Cannot update field ${param}` });
+        }
+        User[param] = req.body[param];
+      });
+
+      await User.save();
+      return res.status(200).json({ message: 'User updated' });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });

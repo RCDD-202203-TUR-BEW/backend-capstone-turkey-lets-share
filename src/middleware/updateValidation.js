@@ -21,10 +21,10 @@ const validateUpdate = (req, res, next) => {
   });
   if (password) {
     if (!passwordConfirmation) {
-      errorsArray.push('Password and password confirmation are required');
+      errorsArray.push('Password feilds are required');
     }
     if (password !== passwordConfirmation) {
-      errorsArray.push('Password and Password confirmation do not match');
+      errorsArray.push('Passwords do not match');
     }
     if (!constants.PASSWORD_REGEX.test(password)) {
       errorsArray.push(constants.PASSWORD_ERROR);
@@ -41,8 +41,15 @@ const validateUpdate = (req, res, next) => {
     }
   }
   if (address) {
+    const requiredFeilds = ['country', 'city', 'address0', 'address1', 'zip'];
     if (typeof address !== 'object') {
       errorsArray.push('Address is not an object');
+    }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const field of requiredFeilds) {
+      if (!address[field]) {
+        errorsArray.push(`${field} is required in Address`);
+      }
     }
   }
   if (age) {
