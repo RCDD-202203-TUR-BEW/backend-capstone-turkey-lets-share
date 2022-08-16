@@ -2,7 +2,7 @@ paths:
   /api/auth/facebook:
     get:
       tags:
-      - "Facebook Authentication"
+      - "Authentication"
       summary: "Authenticates user using Facebook 3rd party authentication service"
       responses:
         "200":
