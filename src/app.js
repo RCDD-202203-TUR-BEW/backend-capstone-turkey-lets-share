@@ -61,10 +61,10 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'https://lets-share-capstone.herokuapp.com/',
     },
   ],
-  host: 'localhost:3000', // the host or url of the app
+  url: 'https://lets-share-capstone.herokuapp.com/', // the host or url of the app
 };
 // options for the swagger docs
 const options = {
