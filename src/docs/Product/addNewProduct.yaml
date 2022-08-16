@@ -1,0 +1,100 @@
+paths:
+  /api/product:
+    post:
+      tags:
+        - Products
+      descriptions: 'Adds a new product'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string,
+                description:
+                  type: string,
+                photos:
+                  type: array,
+                category:
+                  type: string,
+                location:
+                  type: string,
+                productCondition:
+                  type: string,
+                shippingOptions:
+                  type: string,
+                postType:
+                  type: string,
+                donor:
+                  type: ObjectId,
+                beneficiary:
+                  type: ObjectId,
+                isEvent:
+                  type: boolean
+            examples:
+              'Red couch':
+                value: '{
+                  "title": "Red couch",
+                  "description": "I have an underused couch I don''t need anymore",
+                  "photos": ["redCouch0.jpg", "redCouch1.jpg"],
+                  "category": "Furniture",
+                  "location": "Istanbul, Kadikoy",
+                  "productCondition": "Underused",
+                  "shippingOptions": "Meet up",
+                  "postType": "Donate",
+                  "isEvent": false
+                  }'
+              'custom':
+                value: '{
+                  "title": "string",
+                  "description": "string",
+                  "photos": ["array of strings"],
+                  "category": "string, enum",
+                  "location": "string, string",
+                  "productCondition": "string, enum",
+                  "shippingOptions": "string, enum",
+                  "postType": "Donate || Request",
+                  "isEvent": false
+                  }'
+      responses:
+        '201':
+          description: 'Created (a new product)'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        photos:
+          type: array of strings
+        category:
+          type: string
+        location:
+          type: string
+        productCondition:
+          type: string
+        shippingOptions:
+          type: string
+        postType:
+          type: string
+        isTransactionCompleted:
+          type: Boolean
+        donor:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        beneficiary:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        orderRequests:
+          type: array of ObjectIds
+        isEvent:
+          type: boolean,
+          default: false

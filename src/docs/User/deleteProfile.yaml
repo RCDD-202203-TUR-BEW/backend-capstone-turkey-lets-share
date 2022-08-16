@@ -1,0 +1,13 @@
+paths:
+  /api/user/profile/delete:
+    delete:
+      tags:
+        - User
+      description: 'Delete the profile of the logged in user, including all products by this user'
+      responses:
+        '200':
+          description: 'User Deleted'
+        '401':
+          description: 'Not authorized'
+        '500':
+          description: 'Internal server error'
