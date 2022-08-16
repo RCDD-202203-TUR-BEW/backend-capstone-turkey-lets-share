@@ -46,22 +46,20 @@ const updateUser = async (req, res) => {
     'requested',
     'received',
   ];
+  const emptyOrWhiteSpace = /^\s*$/;
   try {
     const User = await UserModel.findById(req.user.userId);
     if (User) {
-      if (req.body.password) {
-        const passwordHash = await bcrypt.hash(req.body.password, 10);
-        User.passwordHash = passwordHash;
-      }
-
       // eslint-disable-next-line consistent-return
       bodyParams.forEach((param) => {
-        if (restrictedParams.includes(param)) {
-          return res
-            .status(400)
-            .json({ message: `Cannot update field ${param}` });
+        if (!emptyOrWhiteSpace.test(req.body[param])) {
+          if (restrictedParams.includes(param)) {
+            return res
+              .status(400)
+              .json({ message: `Cannot update field ${param}` });
+          }
+          User[param] = req.body[param];
         }
-        User[param] = req.body[param];
       });
 
       await User.save();
@@ -72,8 +70,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
+const updatePassword = async (req, res) => {
+  try {
+    const User = await UserModel.findById(req.user.userId);
+    const passwordHash = await bcrypt.hash(req.body.password, 10);
+    User.passwordHash = passwordHash;
+    await User.save();
+    return res.status(200).json({ message: 'Password updated' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProfile,
   getSingleUser,
   updateUser,
+  updatePassword,
 };
