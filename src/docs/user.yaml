@@ -28,6 +28,7 @@ paths:
           description: 'Unauthorized (one needs to be logged in)'
         '500':
           description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
+  /api/user/profile/update:
     patch:
       tags:
         - User
@@ -51,10 +52,6 @@ paths:
                   type: string,
                 refugee:
                   type: boolean,
-                password:
-                  type: string,
-                passwordConfirmation:
-                  type: string,
             examples:
               'CORRECT INFO SENT FOR UPDATE':
                 value: '{
@@ -66,17 +63,6 @@ paths:
                   "nationality": "Turkey",
                   "refugee": false,
                   "address":{"country":"Germany"},
-                  "password": "Nilay-123",
-                  "passwordConfirmation": "Nilay-123"
-                  }'
-              'PASSWORD CONFORMATION NOT PROVIDED':
-                value: '{
-                  "password": "Nilay-123"
-                  }'
-              'PASSWORDS DOESNOT MATCH':
-                value: '{
-                  "password": "Nilay-123",
-                  "passwordConfirmation": "Nilay-123456"
                   }'
               'PHONENUMBER NOT INCORRECT FORMAT':
                 value: '{
@@ -97,6 +83,58 @@ paths:
       responses:
         '201':
           description: 'User Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
+  /api/user/profile/password:
+    patch:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string,
+                password:
+                  type: string,
+                passwordConfirmation:
+                  type: string,
+            examples:
+              'CORRECT PASSWORD UPDATION':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&Here"
+                  }'
+              'OLD PASSWORD IS INCORRECT':
+                value: '{
+                  "oldPassword" : "OldHelloHere",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&Here"
+                  }'
+              'PASSWORD AND PASSWORD CONFIRMATION DO NOT MATCH':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&HereThere"
+                  }'
+              'PASSWORD CONFIRMATION IS EMPTY':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": ""
+                  }'
+      summary: 'Updates password of the user'
+      description: 'Should update the password of the current user'
+      produces:
+        - 'application/json'
+      responses:
+        '201':
+          description: 'User Password Updated'
         '400':
           description: 'Bad request (either validation or database error)'
         '500':
