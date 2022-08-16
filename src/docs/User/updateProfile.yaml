@@ -1,33 +1,4 @@
 paths:
-  /api/user/{id}:
-    get:
-      tags:
-        - User
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: 'ID of the user'
-          examples:
-            'real ID of an available user':
-              value: '62eb038c20b4f5b0bd8c7676'
-            'real ID of a deleted user':
-              value: '62ee5c280262c62f56124dfd'
-            'some fake ObjectId':
-              value: 'fake5c280262c62f56124dfd'
-            'custom':
-              value: ''
-      responses:
-        '200':
-          description: 'OK (shows user)'
-        '404':
-          description: 'Not Found (user was not found)'
-        '401':
-          description: 'Unauthorized (one needs to be logged in)'
-        '500':
-          description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
   /api/user/profile/update:
     patch:
       tags:
