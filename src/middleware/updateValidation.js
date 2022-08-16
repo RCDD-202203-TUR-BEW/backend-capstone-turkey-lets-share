@@ -51,9 +51,7 @@ const validatePassword = async (req, res, next) => {
   const { oldPassword, password, passwordConfirmation } = req.body;
   const errorsArray = [];
   const User = await UserModel.findById(req.user.userId);
-  if (!oldPassword || !password || !passwordConfirmation) {
-    errorsArray.push('Password feilds are required');
-  } else {
+  if (oldPassword && password && passwordConfirmation) {
     if (User) {
       const passwordMatch = await bcrypt.compare(
         req.body.oldPassword,
@@ -69,6 +67,8 @@ const validatePassword = async (req, res, next) => {
     if (!constants.PASSWORD_REGEX.test(password)) {
       errorsArray.push(constants.PASSWORD_ERROR);
     }
+  } else {
+    errorsArray.push('Password fields are required');
   }
   if (errorsArray.length > 0) {
     return res.status(400).json({ error: errorsArray });
