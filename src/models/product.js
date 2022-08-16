@@ -65,7 +65,7 @@ const productSchema = new mongoose.Schema(
     },
     isEvent: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     publisher: {
       ref: 'User',

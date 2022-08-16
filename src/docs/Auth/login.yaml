@@ -6,17 +6,16 @@
     operationId: "loginUser"
     produces:
     - "application/json"
-    parameters:
-    - name: "email"
-      in: "body"
-      description: "login users to the system"
-      required: true
-      type: "string"
-    - name: "password"
-      in: "body"
-      description: "Password for login"
-      required: true
-      type: "string"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
     responses:
       "201":
         description: "User sucesfully signed in!"

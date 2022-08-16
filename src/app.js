@@ -75,11 +75,7 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 // use swagger-Ui-express for app documentation endpoint
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.get('/', (req, res) => {
-  res.json({ message: "Hello Let's Share!" });
-});
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // If I delete the next, the code is not working. Why?
 // eslint-disable-next-line no-unused-vars

@@ -52,6 +52,7 @@ module.exports = Object.freeze({
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
   ),
   NAME_REGEX: new RegExp(/^$|\s+/),
+  EMPTY_PRODUCT_REGEX: new RegExp(/(.|\s)*\S(.|\s)*/),
   EMAIL_REGEX: new RegExp(
     /^[a-zA-Z0-9-_.]+@[a-z]+\.[a-z]{2,15}(\.[a-z]{2,3})?(\.[a-z]{2,3})?$/
   ),

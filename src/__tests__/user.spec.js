@@ -10,8 +10,8 @@ const connectDatabase = require('../db/connection');
 const createCurrentUser = {
   firstName: 'adnan',
   lastName: 'khaldar',
-  email: 'adnan@outlook.com',
-  username: 'adnan',
+  email: 'adnan0@outlook.com',
+  username: 'adnan0',
   provider: 'Local',
   providerId: 'Local',
   passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
@@ -79,8 +79,8 @@ describe('GET /api/user/:id', () => {
       .expect(200, (err, res) => {
         if (err) return done(err);
 
-        expect(res.body._doc).toHaveProperty('donated');
-        expect(res.body._doc.username).toBe(createRandomUser.username);
+        expect(res.body).toHaveProperty('donated');
+        expect(res.body.username).toBe(createRandomUser.username);
         return done();
       });
   });
