@@ -2,6 +2,13 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable consistent-return */
 /* eslint-disable node/no-unpublished-require */
+
+describe('product test', () => {
+  it('product Test', () => {
+    expect(true).toEqual(true);
+  });
+});
+
 // const supertest = require('supertest');
 // const app = require('../app');
 // const UserModel = require('../models/user');
