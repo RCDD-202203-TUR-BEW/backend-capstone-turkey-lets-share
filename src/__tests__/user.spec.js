@@ -99,9 +99,3 @@ describe('GET /api/user/:id', () => {
       });
   });
 });
-
-// apdate user
-
-// describe('PATCH /api/user/:id', () => {
-
-// });

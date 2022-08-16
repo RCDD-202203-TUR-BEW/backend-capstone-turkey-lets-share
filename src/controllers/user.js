@@ -74,13 +74,14 @@ const getSingleUser = async (req, res) => {
   try {
     const User = await UserModel.findById(req.params.id);
     if (User) {
-      if (req.user.userId === User.id) {
+      if (req.user?.userId === User.id) {
         return res.status(200).json({ message: 'Redirecting to profile...' });
       }
 
-      const shownInfo = { ...User, passwordHash: undefined };
+      const shownInfo = { ...User._doc, passwordHash: null };
       return res.status(200).json(shownInfo);
     }
+
     return res.status(404).json({ message: 'User not found' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
