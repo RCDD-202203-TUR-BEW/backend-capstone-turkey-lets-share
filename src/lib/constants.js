@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable prefer-regex-literals */
 module.exports = Object.freeze({
   DEFAULT_PROFILE_PHOTO:
@@ -51,6 +52,7 @@ module.exports = Object.freeze({
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
   ),
   NAME_REGEX: new RegExp(/^$|\s+/),
+  EMPTY_PRODUCT_REGEX: new RegExp(/(.|\s)*\S(.|\s)*/),
   EMAIL_REGEX: new RegExp(
     /^[a-zA-Z0-9-_.]+@[a-z]+\.[a-z]{2,15}(\.[a-z]{2,3})?(\.[a-z]{2,3})?$/
   ),
@@ -89,17 +91,26 @@ module.exports = Object.freeze({
     { method: 'get', path: '/api/about' },
     { method: 'get', path: '/api/product' },
     { method: 'get', path: '/api/product?search&category' },
-    { method: 'get', path: '/api/product/:id' },
+    { method: 'get', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
+    {
+      method: 'get',
+      path: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
+    },
   ],
   PRIVATE_ROUTES: [
     { method: 'post', path: '/api/product' },
     { method: 'post', path: '/api/auth/logout' },
-    { method: 'put', path: '/api/product/:id' },
-    { method: 'delete', path: '/api/product/:id' },
+    { method: 'put', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
+    { method: 'delete', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
     { method: 'get', path: '/api/auth/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],
 
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
+  POST_TYPE_SELECTOR: {
+    Donated: { postType: 'Donate' },
+    Requested: { postType: 'Request', isTransactionCompleted: false },
+    Received: { postType: 'Request', isTransactionCompleted: true },
+  },
 });

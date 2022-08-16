@@ -2,7 +2,7 @@ paths:
   /api/user/{id}:
     get:
       tags:
-        - get users
+        - User
       parameters:
         - in: path
           name: id
@@ -12,7 +12,7 @@ paths:
           description: 'ID of the user'
           examples:
             'real ID of an available user':
-              value: '62eb038c20b4f5b0bd8c7676'
+              value: '62e7aa14c0f7ad46403b142e'
             'real ID of a deleted user':
               value: '62ee5c280262c62f56124dfd'
             'some fake ObjectId':
@@ -22,10 +22,10 @@ paths:
       responses:
         '200':
           description: 'OK (shows user)'
-        '404':
-          description: 'Not Found (user was not found)'
         '401':
           description: 'Unauthorized (one needs to be logged in)'
+        '404':
+          description: 'Not Found (user was not found)'
         '500':
           description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
     delete:
