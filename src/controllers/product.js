@@ -43,28 +43,34 @@ const addNewProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const singlePost = await ProductModel.findById(req.params.id);
+    const singleProduct = await ProductModel.findById(req.params.productId);
 
-    if (singlePost) {
-      if (String(singlePost.publisher) === req.user.userId) {
-        if (singlePost.postType === 'Donate') {
+    if (singleProduct) {
+      if (singleProduct.isTransactionCompleted === true) {
+        return res.status(400).json({
+          message: 'Transaction is completed. You can not delete this post',
+        });
+      }
+
+      if (String(singleProduct.publisher) === req.user.userId) {
+        if (singleProduct.postType === 'Donate') {
           await UserModel.findByIdAndUpdate(req.user.userId, {
-            $pull: { donated: singlePost._id },
+            $pull: { donated: singleProduct._id },
           });
         }
-        if (singlePost.postType === 'Request') {
+        if (singleProduct.postType === 'Request') {
           await UserModel.findByIdAndUpdate(req.user.userId, {
-            $pull: { requested: singlePost._id },
+            $pull: { requested: singleProduct._id },
           });
         }
-        await singlePost.deleteOne();
+        await singleProduct.deleteOne();
         return res
           .status(200)
           .json({ message: 'Product deleted successfully' });
       }
       return res
         .status(401)
-        .json({ message: 'You are not authorized to perform this actions' });
+        .json({ message: 'You are not authorized to perform this action' });
     }
     return res.status(404).json({ message: 'Product not found' });
   } catch (error) {

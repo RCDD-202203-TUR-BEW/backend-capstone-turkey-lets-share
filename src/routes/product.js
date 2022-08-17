@@ -5,6 +5,6 @@ const productController = require('../controllers/product');
 const router = express.Router();
 
 router.post('/', productMiddleware, productController.addNewProduct);
-router.delete('/:id', productController.deleteProduct);
+router.delete('/:productId', productController.deleteProduct);
 
 module.exports = router;

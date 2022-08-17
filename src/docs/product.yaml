@@ -2,7 +2,7 @@ paths:
   /api/product:
     post:
       tags:
-        - CRUD products
+        - Product
       descriptions: 'Adds a new product'
       requestBody:
         content:
@@ -64,13 +64,13 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
-  /api/product/{id}:
+  /api/product/{productId}:
     delete:
       tags:
-        - CRUD products
+        - Product
       description: 'Deletes a product'
       parameters:
-        - name: 'id'
+        - name: 'productId'
           in: 'path'
           description: 'id of the product'
           required: true
