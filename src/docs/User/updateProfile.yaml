@@ -32,8 +32,7 @@ paths:
                   "age": 25,
                   "gender": "Female",
                   "nationality": "Turkey",
-                  "refugee": false,
-                  "address":{"country":"Germany"},
+                  "refugee": false
                   }'
               'PHONENUMBER NOT INCORRECT FORMAT':
                 value: '{
