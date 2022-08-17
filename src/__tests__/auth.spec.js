@@ -212,7 +212,7 @@ describe('AUTH TESTS', () => {
           if (err) return done(err);
           expect(res.headers['set-cookie']).toBeDefined();
           expect(res.headers['set-cookie']).toBeTruthy();
-          expect(res.body.message).toBe('User sucesfully signed in!');
+          expect(res.body.message).toBe('User successfully signed in!');
           // eslint-disable-next-line prefer-destructuring
           jwtToken = res.headers['set-cookie'][0].split(';')[0];
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable prefer-regex-literals */
 module.exports = Object.freeze({
   DEFAULT_PROFILE_PHOTO:
@@ -35,17 +36,7 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
 
-  PUBLIC_PATHS: [
-    '/api/',
-    '/api/about',
-    '/api/auth/login',
-    '/api/auth/register',
-    '/api/auth/google',
-    '/api/auth/google/callback',
-    '/api/auth/facebook',
-    '/api/auth/facebook/callback',
-    '/',
-  ],
+  AGE_REGEX: new RegExp(/^[1-9]{1}\d{1}$/),
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
@@ -57,6 +48,7 @@ module.exports = Object.freeze({
   ),
   USERNAME_REGEX: new RegExp(/^[a-zA-Z0-9\-_.]{2,20}$/),
   PHONE_NUMBER_REGEX: new RegExp(/^[+]?[0-9]{1,3}[-\s]?[0-9]{1,3}[0-9]{4,9}$/),
+
   PASSWORD_ERROR: `<ul>
     <li>At least one upper case letter</li>
     <li>At least one lower case letter</li>
@@ -75,6 +67,17 @@ module.exports = Object.freeze({
     <li>Can be in the format "+90 1234567890" or "901234567890"</li>
   </ul>`,
 
+  PUBLIC_PATHS: [
+    '/api/',
+    '/api/about',
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/google',
+    '/api/auth/google/callback',
+    '/api/auth/facebook',
+    '/api/auth/facebook/callback',
+    '/',
+  ],
   PUBLIC_AUTH_ROUTES: [
     { method: 'get', path: '/api/auth/login' },
     { method: 'get', path: '/api/auth/register' },
@@ -83,24 +86,42 @@ module.exports = Object.freeze({
     { method: 'get', path: '/api/auth/facebook' },
     { method: 'get', path: '/api/auth/facebook/callback' },
   ],
-
   PUBLIC_ROUTES: [
     { method: 'get', path: '/' },
     { method: 'get', path: '/api/' },
     { method: 'get', path: '/api/about' },
     { method: 'get', path: '/api/product' },
     { method: 'get', path: '/api/product?search&category' },
-    { method: 'get', path: '/api/product/:id' },
+    { method: 'get', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
+    {
+      method: 'get',
+      path: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
+    },
   ],
   PRIVATE_ROUTES: [
     { method: 'post', path: '/api/product' },
     { method: 'post', path: '/api/auth/logout' },
-    { method: 'put', path: '/api/product/:id' },
-    { method: 'delete', path: '/api/product/:id' },
+    { method: 'put', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
+    { method: 'delete', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
     { method: 'get', path: '/api/auth/profile' },
     { method: 'get', path: '/api/auth/logout' },
   ],
 
+  VALID_PRODUCT_KEYS: [
+    'title',
+    'description',
+    'photos',
+    'category',
+    'location',
+    'productCondition',
+    'shippingOptions',
+    'postType',
+  ],
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
+  POST_TYPE_SELECTOR: {
+    Donated: { postType: 'Donate' },
+    Requested: { postType: 'Request', isTransactionCompleted: false },
+    Received: { postType: 'Request', isTransactionCompleted: true },
+  },
 });

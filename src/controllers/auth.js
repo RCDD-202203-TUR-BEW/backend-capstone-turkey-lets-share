@@ -48,8 +48,8 @@ const register = async (req, res) => {
     };
 
     return res.status(201).json(shownInfo);
-  } catch (err) {
-    return res.status(500).send(err);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -77,11 +77,9 @@ const login = async (req, res) => {
       httpOnly: true,
       maxAge: constants.COOKIE_MAX_AGE, // 14 days
     });
-    return res.status(201).json({ message: 'User sucesfully signed in!' });
+    return res.status(201).json({ message: 'User successfully signed in!' });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
-    return res.sendStatus(500);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -91,22 +89,27 @@ const logout = async (req, res) => {
 };
 
 const saveUserToTokenAndCookie = (req, res) => {
-  const { name, email, providerId, profilePicture } = req.user;
-  const payload = {
-    name,
-    email,
-    providerId,
-    avatar: profilePicture,
-  };
-  const token = jwt.sign(payload, process.env.SECRET_KEY, {
-    expiresIn: constants.TOKEN_EXPIRATION_DURATION,
-  });
-  res.cookie('token', token, {
-    httpOnly: true,
-    signed: true,
-    maxAge: constants.COOKIE_MAX_AGE,
-  });
-  res.redirect('/api/user/profile');
+  try {
+    const { name, email, providerId, profilePicture } = req.user;
+    const payload = {
+      name,
+      email,
+      providerId,
+      avatar: profilePicture,
+      userId: req.user.id,
+    };
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: constants.TOKEN_EXPIRATION_DURATION,
+    });
+    res.cookie('token', token, {
+      httpOnly: true,
+      signed: true,
+      maxAge: constants.COOKIE_MAX_AGE,
+    });
+    return res.redirect('/api/user/profile');
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 module.exports = {

@@ -4,8 +4,15 @@ const constants = require('../lib/constants');
 const registerMiddleware = async (req, res, next) => {
   try {
     const errorsArray = [];
-    const { firstName, lastName, email, phoneNumber, password0, password1 } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      age,
+      password0,
+      password1,
+    } = req.body;
 
     if (password0 !== password1) {
       errorsArray.push('Password fields do not match');
@@ -28,6 +35,10 @@ const registerMiddleware = async (req, res, next) => {
 
     if (!constants.PHONE_NUMBER_REGEX.test(phoneNumber)) {
       errorsArray.push(constants.PHONE_NUMBER_ERROR);
+    }
+
+    if (!constants.AGE_REGEX.test(age)) {
+      errorsArray.push('Please enter a 2-digit age');
     }
 
     if (errorsArray.length > 0) {

@@ -18,16 +18,13 @@ const productRoutes = require('./routes/product');
 const constants = require('./lib/constants');
 
 const app = express();
-const port = process.env.NODE_LOCAL_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-const { PUBLIC_AUTH_ROUTES } = constants;
-const { PUBLIC_ROUTES } = constants;
-
-const publicAuthPaths = PUBLIC_AUTH_ROUTES.map(({ path }) => path);
-const publicPaths = PUBLIC_ROUTES.map(({ path }) => path);
+const publicAuthPaths = constants.PUBLIC_AUTH_ROUTES.map(({ path }) => path);
+const publicPaths = constants.PUBLIC_ROUTES.map(({ path }) => path);
 const allPublicPaths = publicAuthPaths.concat(publicPaths);
 
 app.use(
@@ -39,7 +36,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: publicAuthPaths,
+    path: allPublicPaths,
   })
 );
 
@@ -79,14 +76,9 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 // use swagger-Ui-express for app documentation endpoint
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.get('/', (req, res) => {
-  res.json({ message: "Hello Let's Share!" });
-});
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // If I delete the next, the code is not working. Why?
-
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
