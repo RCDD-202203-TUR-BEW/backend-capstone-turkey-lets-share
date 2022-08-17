@@ -1,0 +1,112 @@
+paths:
+  /api/user/profile/update:
+    patch:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string,
+                lastName:
+                  type: string,
+                phoneNumber:
+                  type: string,
+                age:
+                  type: integer,
+                gender:
+                  type: string,
+                nationality:
+                  type: string,
+                refugee:
+                  type: boolean,
+            examples:
+              'CORRECT INFO SENT FOR UPDATE':
+                value: '{
+                  "firstName" : "Nilay",
+                  "lastName": "Aydin",
+                  "phoneNumber": "+679-123456789012",
+                  "age": 25,
+                  "gender": "Female",
+                  "nationality": "Turkey",
+                  "refugee": false,
+                  "address":{"country":"Germany"},
+                  }'
+              'PHONENUMBER NOT INCORRECT FORMAT':
+                value: '{
+                  "phoneNumber": "+60"
+                  }'
+              'AGE IS NOT A NUMBER':
+                value: '{
+                  "age": "25"
+                  }'
+              'ADDRESS IS NOT AN OBJECT':
+                value: '{
+                  "address": "Germany"
+                  }'
+      summary: 'Updates information of the user'
+      description: 'Should update the info of the current user'
+      produces:
+        - 'application/json'
+      responses:
+        '201':
+          description: 'User Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
+  /api/user/profile/password:
+    patch:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string,
+                password:
+                  type: string,
+                passwordConfirmation:
+                  type: string,
+            examples:
+              'CORRECT PASSWORD UPDATION':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&Here"
+                  }'
+              'OLD PASSWORD IS INCORRECT':
+                value: '{
+                  "oldPassword" : "OldHelloHere",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&Here"
+                  }'
+              'PASSWORD AND PASSWORD CONFIRMATION DO NOT MATCH':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": "Hello2U&HereThere"
+                  }'
+              'PASSWORD CONFIRMATION IS EMPTY':
+                value: '{
+                  "oldPassword" : "OldHello2U&Here",
+                  "password": "Hello2U&Here",
+                  "passwordConfirmation": ""
+                  }'
+      summary: 'Updates password of the user'
+      description: 'Should update the password of the current user'
+      produces:
+        - 'application/json'
+      responses:
+        '201':
+          description: 'User Password Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'

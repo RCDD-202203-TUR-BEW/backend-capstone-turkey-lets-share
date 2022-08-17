@@ -2,6 +2,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable consistent-return */
 /* eslint-disable prettier/prettier */
+const bcrypt = require('bcrypt');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 const constants = require('../lib/constants');
@@ -87,6 +88,57 @@ const getSingleUser = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
+const updateUser = async (req, res) => {
+  const bodyParams = Object.keys(req.body); // ['name', 'email', 'password']
+  const allowedParams = [
+    'firstName',
+    'lastName',
+    'username',
+    'phoneNumber',
+    'age',
+    'gender',
+    'nationality',
+    'refugee',
+    'profilePhoto',
+  ];
+  const emptyOrWhiteSpace = /^\s*$/;
+  try {
+    const User = await UserModel.findById(req.user.userId);
+    if (User) {
+      // eslint-disable-next-line consistent-return
+      bodyParams.forEach((param) => {
+        if (!emptyOrWhiteSpace.test(req.body[param])) {
+          if (!allowedParams.includes(param)) {
+            return res
+              .status(400)
+              .json({ message: `Cannot update field ${param}` });
+          }
+          User[param] = req.body[param];
+        }
+      });
+
+      await User.save();
+      return res.status(200).json({ message: 'User updated' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// eslint-disable-next-line consistent-return
+const updatePassword = async (req, res) => {
+  try {
+    const User = await UserModel.findById(req.user.userId);
+    const passwordHash = await bcrypt.hash(req.body.password, 10);
+    User.passwordHash = passwordHash;
+    await User.save();
+    return res.status(200).json({ message: 'Password updated' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const deleteProfile = async (req, res) => {
   try {
     await UserModel.findByIdAndDelete(req.user.userId);
@@ -105,5 +157,7 @@ module.exports = {
   getProfile,
   getUserProducts,
   getSingleUser,
+  updateUser,
+  updatePassword,
   deleteProfile,
 };
