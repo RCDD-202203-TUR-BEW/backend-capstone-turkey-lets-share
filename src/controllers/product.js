@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
-const constants = require('../lib/constants');
-
 const objectId = require('mongoose').Types.ObjectId;
+const constants = require('../lib/constants');
 
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
@@ -44,7 +43,6 @@ const addNewProduct = async (req, res) => {
   }
 };
 
-
 const updateProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.productId);
@@ -84,12 +82,12 @@ const updateProduct = async (req, res) => {
     }
     product.save();
     return res.status(200).json(product);
-      } catch (error) {
+  } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
   addNewProduct,
-  updateProduct
+  updateProduct,
 };

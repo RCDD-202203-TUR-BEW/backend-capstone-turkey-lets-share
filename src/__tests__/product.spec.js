@@ -7,7 +7,6 @@ describe('Product test', () => {
     expect(true).toEqual(true);
   });
 });
-
 // const supertest = require('supertest');
 // const app = require('../app');
 // const UserModel = require('../models/user');
