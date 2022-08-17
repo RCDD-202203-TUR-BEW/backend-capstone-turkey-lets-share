@@ -1,3 +1,4 @@
+/* eslint-disable node/no-extraneous-require */
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
