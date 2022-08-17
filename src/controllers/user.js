@@ -91,13 +91,16 @@ const getSingleUser = async (req, res) => {
 // eslint-disable-next-line consistent-return
 const updateUser = async (req, res) => {
   const bodyParams = Object.keys(req.body); // ['name', 'email', 'password']
-  const restrictedParams = [
-    '_id',
-    'email',
-    'provider',
-    'donated',
-    'requested',
-    'received',
+  const allowedParams = [
+    'firstName',
+    'lastName',
+    'username',
+    'phoneNumber',
+    'age',
+    'gender',
+    'nationality',
+    'refugee',
+    'profilePhoto',
   ];
   const emptyOrWhiteSpace = /^\s*$/;
   try {
@@ -106,7 +109,7 @@ const updateUser = async (req, res) => {
       // eslint-disable-next-line consistent-return
       bodyParams.forEach((param) => {
         if (!emptyOrWhiteSpace.test(req.body[param])) {
-          if (restrictedParams.includes(param)) {
+          if (!allowedParams.includes(param)) {
             return res
               .status(400)
               .json({ message: `Cannot update field ${param}` });
