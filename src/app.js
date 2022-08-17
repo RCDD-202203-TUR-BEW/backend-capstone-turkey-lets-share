@@ -39,7 +39,7 @@ app.use(
 
     requestProperty: 'user',
   }).unless({
-    path: allPublicPaths,
+    path: publicAuthPaths,
   })
 );
 
