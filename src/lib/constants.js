@@ -36,17 +36,6 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
 
-  PUBLIC_PATHS: [
-    '/api/',
-    '/api/about',
-    '/api/auth/login',
-    '/api/auth/register',
-    '/api/auth/google',
-    '/api/auth/google/callback',
-    '/api/auth/facebook',
-    '/api/auth/facebook/callback',
-    '/',
-  ],
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
@@ -77,33 +66,33 @@ module.exports = Object.freeze({
   </ul>`,
 
   PUBLIC_AUTH_ROUTES: [
-    { method: 'get', path: '/api/auth/login' },
-    { method: 'get', path: '/api/auth/register' },
-    { method: 'get', path: '/api/auth/google' },
-    { method: 'get', path: '/api/auth/google/callback' },
-    { method: 'get', path: '/api/auth/facebook' },
-    { method: 'get', path: '/api/auth/facebook/callback' },
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/google',
+    '/api/auth/google/callback',
+    '/api/auth/facebook',
+    '/api/auth/facebook/callback',
   ],
 
   PUBLIC_ROUTES: [
-    { method: 'get', path: '/' },
-    { method: 'get', path: '/api/' },
-    { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/product' },
-    { method: 'get', path: '/api/product?search&category' },
-    { method: 'get', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
+    { methods: ['GET'], url: '/' },
+    { methods: ['GET'], url: '/api/' },
+    { methods: ['GET'], url: '/api/about' },
+    { methods: ['GET'], url: '/api/product' },
+    { methods: ['GET'], url: '/api/product?search&category' },
+    { methods: ['GET'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
     {
-      method: 'get',
-      path: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
+      methods: ['GET'],
+      url: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
     },
   ],
   PRIVATE_ROUTES: [
-    { method: 'post', path: '/api/product' },
-    { method: 'post', path: '/api/auth/logout' },
-    { method: 'put', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { method: 'delete', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { method: 'get', path: '/api/auth/profile' },
-    { method: 'get', path: '/api/auth/logout' },
+    { methods: ['POST'], url: '/api/product' },
+    { methods: ['POST'], url: '/api/auth/logout' },
+    { methods: ['PUT'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
+    { methods: ['DELETE'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
+    { methods: ['GET'], url: '/api/auth/profile' },
+    { methods: ['GET'], url: '/api/auth/logout' },
   ],
 
   TOKEN_EXPIRATION_DURATION: '14d',
@@ -112,5 +101,26 @@ module.exports = Object.freeze({
     Donated: { postType: 'Donate' },
     Requested: { postType: 'Request', isTransactionCompleted: false },
     Received: { postType: 'Request', isTransactionCompleted: true },
+  },
+  SWAGGER_OPTIONS: {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: "Let's Share API with Swagger",
+        version: '0.1.0',
+        description: "Let's Share API documentation with Swagger",
+        license: {
+          name: 'MIT',
+          url: 'https://github.com/RCDD-202203-TUR-BEW/backend-capstone-turkey-lets-share',
+        },
+      },
+      servers: [
+        {
+          url: process.env.BASE_URL,
+        },
+      ],
+      url: process.env.BASE_URL,
+    },
+    apis: ['./src/docs/**/*.yaml'],
   },
 });

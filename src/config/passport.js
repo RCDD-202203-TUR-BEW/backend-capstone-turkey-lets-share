@@ -19,7 +19,7 @@ passport.use(
     {
       clientID: process.env.GAPP_CLIENT_ID,
       clientSecret: process.env.GAPP_CLIENT_SECRET,
-      callbackURL: '/api/auth/google/callback',
+      callbackURL: process.env.GOOGLE_REDIRECT_URI,
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {
@@ -48,7 +48,7 @@ passport.use(
     {
       clientID: process.env.FAPP_CLIENT_ID,
       clientSecret: process.env.FAPP_CLIENT_SECRET,
-      callbackURL: '/api/auth/facebook/callback',
+      callbackURL: process.env.FACEBOOK_REDIRECT_URI,
       profileFields: ['id', 'displayName', 'name', 'gender', 'photos', 'email'],
     },
     async (accessToken, refreshToken, profile, cb) => {

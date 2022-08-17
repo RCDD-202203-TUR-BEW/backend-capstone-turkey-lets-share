@@ -1,9 +1,12 @@
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+const { expressjwt: jwt } = require('express-jwt');
 const constants = require('../lib/constants');
 
 const config = process.env;
 
 const { PUBLIC_AUTH_ROUTES, PUBLIC_ROUTES, PRIVATE_ROUTES } = constants;
+
+const allPublicPaths = PUBLIC_ROUTES.concat(PUBLIC_AUTH_ROUTES);
 
 function authorize(req, res, next) {
   const { token } = req.signedCookies;
@@ -31,4 +34,13 @@ function authorize(req, res, next) {
   return next();
 }
 
-module.exports = authorize;
+const authenticationMiddleware = jwt({
+  secret: process.env.SECRET_KEY,
+  algorithms: ['HS256'],
+  getToken: (req) => req.signedCookies.token ?? req.cookies.token,
+  requestProperty: 'user',
+}).unless({
+  path: allPublicPaths,
+});
+
+module.exports = { authorize, authenticationMiddleware };
