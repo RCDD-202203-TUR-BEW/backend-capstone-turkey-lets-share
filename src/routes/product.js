@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post('/', productMiddleware, productController.addNewProduct);
 
+router.post('/:productId/request', productController.orderRequest);
+
 module.exports = router;
