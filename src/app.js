@@ -20,7 +20,7 @@ const port = process.env.PORT || 3000;
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
-// app.use('/', authenticationMiddleware);
+app.use('/api', authenticationMiddleware);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
