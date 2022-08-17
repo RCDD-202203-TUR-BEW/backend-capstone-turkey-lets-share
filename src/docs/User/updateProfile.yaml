@@ -2,7 +2,7 @@ paths:
   /api/user/profile/update:
     patch:
       tags:
-        - User
+        - Update User
       requestBody:
         content:
           application/json:
@@ -32,20 +32,26 @@ paths:
                   "age": 25,
                   "gender": "Female",
                   "nationality": "Turkey",
-                  "refugee": false,
-                  "address":{"country":"Germany"},
+                  "refugee": false
                   }'
               'PHONENUMBER NOT INCORRECT FORMAT':
                 value: '{
                   "phoneNumber": "+60"
                   }'
-              'AGE IS NOT A NUMBER':
+              'AGE IS NOT IN A VALID FORMAT':
                 value: '{
-                  "age": "25"
+                  "age": "225"
                   }'
-              'ADDRESS IS NOT AN OBJECT':
+              'CUSTOM':
                 value: '{
-                  "address": "Germany"
+                  "firstName" : "String",
+                  "lastName": "String",
+                  "phoneNumber": "min 6, max 15 digits without country code;
+                  min 5, max 12 digits + a space or dash + 1-3 digits country code",
+                  "age": "String",
+                  "gender": "String",
+                  "nationality": "String",
+                  "refugee": false
                   }'
       summary: 'Updates information of the user'
       description: 'Should update the info of the current user'
@@ -58,17 +64,17 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
-  /api/user/profile/password:
+  /api/user/profile/update/password:
     patch:
       tags:
-        - User
+        - Update User
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                oldPassword:
+                currentPassword:
                   type: string,
                 password:
                   type: string,
@@ -77,27 +83,33 @@ paths:
             examples:
               'CORRECT PASSWORD UPDATION':
                 value: '{
-                  "oldPassword" : "OldHello2U&Here",
+                  "currentPassword" : "OldHello2U&Here",
                   "password": "Hello2U&Here",
                   "passwordConfirmation": "Hello2U&Here"
                   }'
               'OLD PASSWORD IS INCORRECT':
                 value: '{
-                  "oldPassword" : "OldHelloHere",
+                  "currentPassword" : "OldHelloHere",
                   "password": "Hello2U&Here",
                   "passwordConfirmation": "Hello2U&Here"
                   }'
               'PASSWORD AND PASSWORD CONFIRMATION DO NOT MATCH':
                 value: '{
-                  "oldPassword" : "OldHello2U&Here",
+                  "currentPassword" : "OldHello2U&Here",
                   "password": "Hello2U&Here",
                   "passwordConfirmation": "Hello2U&HereThere"
                   }'
               'PASSWORD CONFIRMATION IS EMPTY':
                 value: '{
-                  "oldPassword" : "OldHello2U&Here",
+                  "currentPassword" : "OldHello2U&Here",
                   "password": "Hello2U&Here",
                   "passwordConfirmation": ""
+                  }'
+              'CUSTOM':
+                value: '{
+                  "currentPassword" : "String",
+                  "password": "String",
+                  "passwordConfirmation": "String"
                   }'
       summary: 'Updates password of the user'
       description: 'Should update the password of the current user'

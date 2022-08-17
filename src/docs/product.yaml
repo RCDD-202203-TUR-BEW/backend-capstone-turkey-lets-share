@@ -1,0 +1,112 @@
+/api/product/{productId}:
+  patch:
+    tags:
+      - Product
+    summary: Updating an existing product of logged in user
+    operationId: updateProduct
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 62f661cf728303c5bead3b6d
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              photos:
+                type: array
+                items:
+                  type: string
+              category:
+                type: string
+                enum:
+                  - 'Books'
+                  - 'Clothing'
+                  - 'Electronics'
+                  - 'Food'
+                  - 'Furniture'
+                  - 'Kitchenware'
+                  - 'Linens'
+                  - 'Toys'
+                  - 'Other'
+              location:
+                type: string
+              productCondition:
+                type: string
+                enum:
+                  - 'New'
+                  - 'Underused'
+                  - 'Overused'
+              shippingOptions:
+                type: string
+                enum:
+                  - 'Meet up'
+                  - 'Drop off'
+                  - 'Free shipping'
+                  - 'Paid shipping'
+                  - 'To be determined'
+              postType:
+                type: string
+                enum:
+                  - 'Donate'
+                  - 'Request'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      '500':
+        description: 'Internal server error'
+      '404':
+        description: 'Product not found'
+      '403':
+        description: 'You are not authorized to update this product'
+      '400':
+        description: 'Transaction is already completed, you cannot update this product'
+      '422':
+        description: 'You entered an invalid key in the body, please check product for valid keys'
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        photos:
+          type: array of strings
+        category:
+          type: string
+        location:
+          type: string
+        productCondition:
+          type: string
+        shippingOptions:
+          type: string
+        postType:
+          type: string
+        isTransactionCompleted:
+          type: Boolean
+        donor:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        beneficiary:
+          type: ObjectId
+          description: 'Added automatically according to postType'
+        orderRequests:
+          type: array of ObjectIds
+        isEvent:
+          type: boolean,
+          default: false

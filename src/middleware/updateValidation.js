@@ -4,7 +4,7 @@ const UserModel = require('../models/user');
 
 // eslint-disable-next-line consistent-return
 const validateUpdate = async (req, res, next) => {
-  const { address, age, phoneNumber, username } = req.body;
+  const { age, phoneNumber, username } = req.body;
   const errorsArray = [];
   if (username) {
     const similarUsername = await UserModel.findOne({ username });
@@ -24,24 +24,6 @@ const validateUpdate = async (req, res, next) => {
       errorsArray.push(constants.PHONE_NUMBER_ERROR);
     }
   }
-  if (address) {
-    const requiredFeilds = ['country', 'city', 'address0'];
-    if (typeof address !== 'object') {
-      errorsArray.push('Address is not an object');
-    }
-    // eslint-disable-next-line prettier/prettier
-    if (address.zip) {
-      if (!constants.ZIP_REGEX.test(address.zip)) {
-        errorsArray.push('Zip code is not valid');
-      }
-    }
-    // eslint-disable-next-line no-restricted-syntax
-    for (const field of requiredFeilds) {
-      if (!address[field]) {
-        errorsArray.push(`${field} is required in Address`);
-      }
-    }
-  }
   if (age) {
     if (!constants.AGE_REGEX.test(age)) {
       errorsArray.push('Please enter a 2-digit age');
@@ -55,13 +37,13 @@ const validateUpdate = async (req, res, next) => {
 
 // eslint-disable-next-line consistent-return
 const validatePassword = async (req, res, next) => {
-  const { oldPassword, password, passwordConfirmation } = req.body;
+  const { currentPassword, password, passwordConfirmation } = req.body;
   const errorsArray = [];
   const User = await UserModel.findById(req.user.userId);
-  if (oldPassword && password && passwordConfirmation) {
+  if (currentPassword && password && passwordConfirmation) {
     if (User) {
       const passwordMatch = await bcrypt.compare(
-        req.body.oldPassword,
+        req.body.currentPassword,
         User.passwordHash
       );
       if (!passwordMatch) {
