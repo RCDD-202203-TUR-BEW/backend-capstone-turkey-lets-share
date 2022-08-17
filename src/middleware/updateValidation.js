@@ -65,7 +65,38 @@ const validatePassword = async (req, res, next) => {
   next();
 };
 
+// eslint-disable-next-line consistent-return
+const validateAddress = async (req, res, next) => {
+  const { address } = req.body;
+  const requiredFeilds = ['country', 'city', 'address0'];
+  const errorsArray = [];
+  if (address) {
+    if (typeof address !== 'object') {
+      errorsArray.push('Address is not an object');
+    }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const field of requiredFeilds) {
+      if (!address[field]) {
+        errorsArray.push(`${field} is required in Address`);
+      }
+    }
+    // eslint-disable-next-line prettier/prettier
+    if (address.zip) {
+      if (!constants.ZIP_REGEX.test(address.zip)) {
+        errorsArray.push('Zip code is not valid');
+      }
+    }
+  } else {
+    errorsArray.push('Address not provided');
+  }
+  if (errorsArray.length > 0) {
+    return res.status(400).json({ error: errorsArray });
+  }
+  next();
+};
+
 module.exports = {
   validateUpdate,
   validatePassword,
+  validateAddress,
 };

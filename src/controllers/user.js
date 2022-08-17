@@ -139,10 +139,40 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const updateAddress = async (req, res) => {
+  const User = await UserModel.findOne({ _id: req.user.userId });
+  try {
+    const { addressID, operation } = req.params;
+    const newAddress = req.body.address;
+    let message;
+    if (addressID && operation) {
+      const toUpdateAddress = User.address.filter(
+        (address) => String(address._id) === addressID
+      );
+      const index = User.address.indexOf(toUpdateAddress[0]);
+      if (operation === 'update') {
+        User.address[index] = newAddress;
+        message = `Address ${index + 1} updated`;
+      } else if (operation === 'delete') {
+        User.address.splice(index, 1);
+        message = `Address ${index + 1} deleted`;
+      }
+    } else {
+      User.address.push(newAddress);
+      message = `Address added`;
+    }
+    await User.save();
+    return res.status(200).json({ message });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProfile,
   getUserProducts,
   getSingleUser,
   updateUser,
   updatePassword,
+  updateAddress,
 };
