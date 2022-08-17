@@ -2,7 +2,7 @@ paths:
   /api/auth/google:
     get:
       tags:
-      - "Authentication"
+      - Authentication
       summary: "Authenticates user using google 3rd party authentication service"
       responses:
         "200":

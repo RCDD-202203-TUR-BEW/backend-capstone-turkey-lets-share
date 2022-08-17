@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 describe('Guard test', () => {
   it('Guard Test', () => {
     expect(true).toEqual(true);

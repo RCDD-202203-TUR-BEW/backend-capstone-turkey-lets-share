@@ -36,6 +36,8 @@ module.exports = Object.freeze({
   ],
   ENUM_POST_TYPE: ['Request', 'Donate'],
 
+  AGE_REGEX: new RegExp(/^[1-9]{1}\d{1}$/),
+
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
@@ -47,6 +49,7 @@ module.exports = Object.freeze({
   ),
   USERNAME_REGEX: new RegExp(/^[a-zA-Z0-9\-_.]{2,20}$/),
   PHONE_NUMBER_REGEX: new RegExp(/^[+]?[0-9]{1,3}[-\s]?[0-9]{1,3}[0-9]{4,9}$/),
+
   PASSWORD_ERROR: `<ul>
     <li>At least one upper case letter</li>
     <li>At least one lower case letter</li>
@@ -73,13 +76,10 @@ module.exports = Object.freeze({
     '/api/auth/facebook',
     '/api/auth/facebook/callback',
   ],
-
   PUBLIC_ROUTES: [
     { methods: ['GET'], url: '/' },
     { methods: ['GET'], url: '/api/' },
-    { methods: ['GET'], url: '/api/about' },
     { methods: ['GET'], url: '/api/product' },
-    { methods: ['GET'], url: '/api/product?search&category' },
     { methods: ['GET'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
     {
       methods: ['GET'],
@@ -95,6 +95,16 @@ module.exports = Object.freeze({
     { methods: ['GET'], url: '/api/auth/logout' },
   ],
 
+  VALID_PRODUCT_KEYS: [
+    'title',
+    'description',
+    'photos',
+    'category',
+    'location',
+    'productCondition',
+    'shippingOptions',
+    'postType',
+  ],
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
   POST_TYPE_SELECTOR: {

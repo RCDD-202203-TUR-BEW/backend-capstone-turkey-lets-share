@@ -8,7 +8,7 @@ const { PUBLIC_AUTH_ROUTES, PUBLIC_ROUTES, PRIVATE_ROUTES } = constants;
 
 const allPublicPaths = PUBLIC_ROUTES.concat(PUBLIC_AUTH_ROUTES);
 
-function authorize(req, res, next) {
+const authorize = (req, res, next) => {
   const { token } = req.signedCookies;
   const route = { method: req.method.toString().toLowerCase(), path: req.path };
   if (!token) {
@@ -32,7 +32,7 @@ function authorize(req, res, next) {
     }
   }
   return next();
-}
+};
 
 const authenticationMiddleware = jwt({
   secret: process.env.SECRET_KEY,

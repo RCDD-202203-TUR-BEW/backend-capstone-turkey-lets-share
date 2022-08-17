@@ -49,6 +49,10 @@ const productSchema = new mongoose.Schema(
     isTransactionCompleted: {
       type: Boolean,
     },
+    publisher: {
+      ref: 'User',
+      type: objectId,
+    },
     donor: {
       ref: 'User',
       type: objectId,
@@ -66,10 +70,6 @@ const productSchema = new mongoose.Schema(
     isEvent: {
       type: Boolean,
       default: false,
-    },
-    publisher: {
-      ref: 'User',
-      type: objectId,
     },
   },
   { timestamps: true }
