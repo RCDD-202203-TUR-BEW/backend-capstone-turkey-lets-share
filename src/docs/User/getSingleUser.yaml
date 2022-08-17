@@ -1,19 +1,4 @@
 paths:
-  /api/user/profile:
-    get:
-      tags:
-        - User
-      summary: 'Returns the information of the logged in user'
-      description: 'Should return the information of current user'
-      produces:
-        - 'application/json'
-      responses:
-        '200':
-          description: 'OK (User info is fetched)'
-        '401':
-          description: 'Unauthorized (No authorization token was found)'
-        '500':
-          description: 'Internal server error'
   /api/user/{id}:
     get:
       tags:

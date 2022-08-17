@@ -64,31 +64,6 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
-  /api/product/{productId}:
-    delete:
-      tags:
-        - Product
-      description: 'Deletes a product'
-      parameters:
-        - name: 'productId'
-          in: 'path'
-          description: 'id of the product'
-          required: true
-          type: 'string'
-          examples:
-            'real ID of a deleted product':
-              value: '62ee5c280262c62f56124dfd'
-            'custom':
-              value: ''
-      responses:
-        '200':
-          description: 'OK (product deleted)'
-        '401':
-          description: 'Unauthorized (one needs to be logged in and be the owner of the product)'
-        '404':
-          description: 'Not Found (product was not found)'
-        '500':
-          description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
 components:
   schemas:
     Product:
@@ -112,9 +87,6 @@ components:
           type: string
         isTransactionCompleted:
           type: Boolean
-        publisher:
-          type: ObjectId
-          description: 'Added automatically when posting'
         donor:
           type: ObjectId
           description: 'Added automatically according to postType'
