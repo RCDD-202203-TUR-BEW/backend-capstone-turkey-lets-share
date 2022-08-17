@@ -4,22 +4,15 @@ const {
   validateUpdate,
   validatePassword,
 } = require('../middleware/updateValidation');
-const authorize = require('../middleware/guard');
 
 const router = express.Router();
 
 router.get('/profile', userController.getProfile);
 router.get('/:id', userController.getSingleUser);
 router.get('/:userId/products', userController.getUserProducts);
-router.patch(
-  '/profile/update',
-  authorize,
-  validateUpdate,
-  userController.updateUser
-);
+router.patch('/profile/update', validateUpdate, userController.updateUser);
 router.patch(
   '/profile/update/password',
-  authorize,
   validatePassword,
   userController.updatePassword
 );
