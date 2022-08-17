@@ -7,7 +7,5 @@ paths:
       responses:
         '200':
           description: 'User Deleted'
-        '401':
-          description: 'Not authorized'
         '500':
           description: 'Internal server error'

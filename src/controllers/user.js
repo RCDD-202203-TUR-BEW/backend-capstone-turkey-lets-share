@@ -90,7 +90,10 @@ const getSingleUser = async (req, res) => {
 const deleteProfile = async (req, res) => {
   try {
     await UserModel.findByIdAndDelete(req.user.userId);
-    await ProductModel.deleteMany({ publisher: req.user.userId });
+    await ProductModel.deleteMany({
+      publisher: req.user.userId,
+      isTransactionCompleted: false,
+    });
     await res.clearCookie('token');
     return res.status(200).json({ message: 'User deleted' });
   } catch (error) {
