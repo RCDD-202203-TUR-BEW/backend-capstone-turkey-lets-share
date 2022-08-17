@@ -7,7 +7,6 @@ const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 const constants = require('../lib/constants');
 
-// eslint-disable-next-line consistent-return
 const getProfile = async (req, res) => {
   try {
     if (req.user) {

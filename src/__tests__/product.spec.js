@@ -1,17 +1,18 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable consistent-return */
-/* eslint-disable node/no-unpublished-require */
-describe('Product test', () => {
-  it('Product Test', () => {
-    expect(true).toEqual(true);
-  });
-});
+// /* eslint-disable no-underscore-dangle */
+// /* eslint-disable prefer-destructuring */
+// /* eslint-disable consistent-return */
+// /* eslint-disable node/no-unpublished-require */
 // const supertest = require('supertest');
 // const app = require('../app');
 // const UserModel = require('../models/user');
 // const ProductModel = require('../models/product');
 // const connectDatabase = require('../db/connection');
+
+describe('Product test', () => {
+  it('Product Test', () => {
+    expect(true).toEqual(true);
+  });
+});
 
 // const createCurrentUser = {
 //   firstName: 'adnan',
@@ -134,6 +135,32 @@ describe('Product test', () => {
 //         expect(res.body.donated).toContain(donatePostId);
 //         expect(res.body.donated[0]).toBe(donatePostId);
 //         expect(res.body.donated.length).toBe(1);
+//         return done();
+//       });
+//   });
+
+//   it('should delete the product with the postType property set to "Request"', (done) => {
+//     supertest(app)
+//       .delete(`/api/product/${requestPostId}`)
+//       .set('Cookie', token)
+//       .expect(200, (err, res) => {
+//         if (err) return done(err);
+
+//         expect(newUser.requested.length).toBe(0);
+//         expect(res.body.message).toBe('Product deleted successfully');
+//         return done();
+//       });
+//   });
+
+//   it('should delete the product with the postType property set to "Donate"', (done) => {
+//     supertest(app)
+//       .delete(`/api/product/${donatePostId}`)
+//       .set('Cookie', token)
+//       .expect(200, (err, res) => {
+//         if (err) return done(err);
+
+//         expect(newUser.donated.length).toBe(0);
+//         expect(res.body.message).toBe('Product deleted successfully');
 //         return done();
 //       });
 //   });

@@ -1,38 +1,37 @@
 paths:
-    /api/user/{userId}/products:
-        get:
-            tags:
-                - User
-            summary: Gets user's posts and provides filtering and searching features
-            description: Gets all the specified user's products if no parameters were passed in the query, filters the products according to the post type if passed in the query, and searches the titles of the products if a search parameter were passed in the query.
-            operationId: getProducts
-            consumes:
-                - application/json
-            produces:
-                - application/json
-            parameters:
-                - name: userId
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                    example: 62e2f022552347123617a73f
-                - name: postType
-                  in: query
-                  description: The postType takes one or more of these values [Donated, Requested, Received]
-                  schema:
-                    type: array
-                    items:
-                      type: string
-                      unique: true
-                - name: SearchTitles
-                  in: query
-                  type: string
-            responses:
-                200:
-                    description: Returns a list of the matching products.
-                400:
-                    description: Your search was not found!
-                500:
-                    description: Internal server error.
-                    
+  /api/user/{userId}/products:
+    get:
+      tags:
+        - User
+      summary: Gets user's posts and provides filtering and searching features
+      description: Gets all the specified user's products if no parameters were passed in the query, filters the products according to the post type if passed in the query, and searches the titles of the products if a search parameter were passed in the query.
+      operationId: getProducts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 62e2f022552347123617a73f
+        - name: postType
+          in: query
+          description: The postType takes one or more of these values [Donated, Requested, Received]
+          schema:
+            type: array
+            items:
+              type: string
+              unique: true
+        - name: SearchTitles
+          in: query
+          type: string
+      responses:
+        200:
+          description: Returns a list of the matching products.
+        400:
+          description: Your search was not found!
+        500:
+          description: Internal server error.

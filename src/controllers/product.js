@@ -1,8 +1,8 @@
+/* eslint-disable node/no-extraneous-require */
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
-
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 
@@ -17,6 +17,7 @@ const addNewProduct = async (req, res) => {
       productCondition: req.body.productCondition,
       shippingOptions: req.body.shippingOptions,
       postType: req.body.postType,
+      publisher: req.user.userId,
       donor: req.user.userId,
       beneficiary: null,
       isEvent: req.body.isEvent,
@@ -43,6 +44,43 @@ const addNewProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const singleProduct = await ProductModel.findById(req.params.productId);
+
+    if (singleProduct) {
+      if (singleProduct.isTransactionCompleted === true) {
+        return res.status(400).json({
+          message: 'Transaction is completed. You can not delete this post',
+        });
+      }
+
+      if (String(singleProduct.publisher) === req.user.userId) {
+        if (singleProduct.postType === 'Donate') {
+          await UserModel.findByIdAndUpdate(req.user.userId, {
+            $pull: { donated: singleProduct._id },
+          });
+        }
+        if (singleProduct.postType === 'Request') {
+          await UserModel.findByIdAndUpdate(req.user.userId, {
+            $pull: { requested: singleProduct._id },
+          });
+        }
+        await singleProduct.deleteOne();
+        return res
+          .status(200)
+          .json({ message: 'Product deleted successfully' });
+      }
+      return res
+        .status(401)
+        .json({ message: 'You are not authorized to perform this action' });
+    }
+    return res.status(404).json({ message: 'Product not found' });
+  } catch (error) {
+    return res.sendStatus(500).json({ message: error.message });
+  }
+};
+
 const updateProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.productId);
@@ -65,7 +103,7 @@ const updateProduct = async (req, res) => {
       });
     }
 
-    const updatedProduct = _.pick(req.body, constants.VALIDPRODUCTKEYS);
+    const updatedProduct = _.pick(req.body, constants.VALID_PRODUCT_KEYS);
     const updatedValidKeys = Object.keys(updatedProduct);
     const requestedKeys = Object.keys(req.body);
 
@@ -89,5 +127,6 @@ const updateProduct = async (req, res) => {
 
 module.exports = {
   addNewProduct,
+  deleteProduct,
   updateProduct,
 };
