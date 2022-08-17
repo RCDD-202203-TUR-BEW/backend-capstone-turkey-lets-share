@@ -5,53 +5,53 @@ const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 
 // eslint-disable-next-line consistent-return
-// const getProducts = async (req, res) => {
-//   try {
-//     const {
-//       search,
-//       category,
-//       productCondition,
-//       location,
-//       shippingOptions,
-//       postType,
-//     } = req.query;
+const getProducts = async (req, res) => {
+  try {
+    const {
+      search,
+      category,
+      productCondition,
+      location,
+      shippingOptions,
+      postType,
+    } = req.query;
 
-//     const filter = {};
+    const filter = {};
 
-//     if (search) {
-//       filter.title = { $regex: search, $options: 'i' };
-//     }
+    if (search) {
+      filter.title = { $regex: search, $options: 'i' };
+    }
 
-//     if (category) {
-//       filter.category = { $in: category };
-//     }
+    if (category) {
+      filter.category = { $in: category };
+    }
 
-//     if (productCondition) {
-//       filter.productCondition = productCondition;
-//     }
+    if (productCondition) {
+      filter.productCondition = productCondition;
+    }
 
-//     if (location) {
-//       filter.location = { $regex: location, $options: 'i' };
-//     }
+    if (location) {
+      filter.location = { $regex: location, $options: 'i' };
+    }
 
-//     if (shippingOptions) {
-//       filter.shippingOptions = shippingOptions;
-//     }
+    if (shippingOptions) {
+      filter.shippingOptions = shippingOptions;
+    }
 
-//     if (postType) {
-//       filter.postType = postType;
-//     }
+    if (postType) {
+      filter.postType = postType;
+    }
 
-//     const filteredProducts = await ProductModel.find(filter);
-//     if (filteredProducts.length === 0) {
-//       return res.status(400).json({ message: 'Your search is not found!' });
-//     }
+    const filteredProducts = await ProductModel.find(filter);
+    if (filteredProducts.length === 0) {
+      return res.status(400).json({ message: 'Your search is not found!' });
+    }
 
-//     return res.status(200).json(filteredProducts);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    return res.status(200).json(filteredProducts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 const addNewProduct = async (req, res) => {
   try {
@@ -92,4 +92,5 @@ const addNewProduct = async (req, res) => {
 
 module.exports = {
   addNewProduct,
+  getProducts,
 };
