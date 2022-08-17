@@ -27,15 +27,15 @@ const connectDatabase = require('../db/connection');
 
 const cookiesAgent = supertest.agent(app);
 
-const createUser = {
-  firstName: 'john',
-  lastName: 'doe',
-  email: 'john.doe@outlook.com',
-  username: 'john.doe',
-  provider: 'Local',
-  providerId: 'Local',
-  passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
-};
+// const createUser = {
+//   firstName: 'john',
+//   lastName: 'doe',
+//   email: 'john.doe@outlook.com',
+//   username: 'john.doe',
+//   provider: 'Local',
+//   providerId: 'Local',
+//   passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
+// };
 
 const mockUser = {
   sub: '12345678',
@@ -79,7 +79,7 @@ beforeAll(async () => {
       '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
   });
 
-  await UserModel.create(createUser);
+  // await UserModel.create(createUser);
 });
 
 afterAll(async (drop = false) => {
@@ -93,7 +93,7 @@ afterAll(async (drop = false) => {
 
 let redirectUri;
 let jwtToken;
-let token;
+// let token;
 
 describe('AUTH TESTS', () => {
   describe('POST /api/auth/register', () => {
@@ -169,34 +169,34 @@ describe('AUTH TESTS', () => {
     });
   });
 
-  describe('POST /api/auth/logout', () => {
-    it('should return a token when correct user is logged in', (done) => {
-      supertest(app)
-        .post('/api/auth/login')
-        .send({ email: createUser.email, password: 'Qwerty-123' })
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
+  // describe('POST /api/auth/logout', () => {
+  //   it('should return a token when correct user is logged in', (done) => {
+  //     supertest(app)
+  //       .post('/api/auth/login')
+  //       .send({ email: createUser.email, password: 'Qwerty-123' })
+  //       .end((err, res) => {
+  //         if (err) {
+  //           return done(err);
+  //         }
 
-          expect(res.status).toBe(201);
-          token = res.headers['set-cookie'][0].split(';')[0];
-          done();
-        });
-    });
+  //         expect(res.status).toBe(201);
+  //         token = res.headers['set-cookie'][0].split(';')[0];
+  //         done();
+  //       });
+  //   });
 
-    it('should log user out', (done) => {
-      supertest(app)
-        .post('/api/auth/logout')
-        .set('Cookie', token)
-        .expect(200, (err, res) => {
-          if (err) return done(err);
+  //   it('should log user out', (done) => {
+  //     supertest(app)
+  //       .post('/api/auth/logout')
+  //       .set('Cookie', token)
+  //       .expect(200, (err, res) => {
+  //         if (err) return done(err);
 
-          expect(res.body.message).toBe('Logged out successfully');
-          return done();
-        });
-    });
-  });
+  //         expect(res.body.message).toBe('Logged out successfully');
+  //         return done();
+  //       });
+  //   });
+  // });
 
   describe('POST /api/auth/login', () => {
     it('should return a token in a cookie and success message ', (done) => {
@@ -604,7 +604,6 @@ function runTestServer() {
   });
 
   // eslint-disable-next-line prettier/prettier
-
   const server = app.listen(5005, () => {});
 
   return async () => await server.close();
