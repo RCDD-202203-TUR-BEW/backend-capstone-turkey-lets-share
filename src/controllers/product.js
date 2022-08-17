@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
-
+const constants = require('../lib/constants');
 const ProductModel = require('../models/product');
 
 const updateProduct = async (req, res) => {
@@ -25,18 +25,7 @@ const updateProduct = async (req, res) => {
       });
     }
 
-    const validKeys = [
-      'title',
-      'description',
-      'photos',
-      'category',
-      'location',
-      'productCondition',
-      'shippingOptions',
-      'postType',
-    ];
-
-    const updatedProduct = _.pick(req.body, validKeys);
+    const updatedProduct = _.pick(req.body, constants.VALIDPRODUCTKEYS);
     const updatedValidKeys = Object.keys(updatedProduct);
     const requestedKeys = Object.keys(req.body);
 
