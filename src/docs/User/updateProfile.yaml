@@ -131,16 +131,16 @@ paths:
       parameters:
         - name: addressID
           in: path
-          required: true
+          required: false
           schema:
           type: string
           example: 62e2f022552347123617a73f
         - name: operation
           in: path
-          required: true
+          required: false
           schema:
           type: string
-          example: 62e2f022552347123617a73f
+          example: update
       requestBody:
         content:
           application/json:
@@ -189,5 +189,7 @@ paths:
           description: 'Address Updated'
         '400':
           description: 'Bad request (either validation or database error)'
+        '404':
+          description: 'Address Not Found'
         '500':
           description: 'Internal server error'
