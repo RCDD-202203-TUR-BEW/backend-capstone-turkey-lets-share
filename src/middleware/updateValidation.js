@@ -68,7 +68,7 @@ const validatePassword = async (req, res, next) => {
 // eslint-disable-next-line consistent-return
 const validateAddress = async (req, res, next) => {
   const { address } = req.body;
-  const requiredFeilds = ['country', 'city', 'address0'];
+  const requiredFeilds = constants.ADDRESS_REQUIRED_FIELDS;
   const errorsArray = [];
   if (address) {
     if (typeof address !== 'object') {

@@ -139,7 +139,7 @@ const updateProduct = async (req, res) => {
         message: 'Product not found',
       });
     }
-
+    console.log(req.user);
     if (product.publisher.toString() !== req.user.userId.toString()) {
       return res.status(403).json({
         message: 'You are not authorized to update this product',
