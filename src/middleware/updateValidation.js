@@ -70,6 +70,10 @@ const validateAddress = async (req, res, next) => {
   const { address } = req.body;
   const requiredFeilds = constants.ADDRESS_REQUIRED_FIELDS;
   const errorsArray = [];
+  const operations = ['update', 'delete'];
+  if (req.params.operation && !operations.includes(req.params.operation)) {
+    return res.status(400).json({ error: 'Unvalid operation' });
+  }
   if (address) {
     if (typeof address !== 'object') {
       errorsArray.push('Address is not an object');
@@ -86,8 +90,6 @@ const validateAddress = async (req, res, next) => {
         errorsArray.push('Zip code is not valid');
       }
     }
-  } else {
-    errorsArray.push('Address not provided');
   }
   if (errorsArray.length > 0) {
     return res.status(400).json({ error: errorsArray });

@@ -139,6 +139,8 @@ const updateAddress = async (req, res) => {
         (address) => String(address._id) === addressID
       );
       const index = User.address.indexOf(toUpdateAddress[0]);
+      if (index === -1)
+        return res.status(404).json({ message: 'Address not found' });
       if (operation === 'update') {
         User.address[index] = newAddress;
         message = `Address ${index + 1} updated`;
