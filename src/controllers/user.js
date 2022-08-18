@@ -7,7 +7,6 @@ const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 const constants = require('../lib/constants');
 
-// eslint-disable-next-line consistent-return
 const getProfile = async (req, res) => {
   try {
     if (req.user) {
@@ -139,10 +138,25 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const deleteProfile = async (req, res) => {
+  try {
+    await UserModel.findByIdAndDelete(req.user.userId);
+    await ProductModel.deleteMany({
+      publisher: req.user.userId,
+      isTransactionCompleted: false,
+    });
+    await res.clearCookie('token');
+    return res.status(200).json({ message: 'User deleted' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProfile,
   getUserProducts,
   getSingleUser,
   updateUser,
   updatePassword,
+  deleteProfile,
 };

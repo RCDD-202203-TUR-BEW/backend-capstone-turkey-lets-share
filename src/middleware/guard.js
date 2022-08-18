@@ -5,7 +5,7 @@ const config = process.env;
 
 const { PUBLIC_AUTH_ROUTES, PUBLIC_ROUTES, PRIVATE_ROUTES } = constants;
 
-function authorize(req, res, next) {
+const authorize = (req, res, next) => {
   const { token } = req.signedCookies;
   const route = { method: req.method.toString().toLowerCase(), path: req.path };
   if (!token) {
@@ -29,6 +29,6 @@ function authorize(req, res, next) {
     }
   }
   return next();
-}
+};
 
 module.exports = authorize;
