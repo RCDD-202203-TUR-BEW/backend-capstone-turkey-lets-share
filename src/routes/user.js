@@ -19,7 +19,7 @@ router.patch(
   userController.updatePassword
 );
 router.patch(
-  '/profile/update/address/:addressID?/:operation?',
+  '/profile/update/address/:operation/:addressID?',
   validateAddress,
   userController.updateAddress
 );

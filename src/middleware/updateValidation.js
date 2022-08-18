@@ -70,7 +70,7 @@ const validateAddress = async (req, res, next) => {
   const { address } = req.body;
   const requiredFeilds = constants.ADDRESS_REQUIRED_FIELDS;
   const errorsArray = [];
-  const operations = ['update', 'delete'];
+  const operations = ['update', 'delete', 'add'];
   if (req.params.operation && !operations.includes(req.params.operation)) {
     return res.status(400).json({ error: 'Unvalid operation' });
   }

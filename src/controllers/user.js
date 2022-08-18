@@ -129,28 +129,37 @@ const updatePassword = async (req, res) => {
 };
 
 const updateAddress = async (req, res) => {
-  const User = await UserModel.findOne({ _id: req.user.userId });
   try {
     const { addressID, operation } = req.params;
-    const newAddress = req.body.address;
+    const User = await UserModel.findById(req.user.userId);
     let message;
-    if (addressID && operation) {
-      const toUpdateAddress = User.address.filter(
-        (address) => String(address._id) === addressID
-      );
-      const index = User.address.indexOf(toUpdateAddress[0]);
-      if (index === -1)
-        return res.status(404).json({ message: 'Address not found' });
-      if (operation === 'update') {
-        User.address[index] = newAddress;
-        message = `Address ${index + 1} updated`;
-      } else if (operation === 'delete') {
-        User.address.splice(index, 1);
-        message = `Address ${index + 1} deleted`;
+    if (operation) {
+      if (operation === 'add') {
+        User.address.push(req.body.address);
+        message = `Address added`;
+      } else if (operation === 'delete' || operation === 'update') {
+        if (addressID) {
+          const addressIndex = User.address
+            .map((address) => address.id)
+            .indexOf(addressID);
+          if (addressIndex === -1)
+            return res.status(404).json({ message: 'Address not found' });
+          if (operation === 'update') {
+            User.address[addressIndex] = req.body.address;
+            message = `Address ${addressIndex + 1} updated`;
+          } else if (operation === 'delete') {
+            User.address.splice(addressIndex, 1);
+            message = `Address ${addressIndex + 1} deleted`;
+          }
+        } else
+          return res
+            .status(400)
+            .json({ message: 'Address ID is required for this operation' });
+      } else {
+        return res.status(400).json({ message: 'Invalid operation' });
       }
     } else {
-      User.address.push(newAddress);
-      message = `Address added`;
+      return res.status(400).json({ message: 'Operation not specified' });
     }
     await User.save();
     return res.status(200).json({ message });
