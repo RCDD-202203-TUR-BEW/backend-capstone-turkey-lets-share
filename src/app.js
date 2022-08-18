@@ -82,15 +82,16 @@ app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
-    return res.status(401).json({
+    res.status(401).json({
       error: true,
       message: `Invalid Token: ${err.message}`,
     });
+  } else {
+    res.status(500).json({
+      error: true,
+      message: 'Internal server error occured',
+    });
   }
-  return res.status(500).json({
-    error: true,
-    message: 'Internal server error occured',
-  });
 }
 
 app.use(errorHandler);
