@@ -1,13 +1,10 @@
-/* eslint-disable node/no-extraneous-require */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable prettier/prettier */
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 
-// eslint-disable-next-line consistent-return
 const getProducts = async (req, res) => {
   try {
     const {
@@ -51,8 +48,8 @@ const getProducts = async (req, res) => {
     }
 
     return res.status(200).json(filteredProducts);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -127,7 +124,7 @@ const deleteProduct = async (req, res) => {
     }
     return res.status(404).json({ message: 'Product not found' });
   } catch (error) {
-    return res.sendStatus(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

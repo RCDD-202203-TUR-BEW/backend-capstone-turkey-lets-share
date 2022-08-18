@@ -81,10 +81,6 @@ module.exports = Object.freeze({
     { methods: ['GET'], url: '/api/' },
     { methods: ['GET'], url: '/api/product' },
     { methods: ['GET'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
-    {
-      methods: ['GET'],
-      url: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
-    },
   ],
   PRIVATE_ROUTES: [
     { methods: ['POST'], url: '/api/product' },

@@ -380,6 +380,32 @@ describe('Google Auth Endpoints', () => {
       expect(auth_cookie).toEqual(expect.objectContaining(expected));
     });
   });
+  describe('GET /api/user/profile', () => {
+    it('It responds with a user schema json correctly for valid token', async () => {
+      const res = await cookiesAgent.get('/api/user/profile');
+
+      expect(res.status).toBe(200);
+      const expected = {
+        firstName: expect.any(String),
+        email: expect.any(String),
+        username: expect.any(String),
+      };
+      expect(res.body).toEqual(expect.objectContaining(expected));
+    });
+
+    it('It responds with 401 for invalid token', async () => {
+      const res = await req.get('/api/user/profile');
+
+      expect(res.status).toBe(401);
+      const notExpected = {
+        name: expect.any(String),
+        email: expect.any(String),
+        avatar: expect.any(String),
+      };
+
+      expect(res.body).not.toEqual(expect.objectContaining(notExpected));
+    });
+  });
 });
 
 async function runInPatchedServer(cb) {
