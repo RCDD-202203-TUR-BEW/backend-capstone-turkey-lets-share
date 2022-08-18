@@ -9,9 +9,9 @@ const registerMiddleware = async (req, res, next) => {
       lastName,
       email,
       phoneNumber,
+      age,
       password0,
       password1,
-      age,
     } = req.body;
 
     if (password0 !== password1) {
@@ -32,12 +32,13 @@ const registerMiddleware = async (req, res, next) => {
     if (!constants.EMAIL_REGEX.test(email)) {
       errorsArray.push('Invalid email format');
     }
-    if (!constants.AGE_REGEX.test(age)) {
-      errorsArray.push('Invalid age format');
-    }
 
     if (!constants.PHONE_NUMBER_REGEX.test(phoneNumber)) {
       errorsArray.push(constants.PHONE_NUMBER_ERROR);
+    }
+
+    if (!constants.AGE_REGEX.test(age)) {
+      errorsArray.push('Please enter a 2-digit age');
     }
 
     if (errorsArray.length > 0) {

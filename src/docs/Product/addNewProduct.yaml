@@ -2,7 +2,7 @@ paths:
   /api/product:
     post:
       tags:
-        - Products
+        - Product
       descriptions: 'Adds a new product'
       requestBody:
         content:
