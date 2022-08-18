@@ -122,3 +122,72 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
+  /profile/update/address/:addressID?/:operation?:
+    patch:
+      tags:
+        - Update User
+      summary: User can update an address in the current address list, can delete and add new addresses to the list
+      description: API has 2 parameters , first is the address ID in the address list and the operation which can have one of two values [update,delete], in address object [country, city, address0] are required
+      parameters:
+        - name: addressID
+          in: path
+          required: true
+          schema:
+          type: string
+          example: 62e2f022552347123617a73f
+        - name: operation
+          in: path
+          required: true
+          schema:
+          type: string
+          example: 62e2f022552347123617a73f
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object,
+            examples:
+              'CORRECT ADDRESS UPDATION':
+                value: '{
+                  "address" : {
+                  "country": "Turkey",
+                  "city": "Istanbul",
+                  "address0": "Kadikoy",
+                  "address1": "Kadikoy",
+                  "zip": "34000"
+                  }
+                  }'
+              'ADDRESS IS NOT IN A VALID FORMAT':
+                value: '{
+                  "address" : "Turkey, Istanbul"
+                  }'
+              'ONE REQUIRED FIELD IS MISSING':
+                value: '{
+                  "address" : {
+                  "city": "Istanbul",
+                  "address0": "Kadikoy",
+                  "address1": "Kadikoy",
+                  "zip": "34000"
+                  }
+                  }'
+              'ZIP CODE IS NOT IN A VALID FORMAT':
+                value: '{
+                  "address" : {
+                  "country": "Turkey",
+                  "city": "Istanbul",
+                  "address0": "Kadikoy",
+                  "zip": "3434"
+                  }
+                  }'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'Address Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '500':
+          description: 'Internal server error'
