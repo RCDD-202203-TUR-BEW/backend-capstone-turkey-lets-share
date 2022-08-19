@@ -1,4 +1,6 @@
 /* eslint-disable arrow-body-style */
+const constants = require('../lib/constants');
+
 const generateUniqeUsername = (email) => {
   return `${email.split('@')[0]}_${new Date().valueOf()}`;
 };
@@ -18,4 +20,14 @@ function errorHandler(err, req, res, next) {
   }
 }
 
-module.exports = { generateUniqeUsername, errorHandler };
+const corsOptions = {
+  origin(origin, callback) {
+    if (constants.WHITE_LIST.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+module.exports = { generateUniqeUsername, errorHandler, corsOptions };
