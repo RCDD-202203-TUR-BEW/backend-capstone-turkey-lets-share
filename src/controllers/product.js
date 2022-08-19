@@ -98,11 +98,11 @@ const getProducts = async (req, res) => {
 // eslint-disable-next-line consistent-return
 const getSingleProduct = async (req, res) => {
   try {
-    const getProduct = await ProductModel.findById(req.params.productId);
-    if (!getProduct) {
+    const product = await ProductModel.findById(req.params.productId);
+    if (!product) {
       return res.status(404).json('No Product found!');
     }
-    return res.status(200).json(getProduct);
+    return res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
