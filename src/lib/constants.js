@@ -82,14 +82,6 @@ module.exports = Object.freeze({
     { methods: ['GET'], url: '/api/product' },
     { methods: ['GET'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
   ],
-  PRIVATE_ROUTES: [
-    { methods: ['POST'], url: '/api/product' },
-    { methods: ['POST'], url: '/api/auth/logout' },
-    { methods: ['PUT'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { methods: ['DELETE'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { methods: ['GET'], url: '/api/auth/profile' },
-    { methods: ['GET'], url: '/api/auth/logout' },
-  ],
 
   VALID_PRODUCT_KEYS: [
     'title',

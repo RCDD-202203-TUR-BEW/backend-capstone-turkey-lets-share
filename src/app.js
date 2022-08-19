@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const { encryptCookieNodeMiddleware } = require('encrypt-cookie');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const cors = require('cors')
 
 const connectToMongo = require('./db/connection');
 const { authenticationMiddleware } = require('./middleware/guard');
@@ -18,6 +19,7 @@ const { errorHandler } = require('./services/utils');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
 
