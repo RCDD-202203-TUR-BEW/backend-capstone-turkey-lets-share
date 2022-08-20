@@ -10,5 +10,8 @@ router.post('/', productMiddleware, productController.addNewProduct);
 router.delete('/:productId', productController.deleteProduct);
 router.patch('/:productId', productController.updateProduct);
 router.get('/:productId', productController.getSingleProduct);
-
+router.post(
+  '/:productId/requesters/:requesterId/approve',
+  productController.approveProduct
+);
 module.exports = router;

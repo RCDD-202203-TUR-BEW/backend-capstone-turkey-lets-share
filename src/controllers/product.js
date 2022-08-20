@@ -189,10 +189,14 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
+const approveProduct = async (req, res) => {};
+
 module.exports = {
   addNewProduct,
   getProducts,
   deleteProduct,
   updateProduct,
   getSingleProduct,
+  approveProduct,
 };
