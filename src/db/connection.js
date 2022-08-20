@@ -15,7 +15,7 @@ const connectToMongo = () => {
   const db = mongoose.connection;
 
   db.once('open', () => {
-    console.log('Database connected', url);
+    console.log('Database connected to MongoDB Atlas');
   });
 
   db.on('error', (err) => {
