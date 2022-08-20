@@ -1,4 +1,3 @@
-/* eslint-disable prefer-template */
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
@@ -19,7 +18,7 @@ passport.use(
     {
       clientID: process.env.GAPP_CLIENT_ID,
       clientSecret: process.env.GAPP_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/auth/google/callback',
+      callbackURL: process.env.GOOGLE_REDIRECT_URI,
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {
@@ -48,7 +47,7 @@ passport.use(
     {
       clientID: process.env.FAPP_CLIENT_ID,
       clientSecret: process.env.FAPP_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/auth/facebook/callback',
+      callbackURL: process.env.FACEBOOK_REDIRECT_URI,
       profileFields: ['id', 'displayName', 'name', 'gender', 'photos', 'email'],
     },
     async (accessToken, refreshToken, profile, cb) => {

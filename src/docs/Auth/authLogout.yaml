@@ -3,6 +3,7 @@ paths:
     post:
       tags:
         - Authentication
+      summary: "Logs out current user"
       description: 'Logs out current user'
       responses:
         '200':

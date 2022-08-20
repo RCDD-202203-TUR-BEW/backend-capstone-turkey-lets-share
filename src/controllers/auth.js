@@ -68,8 +68,8 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: 'Wrong email or password!' });
     }
-    // eslint-disable-next-line no-underscore-dangle
-    const payload = { userId: currentUser._id };
+
+    const payload = { userId: currentUser.id };
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: constants.TOKEN_EXPIRATION_DURATION,
     });

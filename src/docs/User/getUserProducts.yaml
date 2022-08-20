@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - User
-      summary: Gets user's posts and provides filtering and searching features
+      summary: Gets user's products and provides filtering and searching features (Requires log in)
       description: Gets all the specified user's products if no parameters were passed in the query, filters the products according to the post type if passed in the query, and searches the titles of the products if a search parameter were passed in the query.
       operationId: getProducts
       consumes:
