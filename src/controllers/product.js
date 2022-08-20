@@ -1,13 +1,9 @@
-/* eslint-disable node/no-extraneous-require */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable prettier/prettier */
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
-
-// eslint-disable-next-line consistent-return
 
 const addNewProduct = async (req, res) => {
   try {
@@ -46,7 +42,7 @@ const addNewProduct = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-// eslint-disable-next-line consistent-return
+
 const getProducts = async (req, res) => {
   try {
     const {
@@ -91,7 +87,7 @@ const getProducts = async (req, res) => {
 
     return res.status(200).json(filteredProducts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -141,7 +137,7 @@ const deleteProduct = async (req, res) => {
     }
     return res.status(404).json({ message: 'Product not found' });
   } catch (error) {
-    return res.sendStatus(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

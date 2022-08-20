@@ -1,8 +1,10 @@
-// /* eslint-disable no-underscore-dangle */
-// /* eslint-disable prefer-destructuring */
-// /* eslint-disable consistent-return */
-// /* eslint-disable node/no-unpublished-require */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable node/no-unpublished-require */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable consistent-return */
 // const supertest = require('supertest');
+// const mongoose = require('mongoose');
 // const app = require('../app');
 // const UserModel = require('../models/user');
 // const ProductModel = require('../models/product');
@@ -17,8 +19,8 @@ describe('Product test', () => {
 // const createCurrentUser = {
 //   firstName: 'adnan',
 //   lastName: 'khaldar',
-//   email: 'adnan1@outlook.com',
-//   username: 'adnan1',
+//   email: 'adnan3@outlook.com',
+//   username: 'adnan3',
 //   donated: [],
 //   requested: [],
 //   provider: 'Local',
@@ -59,6 +61,12 @@ describe('Product test', () => {
 //   newUser = await UserModel.create(createCurrentUser);
 // });
 
+// afterAll(async (drop = false) => {
+//   drop && (await mongoose.connection.dropDatabase());
+//   await mongoose.disconnect();
+//   await mongoose.connection.close();
+// });
+
 // describe('POST /api/product', () => {
 //   it('should return a token when correct user is logged in', (done) => {
 //     supertest(app)
@@ -85,7 +93,7 @@ describe('Product test', () => {
 //       .expect(201, (err, res) => {
 //         if (err) return done(err);
 
-//         requestPostId = res.body._id;
+//         requestPostId = res.body.id;
 //         expect(res.body).toHaveProperty('isEvent');
 //         return done();
 //       });
@@ -117,7 +125,7 @@ describe('Product test', () => {
 //       .expect(201, (err, res) => {
 //         if (err) return done(err);
 
-//         donatePostId = res.body._id;
+//         donatePostId = res.body.id;
 //         expect(res.body).toHaveProperty('isEvent');
 //         return done();
 //       });
