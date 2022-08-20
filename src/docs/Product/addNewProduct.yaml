@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Product
-      summary: "Adds a new product (Requires log in)"
+      summary: 'Adds a new product (Must be logged in)'
       descriptions: 'Adds a new product'
       requestBody:
         content:

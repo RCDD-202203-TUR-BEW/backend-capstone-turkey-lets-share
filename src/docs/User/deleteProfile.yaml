@@ -3,7 +3,7 @@ paths:
     delete:
       tags:
         - User
-      summary: Deletes the profile of the logged in user (Requires log in)
+      summary: Deletes the profile of the logged in user (Must be logged in)
       description: 'Deletes the profile of the logged in user, including all products by this user'
       responses:
         '200':

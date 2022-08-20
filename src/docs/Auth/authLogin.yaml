@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Authentication
-      summary: "Logs in users"
+      summary: 'Logs in users'
       description: 'Logs in users'
       requestBody:
         content:

@@ -1,0 +1,40 @@
+paths:
+  /api/product/{productId}/requesters:
+    get:
+      tags:
+        - Product
+      summary: Shows IDs of all requesters of a product (Must be logged in)
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: string
+          required: true
+          description: 'ID of the product'
+          examples:
+            'real ID of an available "Donate" product':
+              value: '63010e545d201d7568d1f078'
+            'real ID of an available "Request" product':
+              value: '63015030cd34b6483f3bffd2'
+            'real ID of a deleted product':
+              value: '62ee5c280262c62f56124dfd'
+            'some fake ObjectId':
+              value: 'fake5c280262c62f56124dfd'
+            'custom':
+              value: ''
+      description: Only the product owner can see who requested a product (an empty array if no one has requested it)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 'OK (Users are fetched)'
+        '400':
+          description: 'Bad Request (postType is "Request")'
+        '401':
+          description: 'Unauthorized (No authorization token was found)'
+        '404':
+          description: 'Not Found (product was not found)'
+        '500':
+          description: 'Internal server error'
