@@ -134,12 +134,8 @@ const updateAddress = async (req, res) => {
     const User = await UserModel.findById(req.user.userId);
     let message;
     if (operation === 'add') {
-      if (req.body.address !== null && req.body.address !== undefined) {
-        User.address.push(req.body.address);
-        message = `${req.body.address.title} Address added`;
-      } else {
-        return res.status(400).json({ message: 'Address is required' });
-      }
+      User.address.push(req.body.address);
+      message = `${req.body.address.title} Address added`;
     } else if (operation === 'delete' || operation === 'update') {
       if (addressID) {
         const addressIndex = User.address
