@@ -34,20 +34,22 @@ const productSchema = new mongoose.Schema(
     productCondition: {
       type: String,
       enum: constants.ENUM_PRODUCT_CONDITION,
-      required: true,
+      required: false,
     },
     shippingOptions: {
       type: String,
       enum: constants.ENUM_SHIPPING_OPTION,
-      required: true,
+      required: false,
     },
     postType: {
       type: String,
       enum: constants.ENUM_POST_TYPE,
-      required: true,
+      required: false,
+      defauult: 'Donate',
     },
     isTransactionCompleted: {
       type: Boolean,
+      default: false,
     },
     publisher: {
       ref: 'User',

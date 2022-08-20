@@ -19,14 +19,6 @@ paths:
                   type: string,
                 phoneNumber:
                   type: string,
-                age:
-                  type: integer,
-                gender:
-                  type: string,
-                nationality:
-                  type: string,
-                refugee:
-                  type: boolean,
                 password0:
                   type: string,
                 password1:
@@ -38,10 +30,6 @@ paths:
                   "lastName": "Aydin",
                   "email": "niloaydin@domain.com.tr",
                   "phoneNumber": "+679-123456789012",
-                  "age": 25,
-                  "gender": "Female",
-                  "nationality": "Turkey",
-                  "refugee": false,
                   "password0": "Nilay-123",
                   "password1": "Nilay-123"
                   }'
@@ -51,10 +39,6 @@ paths:
                   "lastName": "",
                   "email": "nilo-aydin@fake.domainaddress4sure.com",
                   "phoneNumber": "+679 1234567890123",
-                  "age": 25,
-                  "gender": "Female",
-                  "nationality": "Turkey",
-                  "refugee": false,
                   "password0": "Nilay-123",
                   "password1": "Nilay-123456789"
                   }'
@@ -64,10 +48,6 @@ paths:
                   "lastName": "Aydin",
                   "email": "nilo-aydin@domain.com.tr",
                   "phoneNumber": "+679 123456789012",
-                  "age": 25,
-                  "gender": "Female",
-                  "nationality": "Turkey",
-                  "refugee": false,
                   "password0": "Nilay-123",
                   "password1": "Nilay-123"
                   }'
@@ -78,10 +58,6 @@ paths:
                   "email": "[letters, numbers, dots, and underscores]@[letters].[2-15 letters].[2-3 letters].[2-3 letters]",
                   "phoneNumber": "min 6, max 15 digits without country code;
                   min 5, max 12 digits + a space or dash + 1-3 digits country code",
-                  "age": "2-digit number between 10 and 99",
-                  "gender": "String",
-                  "nationality": "String",
-                  "refugee": false,
                   "password0": "String",
                   "password1": "String"
                   }'
@@ -112,13 +88,16 @@ components:
           description: 'Required unless null'
         age:
           type: integer
-          description: 'Only accepts 10-99'
+          description: 'Is not required upon FE request, only accepts 10-99'
         gender:
           type: string
+          description: 'Is not required upon FE request'
         nationality:
           type: string
+          description: 'Is not required upon FE request'
         refugee:
           type: boolean
+          description: 'Is not required upon FE request'
         profilePhoto:
           type: string
         donated:

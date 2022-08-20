@@ -13,13 +13,9 @@ const addNewProduct = async (req, res) => {
       photos: req.body.photos,
       category: req.body.category,
       location: req.body.location,
-      productCondition: req.body.productCondition,
-      shippingOptions: req.body.shippingOptions,
-      postType: req.body.postType,
       publisher: req.user.userId,
       donor: req.user.userId,
       beneficiary: null,
-      isEvent: req.body.isEvent,
     });
 
     if (newProduct.postType === 'Donate') {
