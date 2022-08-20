@@ -68,8 +68,8 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: 'Wrong email or password!' });
     }
-    // eslint-disable-next-line no-underscore-dangle
-    const payload = { userId: currentUser._id };
+
+    const payload = { userId: currentUser.id };
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: constants.TOKEN_EXPIRATION_DURATION,
     });
@@ -77,7 +77,7 @@ const login = async (req, res) => {
       httpOnly: true,
       maxAge: constants.COOKIE_MAX_AGE, // 14 days
     });
-    return res.status(201).json({ message: 'User sucesfully signed in!' });
+    return res.status(201).json({ message: 'User successfully signed in!' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

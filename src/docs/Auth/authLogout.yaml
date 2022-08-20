@@ -1,0 +1,12 @@
+paths:
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: "Logs out current user"
+      description: 'Logs out current user'
+      responses:
+        '200':
+          description: 'OK (logged out)'
+        '401':
+          description: 'Unauthorized (one needs to be logged in)'

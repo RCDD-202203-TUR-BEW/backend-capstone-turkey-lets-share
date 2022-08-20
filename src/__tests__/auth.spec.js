@@ -212,7 +212,7 @@ describe('AUTH TESTS', () => {
           if (err) return done(err);
           expect(res.headers['set-cookie']).toBeDefined();
           expect(res.headers['set-cookie']).toBeTruthy();
-          expect(res.body.message).toBe('User sucesfully signed in!');
+          expect(res.body.message).toBe('User successfully signed in!');
           // eslint-disable-next-line prefer-destructuring
           jwtToken = res.headers['set-cookie'][0].split(';')[0];
 
@@ -378,6 +378,32 @@ describe('Google Auth Endpoints', () => {
       };
 
       expect(auth_cookie).toEqual(expect.objectContaining(expected));
+    });
+  });
+  describe('GET /api/user/profile', () => {
+    it('It responds with a user schema json correctly for valid token', async () => {
+      const res = await cookiesAgent.get('/api/user/profile');
+
+      expect(res.status).toBe(200);
+      const expected = {
+        firstName: expect.any(String),
+        email: expect.any(String),
+        username: expect.any(String),
+      };
+      expect(res.body).toEqual(expect.objectContaining(expected));
+    });
+
+    it('It responds with 401 for invalid token', async () => {
+      const res = await req.get('/api/user/profile');
+
+      expect(res.status).toBe(401);
+      const notExpected = {
+        name: expect.any(String),
+        email: expect.any(String),
+        avatar: expect.any(String),
+      };
+
+      expect(res.body).not.toEqual(expect.objectContaining(notExpected));
     });
   });
 });
@@ -604,7 +630,6 @@ function runTestServer() {
   });
 
   // eslint-disable-next-line prettier/prettier
-
   const server = app.listen(5005, () => {});
 
   return async () => await server.close();
