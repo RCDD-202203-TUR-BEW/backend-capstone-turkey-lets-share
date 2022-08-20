@@ -133,8 +133,11 @@ paths:
           in: path
           required: true
           schema:
-            type: string
-            example: update
+            type: enum
+            enum:
+              - add
+              - update
+              - delete
         - name: addressID
           in: path
           required: false
@@ -183,6 +186,7 @@ paths:
                   "address" : {
                   "title": "Home",
                   "city": "Istanbul",
+                  "country": "",
                   "address0": "Kadikoy",
                   "address1": "Kadikoy",
                   "zip": "34000"

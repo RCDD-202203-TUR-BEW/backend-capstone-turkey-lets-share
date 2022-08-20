@@ -81,7 +81,7 @@ const validateAddress = async (req, res, next) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const field of requiredFeilds) {
       if (!address[field]) {
-        errorsArray.push(`${field} is required in Address`);
+        errorsArray.push(`${field} is required in address`);
       }
     }
     // eslint-disable-next-line prettier/prettier

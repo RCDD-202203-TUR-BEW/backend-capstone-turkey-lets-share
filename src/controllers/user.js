@@ -131,28 +131,28 @@ const updatePassword = async (req, res) => {
 const updateAddress = async (req, res) => {
   try {
     const { addressID, operation } = req.params;
-    const User = await UserModel.findById(req.user.userId);
+    const user = await UserModel.findById(req.user.userId);
     let message;
     if (operation === 'add') {
       if (req.body.address !== null && req.body.address !== undefined) {
-        User.address.push(req.body.address);
-        message = `${req.body.address.title} Address added`;
+        user.address.push(req.body.address);
+        message = `${req.body.address.title} address has been added successfully`;
       } else {
         return res.status(400).json({ message: 'Address is required' });
       }
     } else if (operation === 'delete' || operation === 'update') {
       if (addressID) {
-        const addressIndex = User.address
+        const addressIndex = user.address
           .map((address) => address.id)
           .indexOf(addressID);
         if (addressIndex === -1)
           return res.status(404).json({ message: 'Address not found' });
         if (operation === 'update') {
-          User.address[addressIndex] = req.body.address;
-          message = ` ${User.address[addressIndex].title} address has been updated`;
+          user.address[addressIndex] = req.body.address;
+          message = `${user.address[addressIndex].title} address has been updated successfully`;
         } else if (operation === 'delete') {
-          const [deletedAdress] = User.address.splice(addressIndex, 1);
-          message = `${deletedAdress.title} address has been deleted`;
+          const [deletedAdress] = user.address.splice(addressIndex, 1);
+          message = `${deletedAdress.title} address has been deleted successfully`;
         }
       } else {
         return res
@@ -160,7 +160,7 @@ const updateAddress = async (req, res) => {
           .json({ message: 'Address ID is required for this operation' });
       }
     }
-    await User.save();
+    await user.save();
     return res.status(200).json({ message });
   } catch (error) {
     return res.status(500).json({ message: error.message });
