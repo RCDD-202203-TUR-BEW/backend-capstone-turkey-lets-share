@@ -1,8 +1,0 @@
-/api/auth/logout:
-    post:
-      tags:
-        - Authentication
-      description: 'Logs out current user'
-      responses:
-        '200':
-          description: 'OK (logged out)'

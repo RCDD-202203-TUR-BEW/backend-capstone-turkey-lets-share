@@ -1,0 +1,12 @@
+paths:
+  /api/user/profile/delete:
+    delete:
+      tags:
+        - User
+      summary: Deletes the profile of the logged in user (Requires log in)
+      description: 'Deletes the profile of the logged in user, including all products by this user'
+      responses:
+        '200':
+          description: 'User Deleted'
+        '500':
+          description: 'Internal server error'

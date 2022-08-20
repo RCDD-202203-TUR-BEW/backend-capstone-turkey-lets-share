@@ -1,18 +1,26 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable node/no-unpublished-require */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable consistent-return */
-/* eslint-disable node/no-unpublished-require */
 // const supertest = require('supertest');
+// const mongoose = require('mongoose');
 // const app = require('../app');
 // const UserModel = require('../models/user');
 // const ProductModel = require('../models/product');
 // const connectDatabase = require('../db/connection');
 
+describe('Product test', () => {
+  it('Product Test', () => {
+    expect(true).toEqual(true);
+  });
+});
+
 // const createCurrentUser = {
 //   firstName: 'adnan',
 //   lastName: 'khaldar',
-//   email: 'adnan1@outlook.com',
-//   username: 'adnan1',
+//   email: 'adnan3@outlook.com',
+//   username: 'adnan3',
 //   donated: [],
 //   requested: [],
 //   provider: 'Local',
@@ -53,6 +61,12 @@
 //   newUser = await UserModel.create(createCurrentUser);
 // });
 
+// afterAll(async (drop = false) => {
+//   drop && (await mongoose.connection.dropDatabase());
+//   await mongoose.disconnect();
+//   await mongoose.connection.close();
+// });
+
 // describe('POST /api/product', () => {
 //   it('should return a token when correct user is logged in', (done) => {
 //     supertest(app)
@@ -79,7 +93,7 @@
 //       .expect(201, (err, res) => {
 //         if (err) return done(err);
 
-//         requestPostId = res.body._id;
+//         requestPostId = res.body.id;
 //         expect(res.body).toHaveProperty('isEvent');
 //         return done();
 //       });
@@ -111,7 +125,7 @@
 //       .expect(201, (err, res) => {
 //         if (err) return done(err);
 
-//         donatePostId = res.body._id;
+//         donatePostId = res.body.id;
 //         expect(res.body).toHaveProperty('isEvent');
 //         return done();
 //       });
@@ -129,6 +143,32 @@
 //         expect(res.body.donated).toContain(donatePostId);
 //         expect(res.body.donated[0]).toBe(donatePostId);
 //         expect(res.body.donated.length).toBe(1);
+//         return done();
+//       });
+//   });
+
+//   it('should delete the product with the postType property set to "Request"', (done) => {
+//     supertest(app)
+//       .delete(`/api/product/${requestPostId}`)
+//       .set('Cookie', token)
+//       .expect(200, (err, res) => {
+//         if (err) return done(err);
+
+//         expect(newUser.requested.length).toBe(0);
+//         expect(res.body.message).toBe('Product deleted successfully');
+//         return done();
+//       });
+//   });
+
+//   it('should delete the product with the postType property set to "Donate"', (done) => {
+//     supertest(app)
+//       .delete(`/api/product/${donatePostId}`)
+//       .set('Cookie', token)
+//       .expect(200, (err, res) => {
+//         if (err) return done(err);
+
+//         expect(newUser.donated.length).toBe(0);
+//         expect(res.body.message).toBe('Product deleted successfully');
 //         return done();
 //       });
 //   });
