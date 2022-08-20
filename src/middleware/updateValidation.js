@@ -90,8 +90,6 @@ const validateAddress = async (req, res, next) => {
         errorsArray.push('Zip code is not valid');
       }
     }
-  } else {
-    errorsArray.push('Address is required');
   }
   if (errorsArray.length > 0) {
     return res.status(400).json({ error: errorsArray });
