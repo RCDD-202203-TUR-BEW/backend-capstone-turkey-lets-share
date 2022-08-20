@@ -5,6 +5,7 @@ const constants = require('../lib/constants');
 const { generateUniqeUsername } = require('../services/utils');
 
 const register = async (req, res) => {
+  const errorsArray = [];
   const {
     firstName,
     lastName,
@@ -20,7 +21,16 @@ const register = async (req, res) => {
   try {
     const usedEmail = await UserModel.findOne({ email });
     if (usedEmail) {
-      return res.status(400).json({ error: 'Email is already taken' });
+      errorsArray.push('Email is already taken');
+    }
+
+    const usedPhone = await UserModel.findOne({ phoneNumber });
+    if (usedPhone) {
+      errorsArray.push('Phone number is already taken');
+    }
+
+    if (errorsArray.length > 0) {
+      return res.status(400).json({ error: errorsArray });
     }
 
     const passwordHash = await bcrypt.hash(password0, 10);
