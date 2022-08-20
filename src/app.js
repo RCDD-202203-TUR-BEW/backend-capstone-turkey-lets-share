@@ -14,12 +14,12 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const productRoutes = require('./routes/product');
 const constants = require('./lib/constants');
-const { errorHandler } = require('./services/utils');
+const { errorHandler, corsOptions } = require('./services/utils');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));

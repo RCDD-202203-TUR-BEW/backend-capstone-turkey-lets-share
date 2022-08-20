@@ -121,5 +121,5 @@ module.exports = Object.freeze({
     },
     apis: ['./src/docs/**/*.yaml'],
   },
-  WHITE_LIST: ['http://localhost:3000'],
+  ALLOWED_LIST: ['http://localhost:3000'],
 });

@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable arrow-body-style */
 const constants = require('../lib/constants');
 
@@ -21,13 +22,12 @@ function errorHandler(err, req, res, next) {
 }
 
 const corsOptions = {
-  origin(origin, callback) {
-    if (constants.WHITE_LIST.indexOf(origin) !== -1) {
+  origin: function (origin, callback) {
+    if (constants.ALLOWED_LIST.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
 };
-
 module.exports = { generateUniqeUsername, errorHandler, corsOptions };
