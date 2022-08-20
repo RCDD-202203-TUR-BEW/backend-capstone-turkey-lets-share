@@ -27,15 +27,15 @@ const connectDatabase = require('../db/connection');
 
 const cookiesAgent = supertest.agent(app);
 
-// const createUser = {
-//   firstName: 'john',
-//   lastName: 'doe',
-//   email: 'john.doe@outlook.com',
-//   username: 'john.doe',
-//   provider: 'Local',
-//   providerId: 'Local',
-//   passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
-// };
+const createUser = {
+  firstName: 'john',
+  lastName: 'doe',
+  email: 'john.doe@outlook.com',
+  username: 'john.doe',
+  provider: 'Local',
+  providerId: 'Local',
+  passwordHash: '$2b$10$R5NUgaHK51jYdi59ncmwue/lorlCHturbAmFxJ02cS38eumzNSx7O',
+};
 
 const mockUser = {
   sub: '12345678',
@@ -79,7 +79,7 @@ beforeAll(async () => {
       '$2b$10$vEoUN3L9gMDBB8XtoTQf8OKBBGJt.XJDmBacITlS83tvlIUOJH4Dy',
   });
 
-  // await UserModel.create(createUser);
+  await UserModel.create(createUser);
 });
 
 afterAll(async (drop = false) => {
@@ -93,7 +93,7 @@ afterAll(async (drop = false) => {
 
 let redirectUri;
 let jwtToken;
-// let token;
+let token;
 
 describe('AUTH TESTS', () => {
   describe('POST /api/auth/register', () => {
@@ -169,34 +169,34 @@ describe('AUTH TESTS', () => {
     });
   });
 
-  // describe('POST /api/auth/logout', () => {
-  //   it('should return a token when correct user is logged in', (done) => {
-  //     supertest(app)
-  //       .post('/api/auth/login')
-  //       .send({ email: createUser.email, password: 'Qwerty-123' })
-  //       .end((err, res) => {
-  //         if (err) {
-  //           return done(err);
-  //         }
+  describe('POST /api/auth/logout', () => {
+    it('should return a token when correct user is logged in', (done) => {
+      supertest(app)
+        .post('/api/auth/login')
+        .send({ email: createUser.email, password: 'Qwerty-123' })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
 
-  //         expect(res.status).toBe(201);
-  //         token = res.headers['set-cookie'][0].split(';')[0];
-  //         done();
-  //       });
-  //   });
+          expect(res.status).toBe(201);
+          token = res.headers['set-cookie'][0].split(';')[0];
+          done();
+        });
+    });
 
-  //   it('should log user out', (done) => {
-  //     supertest(app)
-  //       .post('/api/auth/logout')
-  //       .set('Cookie', token)
-  //       .expect(200, (err, res) => {
-  //         if (err) return done(err);
+    it('should log user out', (done) => {
+      supertest(app)
+        .post('/api/auth/logout')
+        .set('Cookie', token)
+        .expect(200, (err, res) => {
+          if (err) return done(err);
 
-  //         expect(res.body.message).toBe('Logged out successfully');
-  //         return done();
-  //       });
-  //   });
-  // });
+          expect(res.body.message).toBe('Logged out successfully');
+          return done();
+        });
+    });
+  });
 
   describe('POST /api/auth/login', () => {
     it('should return a token in a cookie and success message ', (done) => {
@@ -378,6 +378,32 @@ describe('Google Auth Endpoints', () => {
       };
 
       expect(auth_cookie).toEqual(expect.objectContaining(expected));
+    });
+  });
+  describe('GET /api/user/profile', () => {
+    it('It responds with a user schema json correctly for valid token', async () => {
+      const res = await cookiesAgent.get('/api/user/profile');
+
+      expect(res.status).toBe(200);
+      const expected = {
+        firstName: expect.any(String),
+        email: expect.any(String),
+        username: expect.any(String),
+      };
+      expect(res.body).toEqual(expect.objectContaining(expected));
+    });
+
+    it('It responds with 401 for invalid token', async () => {
+      const res = await req.get('/api/user/profile');
+
+      expect(res.status).toBe(401);
+      const notExpected = {
+        name: expect.any(String),
+        email: expect.any(String),
+        avatar: expect.any(String),
+      };
+
+      expect(res.body).not.toEqual(expect.objectContaining(notExpected));
     });
   });
 });

@@ -37,6 +37,7 @@ module.exports = Object.freeze({
   ENUM_POST_TYPE: ['Request', 'Donate'],
 
   AGE_REGEX: new RegExp(/^[1-9]{1}\d{1}$/),
+
   ZIP_REGEX: new RegExp(/^\d{5}(?:[-\s]\d{4})?$/),
   PASSWORD_REGEX: new RegExp(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,}$/
@@ -67,44 +68,19 @@ module.exports = Object.freeze({
     <li>Can be in the format "+90 1234567890" or "901234567890"</li>
   </ul>`,
 
-  PUBLIC_PATHS: [
-    '/api/',
-    '/api/about',
+  PUBLIC_AUTH_ROUTES: [
     '/api/auth/login',
     '/api/auth/register',
     '/api/auth/google',
     '/api/auth/google/callback',
     '/api/auth/facebook',
     '/api/auth/facebook/callback',
-    '/',
-  ],
-  PUBLIC_AUTH_ROUTES: [
-    { method: 'get', path: '/api/auth/login' },
-    { method: 'get', path: '/api/auth/register' },
-    { method: 'get', path: '/api/auth/google' },
-    { method: 'get', path: '/api/auth/google/callback' },
-    { method: 'get', path: '/api/auth/facebook' },
-    { method: 'get', path: '/api/auth/facebook/callback' },
   ],
   PUBLIC_ROUTES: [
-    { method: 'get', path: '/' },
-    { method: 'get', path: '/api/' },
-    { method: 'get', path: '/api/about' },
-    { method: 'get', path: '/api/product' },
-    { method: 'get', path: '/api/product?search&category' },
-    { method: 'get', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
-    {
-      method: 'get',
-      path: /^\/api\/user\/(?:([^\/]+?))\/products\/?$/i, // '/api/user/:userId/products'
-    },
-  ],
-  PRIVATE_ROUTES: [
-    { method: 'post', path: '/api/product' },
-    { method: 'post', path: '/api/auth/logout' },
-    { method: 'put', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { method: 'delete', path: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // /api/product/:id
-    { method: 'get', path: '/api/auth/profile' },
-    { method: 'get', path: '/api/auth/logout' },
+    { methods: ['GET'], url: '/' },
+    { methods: ['GET'], url: '/api/' },
+    { methods: ['GET'], url: '/api/product' },
+    { methods: ['GET'], url: /^\/api\/product\/(?:([^\/]+?))\/?$/i }, // '/api/product/:id'
   ],
 
   VALID_PRODUCT_KEYS: [
@@ -136,4 +112,26 @@ module.exports = Object.freeze({
     Requested: { postType: 'Request', isTransactionCompleted: false },
     Received: { postType: 'Request', isTransactionCompleted: true },
   },
+  SWAGGER_OPTIONS: {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: "Let's Share API with Swagger",
+        version: '0.1.0',
+        description: "Let's Share API documentation with Swagger",
+        license: {
+          name: 'MIT',
+          url: 'https://github.com/RCDD-202203-TUR-BEW/backend-capstone-turkey-lets-share',
+        },
+      },
+      servers: [
+        {
+          url: process.env.BASE_URL,
+        },
+      ],
+      url: process.env.BASE_URL,
+    },
+    apis: ['./src/docs/**/*.yaml'],
+  },
+  ALLOWED_LIST: ['http://localhost:3000'],
 });

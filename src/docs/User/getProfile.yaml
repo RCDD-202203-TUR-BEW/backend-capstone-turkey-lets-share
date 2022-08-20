@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - User
-      summary: 'Returns the information of the logged in user'
+      summary: 'Returns the information of the logged in user (Requires log in)'
       description: 'Should return the information of current user'
       produces:
         - 'application/json'

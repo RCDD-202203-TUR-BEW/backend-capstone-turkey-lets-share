@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable prefer-const */
 /* eslint-disable consistent-return */
-/* eslint-disable prettier/prettier */
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
@@ -87,7 +86,6 @@ const getSingleUser = async (req, res) => {
   }
 };
 
-// eslint-disable-next-line consistent-return
 const updateUser = async (req, res) => {
   const bodyParams = Object.keys(req.body); // ['name', 'email', 'password']
   const allowedParams = constants.VALID_USER_KEYS;
@@ -115,7 +113,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-// eslint-disable-next-line consistent-return
 const updatePassword = async (req, res) => {
   try {
     const User = await UserModel.findById(req.user.userId);

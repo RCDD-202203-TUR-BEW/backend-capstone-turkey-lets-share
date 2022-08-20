@@ -3,6 +3,7 @@ paths:
     post:
       tags:
         - Authentication
+      summary: 'Registers a new user'
       description: 'Registers a new user'
       requestBody:
         content:
