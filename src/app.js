@@ -19,7 +19,7 @@ const { errorHandler, corsOptions } = require('./services/utils');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(cookieParser(process.env.SECRET_KEY));
 app.use(encryptCookieNodeMiddleware(process.env.SECRET_KEY));
