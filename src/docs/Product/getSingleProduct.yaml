@@ -1,0 +1,25 @@
+paths:
+  /api/product/{productId}:
+    get:
+      tags:
+        - Product
+      summary: Gets the information of a single product based on productId. Does not require login.
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: string
+          required: true
+          description: 'ID of the product'
+          examples:
+            'real ID of a product':
+              value: '62f661cf728303c5bead3b6d'
+            'fake ObjectId':
+              value: '111111111111111111111111'
+      responses:
+        '200':
+          description: 'OK (shows product)'
+        '404':
+          description: 'Not Found (product was not found)'
+        '500':
+          description: 'Internal server error (ID is not a valid ObjectId or a server error occurred)'
