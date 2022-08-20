@@ -128,7 +128,7 @@ module.exports = Object.freeze({
     'refugee',
     'profilePhoto',
   ],
-  ADDRESS_REQUIRED_FIELDS: ['country', 'city', 'address0'],
+  ADDRESS_REQUIRED_FIELDS: ['title', 'country', 'city', 'address0'],
   TOKEN_EXPIRATION_DURATION: '14d',
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 14,
   POST_TYPE_SELECTOR: {

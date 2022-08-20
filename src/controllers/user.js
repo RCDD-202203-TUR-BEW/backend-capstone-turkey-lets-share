@@ -133,33 +133,32 @@ const updateAddress = async (req, res) => {
     const { addressID, operation } = req.params;
     const User = await UserModel.findById(req.user.userId);
     let message;
-    if (operation) {
-      if (operation === 'add') {
+    if (operation === 'add') {
+      if (req.body.address !== null && req.body.address !== undefined) {
         User.address.push(req.body.address);
-        message = `Address added`;
-      } else if (operation === 'delete' || operation === 'update') {
-        if (addressID) {
-          const addressIndex = User.address
-            .map((address) => address.id)
-            .indexOf(addressID);
-          if (addressIndex === -1)
-            return res.status(404).json({ message: 'Address not found' });
-          if (operation === 'update') {
-            User.address[addressIndex] = req.body.address;
-            message = `Address ${addressIndex + 1} updated`;
-          } else if (operation === 'delete') {
-            User.address.splice(addressIndex, 1);
-            message = `Address ${addressIndex + 1} deleted`;
-          }
-        } else
-          return res
-            .status(400)
-            .json({ message: 'Address ID is required for this operation' });
+        message = `${req.body.address.title} Address added`;
       } else {
-        return res.status(400).json({ message: 'Invalid operation' });
+        return res.status(400).json({ message: 'Address is required' });
       }
-    } else {
-      return res.status(400).json({ message: 'Operation not specified' });
+    } else if (operation === 'delete' || operation === 'update') {
+      if (addressID) {
+        const addressIndex = User.address
+          .map((address) => address.id)
+          .indexOf(addressID);
+        if (addressIndex === -1)
+          return res.status(404).json({ message: 'Address not found' });
+        if (operation === 'update') {
+          User.address[addressIndex] = req.body.address;
+          message = ` ${User.address[addressIndex].title} address has been updated`;
+        } else if (operation === 'delete') {
+          const [deletedAdress] = User.address.splice(addressIndex, 1);
+          message = `${deletedAdress.title} address has been deleted`;
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ message: 'Address ID is required for this operation' });
+      }
     }
     await User.save();
     return res.status(200).json({ message });
