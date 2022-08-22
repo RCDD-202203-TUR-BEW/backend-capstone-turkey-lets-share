@@ -12,10 +12,6 @@ paths:
           required: true
           description: 'ID of the product'
           examples:
-            'real ID of an available "Donate" product':
-              value: '63010e545d201d7568d1f078'
-            'real ID of an available "Request" product':
-              value: '63015030cd34b6483f3bffd2'
             'real ID of a deleted product':
               value: '62ee5c280262c62f56124dfd'
             'some fake ObjectId':
