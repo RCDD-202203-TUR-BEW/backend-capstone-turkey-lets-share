@@ -122,3 +122,94 @@ paths:
           description: 'Bad request (either validation or database error)'
         '500':
           description: 'Internal server error'
+  /api/user/profile/update/address/{operation}/{addressID}:
+    patch:
+      tags:
+        - Update User
+      summary: User can update an address in the current address list, can delete and add new addresses to the list
+      description: API has 2 parameters , first is the address ID in the address list and the operation which can have one of three values [add,update,delete], in address object [title, country, city, address0] are required
+      parameters:
+        - name: operation
+          in: path
+          required: true
+          schema:
+            type: enum
+            enum:
+              - add
+              - update
+              - delete
+        - name: addressID
+          in: path
+          required: false
+          schema:
+            type: string
+            example: 62e2f022552347123617a73f
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object,
+                  properties:
+                    title:
+                      type: string,
+                    country:
+                      type: string,
+                    city:
+                      type: string,
+                    address0:
+                      type: string,
+                    address1:
+                      type: string,
+                    zip:
+                      type: string,
+            examples:
+              'CORRECT ADDRESS UPDATION':
+                value: '{
+                  "address" : {
+                  "title": "Home",
+                  "country": "Turkey",
+                  "city": "Istanbul",
+                  "address0": "Kadikoy",
+                  "address1": "Kadikoy",
+                  "zip": "34000"
+                  }
+                  }'
+              'ADDRESS IS NOT IN A VALID FORMAT':
+                value: '{
+                  "address" : "Turkey, Istanbul"
+                  }'
+              'ONE REQUIRED FIELD IS MISSING':
+                value: '{
+                  "address" : {
+                  "title": "Home",
+                  "city": "Istanbul",
+                  "country": "",
+                  "address0": "Kadikoy",
+                  "address1": "Kadikoy",
+                  "zip": "34000"
+                  }
+                  }'
+              'ZIP CODE IS NOT IN A VALID FORMAT':
+                value: '{
+                  "address" : {
+                  "title": "Home",
+                  "country": "Turkey",
+                  "city": "Istanbul",
+                  "address0": "Kadikoy",
+                  "zip": "3434"
+                  }
+                  }'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'Address Updated'
+        '400':
+          description: 'Bad request (either validation or database error)'
+        '404':
+          description: 'Address Not Found'
+        '500':
+          description: 'Internal server error'
