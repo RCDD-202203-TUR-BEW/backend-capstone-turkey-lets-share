@@ -88,17 +88,7 @@ const getSingleUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const bodyParams = Object.keys(req.body); // ['name', 'email', 'password']
-  const allowedParams = [
-    'firstName',
-    'lastName',
-    'username',
-    'phoneNumber',
-    'age',
-    'gender',
-    'nationality',
-    'refugee',
-    'profilePhoto',
-  ];
+  const allowedParams = constants.VALID_USER_KEYS;
   const emptyOrWhiteSpace = /^\s*$/;
   try {
     const User = await UserModel.findById(req.user.userId);
@@ -135,6 +125,45 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const updateAddress = async (req, res) => {
+  try {
+    const { addressID, operation } = req.params;
+    const user = await UserModel.findById(req.user.userId);
+    let message;
+    if (operation === 'add') {
+      if (req.body.address !== null && req.body.address !== undefined) {
+        user.address.push(req.body.address);
+        message = `${req.body.address.title} address has been added successfully`;
+      } else {
+        return res.status(400).json({ message: 'Address is required' });
+      }
+    } else if (operation === 'delete' || operation === 'update') {
+      if (addressID) {
+        const addressIndex = user.address
+          .map((address) => address.id)
+          .indexOf(addressID);
+        if (addressIndex === -1)
+          return res.status(404).json({ message: 'Address not found' });
+        if (operation === 'update') {
+          user.address[addressIndex] = req.body.address;
+          message = `${user.address[addressIndex].title} address has been updated successfully`;
+        } else if (operation === 'delete') {
+          const [deletedAdress] = user.address.splice(addressIndex, 1);
+          message = `${deletedAdress.title} address has been deleted successfully`;
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ message: 'Address ID is required for this operation' });
+      }
+    }
+    await user.save();
+    return res.status(200).json({ message });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const deleteProfile = async (req, res) => {
   try {
     await UserModel.findByIdAndDelete(req.user.userId);
@@ -155,5 +184,6 @@ module.exports = {
   getSingleUser,
   updateUser,
   updatePassword,
+  updateAddress,
   deleteProfile,
 };

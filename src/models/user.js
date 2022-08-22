@@ -4,6 +4,11 @@ const constants = require('../lib/constants');
 const objectId = mongoose.Schema.Types.ObjectId;
 
 const addressSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   country: {
     type: String,
     required: true,
