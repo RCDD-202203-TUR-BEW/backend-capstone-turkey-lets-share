@@ -199,7 +199,7 @@ const approveProduct = async (req, res) => {
     const requesterInOrders = product.orderRequests.includes(
       req.params.requesterId
     );
-    console.log(requesterInOrders);
+
     if (!requester || !requesterInOrders) {
       return res.status(404).json({
         message: 'Requester not found',
@@ -224,7 +224,7 @@ const approveProduct = async (req, res) => {
         message: 'You can not approve this product',
       });
     }
-    return res.status(200).json(product.orderRequests);
+    return res.status(200).json(product);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
