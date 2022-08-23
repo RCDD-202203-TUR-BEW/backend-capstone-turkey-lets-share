@@ -35,7 +35,9 @@ const emailForRequest = async (
       <p>You can <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}/requesters">click here</a> to see all requesters.
       Make sure you're logged in to access the page.</p>
       <p>Kind regards,<br>
-      Let's Share Team.</p>
+      Let's Share team</p>
+      <br></br>
+      <p style="color:#a0a0a0; font-size:10px; text-align:center;">Let's Share, 2022. All rights reserved.</p>
     `;
   } else {
     output = `
@@ -45,7 +47,9 @@ const emailForRequest = async (
       <p>You can <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}/requesters">click here</a> to see all requesters.
       Make sure you're logged in to access the page.</p>
       <p>Kind regards,<br>
-      Let's Share Team.</p>
+      Let's Share team</p>
+      <br></br>
+      <p style="color:#a0a0a0; font-size:10px; text-align:center;">Let's Share, 2022. All rights reserved.</p>
     `;
   }
 
@@ -64,5 +68,16 @@ const emailForRequest = async (
     console.log('Message sent: %s', info.messageId);
   });
 };
+
+emailForRequest(
+  'fromUsername',
+  'fromEmail',
+  'fromId',
+  'toUsername',
+  'adnan-6-@outlook.com',
+  'productTitle',
+  'productId',
+  'fromPhoneNumber'
+);
 
 module.exports = { emailForRequest };
