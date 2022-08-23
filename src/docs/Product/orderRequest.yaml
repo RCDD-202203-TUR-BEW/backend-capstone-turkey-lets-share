@@ -1,0 +1,25 @@
+paths:
+  /api/product/{productId}/request:
+    post:
+      tags:
+        - Product
+      summary: Makes an order request to the specified product
+      description: User sends a request to the product. UserId is saved in the orderRequest array of the product schema. ProductId is saved in the requested array of the user schema.
+      operationId: orderRequest
+      produces:
+        - application/json
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 62fad337a138ca66b0ad389e
+      responses:
+        200:
+          description: Returns a success message with the product information
+        400:
+          description: 'Bad request. You can see one of the errors;
+            [This product is no longer available, You have already made a request for this product, This product is not available for donation, You cannot make request to your own product, This product has reached the maximum number of requests]'
+        500:
+          description: Internal server error.

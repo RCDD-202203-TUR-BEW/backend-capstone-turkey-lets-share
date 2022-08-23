@@ -3,6 +3,7 @@ const userController = require('../controllers/user');
 const {
   validateUpdate,
   validatePassword,
+  validateAddress,
 } = require('../middleware/updateValidation');
 
 const router = express.Router();
@@ -16,6 +17,11 @@ router.patch(
   '/profile/update/password',
   validatePassword,
   userController.updatePassword
+);
+router.patch(
+  '/profile/update/address/:operation/:addressID?',
+  validateAddress,
+  userController.updateAddress
 );
 
 module.exports = router;
