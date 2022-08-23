@@ -8,8 +8,9 @@ powered by [![recoded](https://www.re-coded.com/_next/image?url=%2FReCoded-Logo-
 
 # 🔬 Description
 
-Let's share is an API for people to donate and request availiable
-products and exchanges them among each other, to help pepole from unprivilidged communities.
+> “Let’s share” website encourages people who live in the same region  to share their daily extra electronics, clothes , >
+> furniture, etc. Let's share is an API allows people to post donation and request posts
+> products and exchanges them among each other. 
 
 # ⚙️ Demo
 
@@ -27,11 +28,6 @@ Server link: [Let's Share API]
 - Filter products by category
 - Search products
 - Middleware for validation and error handling
-
-> The overriding design goal for Markdown's formatting syntax is to make it as readable
-> as possible. The idea is that a Markdown-formatted document should be
-> publishable as-is, as plain text, without looking like it's been marked up with tags
-> or formatting instructions.
 
 # 🦾 Team
 
@@ -74,7 +70,7 @@ Let's Share uses a number of open source projects to work properly:
 
 ![Database](https://images.unsplash.com/uploads/14123892966835548e7bd/14369636?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80)
 
-# ⚔️ Installation
+# 🕹 Installation
 
 Let's Share requires [Node.js](https://nodejs.org/) v10+ to run.
 
@@ -90,6 +86,18 @@ For production environments...
 ```sh
 yarn install --production
 NODE_ENV=production
+```
+
+Starting the server
+
+to start with node
+```sh
+yarn start
+```
+
+to start with nodemon
+```sh
+yarn dev
 ```
 
 # 📦 Contributing
