@@ -69,15 +69,4 @@ const emailForRequest = async (
   });
 };
 
-emailForRequest(
-  'fromUsername',
-  'fromEmail',
-  'fromId',
-  'toUsername',
-  'adnan-6-@outlook.com',
-  'productTitle',
-  'productId',
-  'fromPhoneNumber'
-);
-
 module.exports = { emailForRequest };
