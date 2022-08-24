@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Authentication
-      summary: "Logs in users"
+      summary: 'Logs in users'
       description: 'Logs in users'
       requestBody:
         content:
@@ -20,6 +20,11 @@ paths:
                 value: '{
                   "email": "tester@domain.com",
                   "password": "Qwerty-123"
+                  }'
+              'ANOTHER REAL USER':
+                value: '{
+                  "email": "niloaydin@domain.com.tr",
+                  "password": "Nilay-123"
                   }'
               'CUSTOM':
                 value: '{

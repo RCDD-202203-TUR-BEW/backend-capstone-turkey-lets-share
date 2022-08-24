@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
@@ -41,6 +42,18 @@ const addNewProduct = async (req, res) => {
     return res.status(201).json(newProduct);
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+const getSingleProduct = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.productId);
+    if (!product) {
+      return res.status(404).json({ message: 'No Product found!' });
+    }
+    return res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -89,19 +102,6 @@ const getProducts = async (req, res) => {
     return res.status(200).json(filteredProducts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  }
-};
-
-// eslint-disable-next-line consistent-return
-const getSingleProduct = async (req, res) => {
-  try {
-    const product = await ProductModel.findById(req.params.productId);
-    if (!product) {
-      return res.status(404).json({ message: 'No Product found!' });
-    }
-    return res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 };
 
@@ -264,11 +264,53 @@ const orderRequest = async (req, res) => {
   }
 };
 
+const getRequesters = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.productId).populate(
+      'orderRequests',
+      'firstName lastName username email phoneNumber'
+    );
+    if (!product) {
+      return res.status(404).json({
+        message: 'Product not found',
+      });
+    }
+
+    if (String(product.publisher) !== req.user.userId) {
+      return res.status(401).json({
+        message: 'You are not authorized to perform this action',
+      });
+    }
+
+    if (product.postType !== 'Donate') {
+      return res.status(400).json({
+        message: 'This is not a donation product: no requesters',
+      });
+    }
+
+    if (product.orderRequests.length === 0) {
+      return res.status(400).json({
+        message: 'No requesters found for this product',
+      });
+    }
+
+    const requesters = {
+      ID: product._id,
+      Title: product.title,
+      Requesters: product.orderRequests,
+    };
+    return res.status(200).json(requesters);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addNewProduct,
+  getSingleProduct,
   getProducts,
   deleteProduct,
   updateProduct,
-  getSingleProduct,
   orderRequest,
+  getRequesters,
 };
