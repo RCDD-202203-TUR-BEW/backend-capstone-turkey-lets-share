@@ -237,7 +237,10 @@ const orderRequest = async (req, res) => {
 
 const getRequesters = async (req, res) => {
   try {
-    const product = await ProductModel.findById(req.params.productId);
+    const product = await ProductModel.findById(req.params.productId).populate(
+      'orderRequests',
+      'firstName lastName username email phoneNumber'
+    );
     if (!product) {
       return res.status(404).json({
         message: 'Product not found',
@@ -256,15 +259,17 @@ const getRequesters = async (req, res) => {
       });
     }
 
-    const requesters = await ProductModel.findById(
-      req.params.productId
-    ).populate('orderRequests', 'firstName lastName username email');
-
-    if (requesters.orderRequests.length === 0) {
+    if (product.orderRequests.length === 0) {
       return res.status(400).json({
         message: 'No requesters found for this product',
       });
     }
+
+    const requesters = {
+      ID: product._id,
+      Title: product.title,
+      Requesters: product.orderRequests,
+    };
     return res.status(200).json(requesters);
   } catch (error) {
     res.status(500).json({ message: error.message });

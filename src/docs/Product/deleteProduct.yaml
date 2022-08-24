@@ -3,7 +3,7 @@ paths:
     delete:
       tags:
         - Product
-      summary: 'Deletes a product (Must be logged in)'
+      summary: 'Deletes a product (Requires log in)'
       description: 'Deletes a product'
       parameters:
         - name: 'productId'

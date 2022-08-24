@@ -53,7 +53,7 @@ paths:
                   "nationality": "String",
                   "refugee": false
                   }'
-      summary: Updates information of the user (Must be logged in)
+      summary: Updates information of the user (Requires log in)
       description: 'Should update the info of the current user'
       produces:
         - 'application/json'
@@ -111,7 +111,7 @@ paths:
                   "password": "String",
                   "passwordConfirmation": "String"
                   }'
-      summary: Updates password of the user (Must be logged in)
+      summary: Updates password of the user (Requires log in)
       description: 'Should update the password of the current user'
       produces:
         - 'application/json'

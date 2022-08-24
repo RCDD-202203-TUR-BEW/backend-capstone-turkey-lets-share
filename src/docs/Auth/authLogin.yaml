@@ -21,6 +21,11 @@ paths:
                   "email": "tester@domain.com",
                   "password": "Qwerty-123"
                   }'
+              'ANOTHER REAL USER':
+                value: '{
+                  "email": "niloaydin@domain.com.tr",
+                  "password": "Nilay-123"
+                  }'
               'CUSTOM':
                 value: '{
                   "email" : "String",

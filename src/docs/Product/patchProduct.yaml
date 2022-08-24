@@ -3,7 +3,7 @@ paths:
     patch:
       tags:
         - Product
-      summary: Updats existing product of logged in user (Must be logged in)
+      summary: Updats existing product of logged in user (Requires log in)
       operationId: updateProduct
       parameters:
         - name: productId

@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - Product
-      summary: Shows IDs of all requesters of a product (Must be logged in)
+      summary: Shows IDs of all requesters of a product (Requires log in)
       parameters:
         - in: path
           name: productId
@@ -12,10 +12,12 @@ paths:
           required: true
           description: 'ID of the product'
           examples:
+            'real ID of an available product':
+              value: '6303b1e98a23747a879d220c'
             'real ID of a deleted product':
               value: '62ee5c280262c62f56124dfd'
-            'some fake ObjectId':
-              value: 'fake5c280262c62f56124dfd'
+            "real ID of someone else's product":
+              value: '62f2dc11ebaae9d69cde5ef4'
             'custom':
               value: ''
       description: Only the product owner can see who requested a product (an empty array if no one has requested it)

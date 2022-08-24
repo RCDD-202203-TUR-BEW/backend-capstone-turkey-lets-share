@@ -3,7 +3,7 @@ paths:
     get:
       tags:
         - User
-      summary: Gets the profile of a specific user, excluding the logged in user (Must be logged in)
+      summary: Gets the profile of a specific user, excluding the logged in user (Requires log in)
       parameters:
         - in: path
           name: id
