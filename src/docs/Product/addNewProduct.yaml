@@ -21,18 +21,10 @@ paths:
                   type: string,
                 location:
                   type: string,
-                productCondition:
-                  type: string,
-                shippingOptions:
-                  type: string,
-                postType:
-                  type: string,
                 donor:
                   type: ObjectId,
                 beneficiary:
                   type: ObjectId,
-                isEvent:
-                  type: boolean
             examples:
               'Red couch':
                 value: '{
@@ -40,11 +32,7 @@ paths:
                   "description": "I have an underused couch I don''t need anymore",
                   "photos": ["redCouch0.jpg", "redCouch1.jpg"],
                   "category": "Furniture",
-                  "location": "Istanbul, Kadikoy",
-                  "productCondition": "Underused",
-                  "shippingOptions": "Meet up",
-                  "postType": "Donate",
-                  "isEvent": false
+                  "location": "Istanbul, Kadikoy"
                   }'
               'custom':
                 value: '{
@@ -52,11 +40,7 @@ paths:
                   "description": "string",
                   "photos": ["array of strings"],
                   "category": "string, enum",
-                  "location": "string, string",
-                  "productCondition": "string, enum",
-                  "shippingOptions": "string, enum",
-                  "postType": "Donate || Request",
-                  "isEvent": false
+                  "location": "string, string"
                   }'
       responses:
         '201':
@@ -82,20 +66,32 @@ components:
           type: string
         productCondition:
           type: string
+          default: false
+          description: 'Is not required upon FE request'
         shippingOptions:
           type: string
+          default: false
+          description: 'Is not required upon FE request'
         postType:
           type: string
+          default: false
+          description: 'Is not required upon FE request'
         isTransactionCompleted:
           type: Boolean
+          default: false
+        publisher:
+          type: ObjectId
+          description: 'Added automatically'
         donor:
           type: ObjectId
-          description: 'Added automatically according to postType'
+          default: publisher
+          description: 'Changed upon FE request, added automatically by default'
         beneficiary:
           type: ObjectId
-          description: 'Added automatically according to postType'
+          description: 'Changed upon FE request, added automatically according to postType'
         orderRequests:
           type: array of ObjectIds
         isEvent:
-          type: boolean,
+          type: Boolean,
           default: false
+          description: 'Is not required'

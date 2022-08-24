@@ -7,17 +7,7 @@ const { generateUniqeUsername } = require('../services/utils');
 
 const register = async (req, res) => {
   const errorsArray = [];
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    age,
-    gender,
-    nationality,
-    refugee,
-    password0,
-  } = req.body;
+  const { firstName, lastName, email, phoneNumber, password0 } = req.body;
 
   try {
     const usedEmail = await UserModel.findOne({ email });
@@ -41,10 +31,6 @@ const register = async (req, res) => {
       email,
       username: generateUniqeUsername(email),
       phoneNumber,
-      age,
-      gender,
-      nationality,
-      refugee,
       provider: 'Local',
       providerId: 'Local',
       passwordHash,

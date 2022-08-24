@@ -3,8 +3,8 @@ paths:
     post:
       tags:
         - Authentication
-      summary: 'Logs in users'
-      description: 'Logs in users'
+      summary: 'Logs users in'
+      description: 'Logs users in'
       requestBody:
         content:
           application/json:
