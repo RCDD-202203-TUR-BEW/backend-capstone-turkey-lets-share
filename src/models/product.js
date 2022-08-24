@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       enum: constants.ENUM_POST_TYPE,
       required: false,
-      defauult: 'Donate',
+      default: 'Donate',
     },
     isTransactionCompleted: {
       type: Boolean,
