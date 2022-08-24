@@ -12,6 +12,6 @@ router.get('/:productId', productController.getSingleProduct);
 router.post('/:productId/request', productController.orderRequest);
 router.patch(
   '/:productId/requesters/:requesterId/approve',
-  productController.approveProduct
+  productController.approveRequest
 );
 module.exports = router;

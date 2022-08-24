@@ -3,16 +3,15 @@ paths:
     patch:
       tags:
         - Product
-      summary: Updats beneficiary of the product (Requires log in)
+      summary: Updates beneficiary of the product (Requires log in)
       description: Approves a product request , Sets benficiary to be the requesterID , and updates list of recieved product or requester
-      operationId: updateProduct
       parameters:
         - name: productId
           in: path
           required: true
           schema:
             type: string
-            example: 62f661cf728303c5bead3b6d
+            example: 62e2f022552347123617a73f
         - name: requesterId
           in: path
           required: true

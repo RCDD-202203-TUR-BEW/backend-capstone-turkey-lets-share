@@ -236,7 +236,7 @@ const orderRequest = async (req, res) => {
 };
 
 // eslint-disable-next-line consistent-return
-const approveProduct = async (req, res) => {
+const approveRequest = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.productId);
     const requester = await UserModel.findById(req.params.requesterId);
@@ -258,6 +258,7 @@ const approveProduct = async (req, res) => {
     if (product.postType === 'Donate') {
       if (!product.isTransactionCompleted) {
         requester.received.push(product._id);
+        requester.requested.remove(product._id);
         product.beneficiary = requester._id;
         product.isTransactionCompleted = true;
 
@@ -286,5 +287,5 @@ module.exports = {
   updateProduct,
   getSingleProduct,
   orderRequest,
-  approveProduct,
+  approveRequest,
 };
