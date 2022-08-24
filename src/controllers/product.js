@@ -5,6 +5,7 @@ const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
+const { sendProductRequestEmail } = require('../services/mail');
 
 const addNewProduct = async (req, res) => {
   try {
@@ -48,7 +49,7 @@ const getSingleProduct = async (req, res) => {
   try {
     const product = await ProductModel.findById(req.params.productId);
     if (!product) {
-      return res.status(404).json('No Product found!');
+      return res.status(404).json({ message: 'No Product found!' });
     }
     return res.status(200).json(product);
   } catch (error) {
@@ -228,6 +229,34 @@ const orderRequest = async (req, res) => {
       message: 'Your request is succesfully saved for this product',
       product: _.omit(product.toObject(), ['orderRequests']),
     };
+
+    const owner = await UserModel.findById(product.publisher);
+
+    if (
+      !constants.PHONE_NUMBER_REGEX.test(user.phoneNumber) ||
+      !user.phoneNumber
+    ) {
+      await sendProductRequestEmail(
+        user.username,
+        user.email,
+        user._id,
+        owner.username,
+        owner.email,
+        product.title,
+        product._id
+      );
+    } else {
+      await sendProductRequestEmail(
+        user.username,
+        user.email,
+        user._id,
+        owner.username,
+        owner.email,
+        product.title,
+        product._id,
+        user.phoneNumber
+      );
+    }
 
     return res.status(200).json(response);
   } catch (error) {

@@ -2,9 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user');
 const constants = require('../lib/constants');
+const { sendWelcomeEmail } = require('../services/mail');
 const { generateUniqeUsername } = require('../services/utils');
 
 const register = async (req, res) => {
+  const errorsArray = [];
   const {
     firstName,
     lastName,
@@ -20,7 +22,16 @@ const register = async (req, res) => {
   try {
     const usedEmail = await UserModel.findOne({ email });
     if (usedEmail) {
-      return res.status(400).json({ error: 'Email is already taken' });
+      errorsArray.push('Email is already taken');
+    }
+
+    const usedPhone = await UserModel.findOne({ phoneNumber });
+    if (usedPhone) {
+      errorsArray.push('Phone number is already taken');
+    }
+
+    if (errorsArray.length > 0) {
+      return res.status(400).json({ error: errorsArray });
     }
 
     const passwordHash = await bcrypt.hash(password0, 10);
@@ -46,6 +57,13 @@ const register = async (req, res) => {
       username: newUser.username,
       phoneNumber: newUser.phoneNumber,
     };
+
+    await sendWelcomeEmail(
+      newUser.firstName,
+      newUser.lastName,
+      newUser.username,
+      newUser.email
+    );
 
     return res.status(201).json(shownInfo);
   } catch (error) {
