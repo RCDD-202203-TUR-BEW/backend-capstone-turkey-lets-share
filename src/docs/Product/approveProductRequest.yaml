@@ -4,20 +4,20 @@ paths:
       tags:
         - Product
       summary: Updates beneficiary of the product (Requires log in)
-      description: Approves a product request , Sets benficiary to be the requesterID , and updates list of recieved product or requester
+      description: Approves a product to a requester , Sets benficiary to be the requesterID , and updates list of recieved product or requester
       parameters:
         - name: productId
           in: path
           required: true
           schema:
             type: string
-            example: 62e2f022552347123617a73f
+            example: 62f661cf728303c5bead3b6d
         - name: requesterId
           in: path
           required: true
           schema:
             type: string
-            example: 62f661cf728303c5bead3b6d
+            example: 62e2f022552347123617a73f
       responses:
         '200':
           description: 'Successfully approved product request'
