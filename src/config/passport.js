@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('../models/user');
-const { emailForRegistering } = require('../services/mail');
+const { sendWelcomeEmail } = require('../services/mail');
 const { generateUniqeUsername } = require('../services/utils');
 
 passport.serializeUser((user, done) => {
@@ -35,7 +35,7 @@ passport.use(
             providerId: `google-${profile.id}`,
           });
 
-          await emailForRegistering(
+          await sendWelcomeEmail(
             user.firstName,
             user.lastName,
             user.username,
@@ -72,7 +72,7 @@ passport.use(
             providerId: `facebook-${profile.id}`,
           });
 
-          await emailForRegistering(
+          await sendWelcomeEmail(
             user.firstName,
             user.lastName,
             user.username,

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user');
 const constants = require('../lib/constants');
-const { emailForRegistering } = require('../services/mail');
+const { sendWelcomeEmail } = require('../services/mail');
 const { generateUniqeUsername } = require('../services/utils');
 
 const register = async (req, res) => {
@@ -48,7 +48,7 @@ const register = async (req, res) => {
       phoneNumber: newUser.phoneNumber,
     };
 
-    await emailForRegistering(
+    await sendWelcomeEmail(
       newUser.firstName,
       newUser.lastName,
       newUser.username,
