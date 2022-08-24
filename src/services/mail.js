@@ -3,7 +3,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const emailForRequest = async (
+const sendProductRequestEmail = async (
   fromUsername,
   fromEmail,
   fromId,
@@ -69,4 +69,4 @@ const emailForRequest = async (
   });
 };
 
-module.exports = { emailForRequest };
+module.exports = { sendProductRequestEmail };

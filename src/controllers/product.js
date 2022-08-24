@@ -4,7 +4,7 @@ const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
-const { emailForRequest } = require('../services/mail');
+const { sendProductRequestEmail } = require('../services/mail');
 
 const addNewProduct = async (req, res) => {
   try {
@@ -236,7 +236,7 @@ const orderRequest = async (req, res) => {
       !constants.PHONE_NUMBER_REGEX.test(user.phoneNumber) ||
       !user.phoneNumber
     ) {
-      await emailForRequest(
+      await sendProductRequestEmail(
         user.username,
         user.email,
         user._id,
@@ -246,7 +246,7 @@ const orderRequest = async (req, res) => {
         product._id
       );
     } else {
-      await emailForRequest(
+      await sendProductRequestEmail(
         user.username,
         user.email,
         user._id,
