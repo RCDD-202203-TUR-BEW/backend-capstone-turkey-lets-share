@@ -3,7 +3,7 @@ paths:
     post:
       tags:
         - Product
-      summary: Makes an order request to the specified product
+      summary: Makes an order request to the specified product. Sends an automatic email to the product owner.
       description: User sends a request to the product. UserId is saved in the orderRequest array of the product schema. ProductId is saved in the requested array of the user schema.
       operationId: orderRequest
       produces:
