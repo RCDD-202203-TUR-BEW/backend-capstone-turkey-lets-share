@@ -1,0 +1,30 @@
+paths:
+  /api/product/{productId}/requesters/{requesterId}/approve:
+    patch:
+      tags:
+        - Product
+      summary: Updats beneficiary of the product (Requires log in)
+      description: Approves a product request , Sets benficiary to be the requesterID , and updates list of recieved product or requester
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 62f661cf728303c5bead3b6d
+        - name: requesterId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 62f661cf728303c5bead3b6d
+      responses:
+        '200':
+          description: 'Successfully approved product request'
+        '400':
+          description: 'Transaction is already completed, you cannot update this product'
+        '404':
+          description: 'Requester or product not found'
+        '500':
+          description: 'Internal server error'
