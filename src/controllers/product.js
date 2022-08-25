@@ -3,22 +3,36 @@
 const _ = require('lodash');
 const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
+const storage = require('../config/storage');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
 const { sendProductRequestEmail } = require('../services/mail');
+
+const getFileExtension = (fileName) =>
+  fileName.slice(fileName.lastIndexOf('.') + 1);
 
 const addNewProduct = async (req, res) => {
   try {
     const newProduct = await ProductModel.create({
       title: req.body.title,
       description: req.body.description,
-      photos: req.body.photos,
+      // photos: req.body.photos,
       category: req.body.category,
       location: req.body.location,
       publisher: req.user.userId,
       donor: req.user.userId,
       beneficiary: null,
     });
+
+    if (req.files) {
+      const imgUrl = await storage.uploadImage(
+        req.files,
+        `photos/${newProduct.id}.${new Date().valueOf()}
+        .${getFileExtension(req.files.originalname)}`
+      );
+      newProduct.photos.push(imgUrl);
+      await newProduct.save();
+    }
 
     if (newProduct.postType === 'Donate') {
       await UserModel.findByIdAndUpdate(req.user.userId, {

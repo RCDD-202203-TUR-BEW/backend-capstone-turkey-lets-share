@@ -1,10 +1,23 @@
+const Multer = require('multer');
 const express = require('express');
 const { productMiddleware } = require('../middleware/product');
 const productController = require('../controllers/product');
 
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 1024 * 1024 * 10,
+  },
+});
+
 const router = express.Router();
 
-router.post('/', productMiddleware, productController.addNewProduct);
+router.post(
+  '/',
+  multer.array('photos', 10),
+  productMiddleware,
+  productController.addNewProduct
+);
 router.get('/:productId', productController.getSingleProduct);
 router.get('/', productController.getProducts);
 router.delete('/:productId', productController.deleteProduct);
