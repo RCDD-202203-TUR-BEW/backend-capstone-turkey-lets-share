@@ -137,7 +137,7 @@ describe('AUTH TESTS', () => {
         });
     });
 
-    it('should not register users if username/email is already taken', (done) => {
+    it('should not register users if email/phone number is already taken', (done) => {
       supertest(app)
         .post('/api/auth/register')
         .set('Content-Type', 'application/json')
@@ -146,7 +146,8 @@ describe('AUTH TESTS', () => {
         .expect(400, (err, res) => {
           if (err) return done(err);
 
-          expect(res.body.error).toBe('Email is already taken');
+          expect(res.body.error[0]).toBe('Email is already taken');
+          expect(res.body.error[1]).toBe('Phone number is already taken');
           return done();
         });
     });
@@ -259,7 +260,7 @@ describe('AUTH TESTS', () => {
         .expect('Content-Type', /json/)
         .expect(422, (err, res) => {
           if (err) return done(err);
-          expect(res.body.errors[0].msg).toBe('Password cannot be empty!');
+          expect(res.body.error[0].msg).toBe('Password cannot be empty!');
 
           return done();
         });
@@ -275,7 +276,7 @@ describe('AUTH TESTS', () => {
         .expect(422, (err, res) => {
           if (err) return done(err);
           expect(
-            res.body.errors.find((error) => error.param === 'email')
+            res.body.error.find((error) => error.param === 'email')
           ).toBeDefined();
           return done();
         });
