@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable node/no-unpublished-require */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable consistent-return */
+// /* eslint-disable no-unused-expressions */
+// /* eslint-disable node/no-unpublished-require */
+// /* eslint-disable no-underscore-dangle */
+// /* eslint-disable prefer-destructuring */
+// /* eslint-disable consistent-return */
 // const supertest = require('supertest');
 // const mongoose = require('mongoose');
 // const app = require('../app');
@@ -94,7 +94,7 @@ describe('Product test', () => {
 //         if (err) return done(err);
 
 //         requestPostId = res.body.id;
-//         expect(res.body).toHaveProperty('isEvent');
+//         expect(res.body).toHaveProperty('publisher');
 //         return done();
 //       });
 //   });
@@ -126,7 +126,7 @@ describe('Product test', () => {
 //         if (err) return done(err);
 
 //         donatePostId = res.body.id;
-//         expect(res.body).toHaveProperty('isEvent');
+//         expect(res.body).toHaveProperty('publisher');
 //         return done();
 //       });
 //   });

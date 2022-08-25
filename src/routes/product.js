@@ -4,12 +4,13 @@ const productController = require('../controllers/product');
 
 const router = express.Router();
 
-router.get('/', productController.getProducts);
 router.post('/', productMiddleware, productController.addNewProduct);
+router.get('/:productId', productController.getSingleProduct);
+router.get('/', productController.getProducts);
 router.delete('/:productId', productController.deleteProduct);
 router.patch('/:productId', productController.updateProduct);
-router.get('/:productId', productController.getSingleProduct);
 router.post('/:productId/request', productController.orderRequest);
+router.get('/:productId/requesters', productController.getRequesters);
 router.patch(
   '/:productId/requesters/:requesterId/approve',
   productController.approveRequest

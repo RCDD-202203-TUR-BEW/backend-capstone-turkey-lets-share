@@ -1,61 +1,79 @@
 paths:
-    /api/product:
-        get:
-            tags:
-                - Product
-            summary: Gets all products and provides filtering and searching features
-            description: If there is no query, this endpoints gets all the products. If there is query, this endpoint gets the products which fits query in qustion.
-            operationId: getProducts
-            consumes:
-                - application/json
-            produces:
-                - application/json
-            parameters:
-                - name: category
-                  in: query
-                  description: More than 1 category can be selected. Array contains; Books, Clothing, Electronics, Food, Furniture, Kitchenware, Linens, Toys, Other
-                  schema:
-                    type: array
-                    enum: [Books, Clothing, Electronics, Food, Furniture, Kitchenware, Linens, Toys, Other]
-                    item:
-                      type: string
-                - name: productCondition
-                  in: query
-                  description: More than 1 field can be selected. Array contains; New, Underused, Overused
-                  schema:
-                    type: array
-                    enum: [New, Underused, Overused]
-                    item:
-                      type: string
-                - name: search
-                  in: query
-                  type: string
-                  example: computer
-                - name: location
-                  in: query
-                  type: string
-                  example: Istanbul
-                - name: shippingOptions
-                  in: query
-                  description: More than 1 field can be selected. Array contains; Meet up, Drop off, Free shipping, Paid shipping, To be determined
-                  schema:
-                    type: array
-                    enum: [Meet up, Drop off, Free shipping, Paid shipping, To be determined]
-                    item:
-                      type: string
-                - name: postType
-                  in: query
-                  type: array
-                  description: More than 1 field can be selected. Array contains; Request, Donate
-                  schema:
-                    type: array
-                    enum: [Request, Donate]
-                    item:
-                      type: string
-            responses:
-                200:
-                    description: Returns a list of the matching products.
-                400:
-                    description: Your search is not found!
-                500:
-                    description: Internal server error
+  /api/product:
+    get:
+      tags:
+        - Product
+      summary: Gets all products and provides filtering and searching features
+      description: If there is no query, this endpoints gets all the products. If there is query, this endpoint gets the products which fits query in qustion.
+      operationId: getProducts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: category
+          in: query
+          description: More than 1 category can be selected. Array contains; Books, Clothing, Electronics, Food, Furniture, Kitchenware, Linens, Toys, Other
+          schema:
+            type: array
+            enum:
+              [
+                Books,
+                Clothing,
+                Electronics,
+                Food,
+                Furniture,
+                Kitchenware,
+                Linens,
+                Toys,
+                Other,
+              ]
+            item:
+              type: string
+        - name: productCondition
+          in: query
+          description: More than 1 field can be selected. Array contains; New, Underused, Overused
+          schema:
+            type: array
+            enum: [New, Underused, Overused]
+            item:
+              type: string
+        - name: search
+          in: query
+          type: string
+          example: computer
+        - name: location
+          in: query
+          type: string
+          example: Istanbul
+        - name: shippingOptions
+          in: query
+          description: More than 1 field can be selected. Array contains; Meet up, Drop off, Free shipping, Paid shipping, To be determined
+          schema:
+            type: array
+            enum:
+              [
+                Meet up,
+                Drop off,
+                Free shipping,
+                Paid shipping,
+                To be determined,
+              ]
+            item:
+              type: string
+        - name: postType
+          in: query
+          type: array
+          description: More than 1 field can be selected. Array contains; Request, Donate
+          schema:
+            type: array
+            enum: [Request, Donate]
+            item:
+              type: string
+      responses:
+        200:
+          description: Returns a list of the matching products.
+        400:
+          description: Your search is not found!
+        500:
+          description: Internal server error
