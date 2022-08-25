@@ -301,6 +301,52 @@ const getRequesters = async (req, res) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
+const approveRequest = async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.productId);
+    const requester = await UserModel.findById(req.params.requesterId);
+
+    if (!product) {
+      return res.status(404).json({
+        message: 'Product not found',
+      });
+    }
+    const requesterInOrders = product.orderRequests.includes(
+      req.params.requesterId
+    );
+
+    if (!requester || !requesterInOrders) {
+      return res.status(404).json({
+        message: 'Requester not found',
+      });
+    }
+    if (product.postType === 'Donate') {
+      if (!product.isTransactionCompleted) {
+        requester.received.push(product._id);
+        requester.requested.remove(product._id);
+        product.beneficiary = requester._id;
+        product.isTransactionCompleted = true;
+
+        requester.save();
+        product.save();
+      } else {
+        return res.status(400).json({
+          message:
+            'Transaction is already completed, you cannot update this product',
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: 'You can not approve this product',
+      });
+    }
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addNewProduct,
   getSingleProduct,
@@ -309,4 +355,5 @@ module.exports = {
   updateProduct,
   orderRequest,
   getRequesters,
+  approveRequest,
 };

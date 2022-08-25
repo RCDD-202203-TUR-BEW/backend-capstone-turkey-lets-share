@@ -11,5 +11,8 @@ router.delete('/:productId', productController.deleteProduct);
 router.patch('/:productId', productController.updateProduct);
 router.post('/:productId/request', productController.orderRequest);
 router.get('/:productId/requesters', productController.getRequesters);
-
+router.patch(
+  '/:productId/requesters/:requesterId/approve',
+  productController.approveRequest
+);
 module.exports = router;
