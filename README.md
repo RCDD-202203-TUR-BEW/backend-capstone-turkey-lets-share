@@ -2,15 +2,18 @@
 
 ## _A sharing and Posting API_
 
-powered by [![recoded](https://www.re-coded.com/_next/image?url=%2FReCoded-Logo-Black.png.webp&w=384&q=75)](https://www.re-coded.com/)
+<p align="center">powered by</p>
+<p align="center">
+<img src="https://www.re-coded.com/_next/image?url=%2FReCoded-Logo-Black.png.webp&w=384&q=75)](https://www.re-coded.com/" alt="Phoenix" width="170"/>
+</p>
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 # 🔬 Description
 
-> “Let’s share” website encourages people who live in the same region  to share their daily extra electronics, clothes , >
+> “Let’s share” website encourages people who live in the same region to share their daily extra electronics clothes ,
 > furniture, etc. Let's share is an API allows people to post donation and request posts
-> products and exchanges them among each other. 
+> where one order request can be approved to take the product,
 
 # ⚙️ Demo
 
@@ -64,11 +67,11 @@ Let's Share uses a number of open source projects to work properly:
 
 ### System Structure
 
-![Structure](https://images.unsplash.com/photo-1493476523860-a6de6ce1b0c3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80)
+![Structure](./assets/systemStructure.png)
 
 ### Database Schema
 
-![Database](https://images.unsplash.com/uploads/14123892966835548e7bd/14369636?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80)
+![Database](./assets/databseSchema.png)
 
 # 🕹 Installation
 
@@ -91,11 +94,13 @@ NODE_ENV=production
 Starting the server
 
 to start with node
+
 ```sh
 yarn start
 ```
 
 to start with nodemon
+
 ```sh
 yarn dev
 ```
