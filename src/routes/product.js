@@ -1,21 +1,26 @@
-const Multer = require('multer');
+const multer = require('multer');
 const express = require('express');
+const storage = require('../config/storage');
 const { productMiddleware } = require('../middleware/product');
 const productController = require('../controllers/product');
 
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 1024 * 1024 * 10,
+const fileStorageEngine = multer.diskStorage({
+  storage: multer.memoryStorage(),
+  filename: (req, file, cb) => {
+    cb(null, `${new Date().valueOf()}.${file.originalname}`);
   },
 });
 
+const upload = multer({ storage: fileStorageEngine });
+
 const router = express.Router();
+
+router.post('/test', upload.array('photos', 2), productController.testMulter);
 
 router.post(
   '/',
-  multer.array('photos', 10),
   productMiddleware,
+  upload.array('photos', 2),
   productController.addNewProduct
 );
 router.get('/:productId', productController.getSingleProduct);

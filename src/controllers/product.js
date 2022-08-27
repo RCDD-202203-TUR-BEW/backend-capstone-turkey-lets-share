@@ -11,6 +11,26 @@ const { sendProductRequestEmail } = require('../services/mail');
 const getFileExtension = (fileName) =>
   fileName.slice(fileName.lastIndexOf('.') + 1);
 
+const testMulter = async (req, res) => {
+  console.log('photos has been uploaded', req.files);
+  // eslint-disable-next-line no-restricted-syntax
+  (async () => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const file of req.files) {
+      console.log(file.filename);
+      // eslint-disable-next-line no-await-in-loop
+      const imgUrl = await storage.uploadImage(
+        file,
+        `product-photos/${new Date().valueOf()}.${file.originalname}`
+      );
+      console.log('imgUrl', imgUrl);
+      console.log('image uploaded');
+    }
+  })();
+
+  return res.status(200).json({ message: 'Photos has been uploaded' });
+};
+
 const addNewProduct = async (req, res) => {
   try {
     const newProduct = await ProductModel.create({
@@ -25,13 +45,29 @@ const addNewProduct = async (req, res) => {
     });
 
     if (req.files) {
-      const imgUrl = await storage.uploadImage(
-        req.files,
-        `photos/${newProduct.id}.${new Date().valueOf()}
-        .${getFileExtension(req.files.originalname)}`
-      );
-      newProduct.photos.push(imgUrl);
+      console.log('files:', req.files);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of req.files) {
+        console.log(file.filename);
+        // eslint-disable-next-line no-await-in-loop
+        const imgUrl = await storage.uploadImage(
+          file,
+          `product-photos/${new Date().valueOf()}.${file.originalname}`
+        );
+        newProduct.photos.push(imgUrl);
+        console.log('imgUrl', imgUrl);
+        console.log('image uploaded');
+      }
       await newProduct.save();
+
+      //   console.log('helllloo', req.files);
+      //   const imgUrl = await storage.uploadImage(
+      //     req.files,
+      //     `photos/${newProduct.id}.${new Date().valueOf()}
+      //     .${getFileExtension(req.files.originalname)}`
+      //   );
+      //   newProduct.photos.push(imgUrl);
+      //   await newProduct.save();
     }
 
     if (newProduct.postType === 'Donate') {
@@ -316,6 +352,7 @@ const getRequesters = async (req, res) => {
 };
 
 module.exports = {
+  testMulter,
   addNewProduct,
   getSingleProduct,
   getProducts,
