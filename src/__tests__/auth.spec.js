@@ -174,7 +174,7 @@ describe('AUTH TESTS', () => {
     it('should return a token when correct user is logged in', (done) => {
       supertest(app)
         .post('/api/auth/login')
-        .send({ email: createUser.email, password: 'Qwerty-123' })
+        .send({ usernameOrEmail: createUser.email, password: 'Qwerty-123' })
         .end((err, res) => {
           if (err) {
             return done(err);
@@ -205,7 +205,7 @@ describe('AUTH TESTS', () => {
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
-          email: validUserExample.email,
+          usernameOrEmail: validUserExample.email,
           password: validUserExample.password,
         })
         .expect('Content-Type', /json/)
@@ -225,7 +225,7 @@ describe('AUTH TESTS', () => {
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
-          email: 'wrongemail@wrongemail.com',
+          usernameOrEmail: 'wrongemail@wrongemail.com',
           password: validUserExample.password,
         })
         .expect('Content-Type', /json/)
@@ -240,7 +240,7 @@ describe('AUTH TESTS', () => {
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
-          email: validUserExample.email,
+          usernameOrEmail: validUserExample.email,
           password: 'wrongpasswordthaticreatedfortestpurposes',
         })
         .expect('Content-Type', /json/)
@@ -255,7 +255,7 @@ describe('AUTH TESTS', () => {
         .post('/api/auth/login')
         .set('Content-Type', 'application/json')
         .send({
-          email: validUserExample.email,
+          usernameOrEmail: validUserExample.email,
         })
         .expect('Content-Type', /json/)
         .expect(422, (err, res) => {
@@ -276,7 +276,7 @@ describe('AUTH TESTS', () => {
         .expect(422, (err, res) => {
           if (err) return done(err);
           expect(
-            res.body.error.find((error) => error.param === 'email')
+            res.body.error.find((error) => error.param === 'usernameOrEmail')
           ).toBeDefined();
           return done();
         });

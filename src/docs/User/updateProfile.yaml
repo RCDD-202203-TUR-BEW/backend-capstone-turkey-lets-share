@@ -125,7 +125,7 @@ paths:
   /api/user/profile/update/address/{operation}/{addressID}:
     patch:
       tags:
-        - Update User
+        - User
       summary: User can update an address in the current address list, can delete and add new addresses to the list
       description: API has 2 parameters , first is the address ID in the address list and the operation which can have one of three values [add,update,delete], in address object [title, country, city, address0] are required
       parameters:
