@@ -233,23 +233,23 @@ const orderRequest = async (req, res) => {
       !user.phoneNumber
     ) {
       await sendProductRequestEmail(
-        user.username,
-        user.email,
-        user._id,
-        owner.username,
-        owner.email,
-        product.title,
-        product._id
-      );
-    } else {
-      await sendProductRequestEmail(
-        user.username,
-        user.email,
-        user._id,
         owner.username,
         owner.email,
         product.title,
         product._id,
+        user.username,
+        user.email,
+        user._id
+      );
+    } else {
+      await sendProductRequestEmail(
+        owner.username,
+        owner.email,
+        product.title,
+        product._id,
+        user.username,
+        user.email,
+        user._id,
         user.phoneNumber
       );
     }

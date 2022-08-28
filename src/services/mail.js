@@ -47,14 +47,14 @@ const sendWelcomeEmail = async (firstName, lastName, username, email) => {
 };
 
 const sendProductRequestEmail = async (
-  fromUsername,
-  fromEmail,
-  fromId,
-  toUsername,
-  toEmail,
+  ownerUsername,
+  ownerEmail,
   productTitle,
   productId,
-  fromPhoneNumber
+  requesterUsername,
+  requesterEmail,
+  requesterId,
+  requesterPhoneNumber
 ) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -70,11 +70,11 @@ const sendProductRequestEmail = async (
   });
 
   let output;
-  if (fromPhoneNumber) {
+  if (requesterPhoneNumber) {
     output = `
-      <p>Hello ${toUsername},<br>
-      <a href="https://lets-share-capstone.herokuapp.com/api/user/${fromId}">${fromUsername}</a> has requested your <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}">${productTitle}</a>.<br>
-      You can contact ${fromUsername} on ${fromEmail} or ${fromPhoneNumber}.</p>
+      <p>Hello ${ownerUsername},<br>
+      <a href="https://lets-share-capstone.herokuapp.com/api/user/${requesterId}">${requesterUsername}</a> has requested your <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}">${productTitle}</a>.<br>
+      You can contact ${requesterUsername} on ${requesterEmail} or ${requesterPhoneNumber}.</p>
       <p>You can <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}/requesters">click here</a> to see all requesters.
       Make sure you're logged in to access the page.</p>
       <p>Kind regards,<br>
@@ -84,9 +84,9 @@ const sendProductRequestEmail = async (
     `;
   } else {
     output = `
-      <p>Hello ${toUsername},<br>
-      <a href="https://lets-share-capstone.herokuapp.com/api/user/${fromId}">${fromUsername}</a> has requested your <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}">${productTitle}</a>.<br>
-      You can contact ${fromUsername} on ${fromEmail}.</p>
+      <p>Hello ${ownerUsername},<br>
+      <a href="https://lets-share-capstone.herokuapp.com/api/user/${requesterId}">${requesterUsername}</a> has requested your <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}">${productTitle}</a>.<br>
+      You can contact ${requesterUsername} on ${requesterEmail}.</p>
       <p>You can <a href="https://lets-share-capstone.herokuapp.com/api/product/${productId}/requesters">click here</a> to see all requesters.
       Make sure you're logged in to access the page.</p>
       <p>Kind regards,<br>
@@ -98,7 +98,7 @@ const sendProductRequestEmail = async (
 
   const mailOptions = {
     from: `"Let's Share" <${process.env.GMAIL}>`,
-    to: `"${toUsername}" <${toEmail}>`,
+    to: `"${ownerUsername}" <${ownerEmail}>`,
     subject: 'Someone has requested your item',
     text: 'Someone has requested your item.',
     html: output,
