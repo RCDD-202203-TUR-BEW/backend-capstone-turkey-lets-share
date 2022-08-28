@@ -312,6 +312,13 @@ const approveRequest = async (req, res) => {
         message: 'Product not found',
       });
     }
+    
+    if (String(product.publisher) !== req.user.userId) {
+      return res.status(401).json({
+        message: 'You are not authorized to perform this action',
+      });
+    }
+    
     const requesterInOrders = product.orderRequests.includes(
       req.params.requesterId
     );
