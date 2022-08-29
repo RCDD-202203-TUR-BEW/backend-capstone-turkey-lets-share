@@ -5,7 +5,10 @@ const objectId = require('mongoose').Types.ObjectId;
 const constants = require('../lib/constants');
 const UserModel = require('../models/user');
 const ProductModel = require('../models/product');
-const { sendProductRequestEmail } = require('../services/mail');
+const {
+  sendProductRequestEmail,
+  sendProductApprovalEmail,
+} = require('../services/mail');
 
 const addNewProduct = async (req, res) => {
   try {
@@ -312,6 +315,13 @@ const approveRequest = async (req, res) => {
         message: 'Product not found',
       });
     }
+
+    if (String(product.publisher) !== req.user.userId) {
+      return res.status(401).json({
+        message: 'You are not authorized to perform this action',
+      });
+    }
+
     const requesterInOrders = product.orderRequests.includes(
       req.params.requesterId
     );
@@ -323,10 +333,38 @@ const approveRequest = async (req, res) => {
     }
     if (product.postType === 'Donate') {
       if (!product.isTransactionCompleted) {
+        const owner = await UserModel.findById(product.publisher);
+
         requester.received.push(product._id);
         requester.requested.remove(product._id);
         product.beneficiary = requester._id;
         product.isTransactionCompleted = true;
+
+        if (
+          !constants.PHONE_NUMBER_REGEX.test(owner.phoneNumber) ||
+          !owner.phoneNumber
+        ) {
+          await sendProductApprovalEmail(
+            requester.username,
+            requester.email,
+            product.title,
+            product._id,
+            owner.username,
+            owner.email,
+            owner._id
+          );
+        } else {
+          await sendProductApprovalEmail(
+            requester.username,
+            requester.email,
+            product.title,
+            product._id,
+            owner.username,
+            owner.email,
+            owner._id,
+            owner.phoneNumber
+          );
+        }
 
         requester.save();
         product.save();
