@@ -44,14 +44,14 @@ Server link: [Let's Share API]
 - 👩🏻 [Noor Awied]
 - 👩🏻‍🦱 [Ezgi Okur]
 - 👩🏻‍🦱 [Nilay Aydin]
-- 👨🏻 [Adnan Khaldarov]
+- 👨🏻 [Adnan Khaldar]
 - 🧔🏻 [Amjad Khatib]
 
 # 🛠 Tech
 
 Let's Share uses a number of open source projects to work properly:
 
-- [ExpressJS] - fast node.js network app framework [@tjholowaychuk]
+- [ExpressJS] - fast node.js network app framework
 - [NodeJS] - evented I/O for the backend
 - [VSCode] - awesome web-based text editor
 - [Heroku] - a cloud platform as a service
@@ -144,5 +144,5 @@ MIT
 [noor awied]: https://github.com/awiednoor
 [ezgi okur]: https://github.com/okurezgi
 [nilay aydin]: https://github.com/niloaydin
-[adnan khaldarov]: https://github.com/khaldarov
+[adnan khaldar]: https://github.com/khaldarov
 [amjad khatib]: https://github.com/khatibAmjad
