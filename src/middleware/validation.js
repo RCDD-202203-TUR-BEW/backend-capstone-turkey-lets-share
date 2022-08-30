@@ -3,12 +3,12 @@ const { body, validationResult } = require('express-validator');
 const constants = require('../lib/constants');
 
 const userLoginValidationRules = [
-  body('email')
-    .exists()
-    .withMessage('Email cannot be empty!')
-    .isEmail()
-    .withMessage('Email format is not correct!'),
-  body('password').exists().withMessage('Password cannot be empty!'),
+  body('usernameOrEmail')
+    .exists({ checkFalsy: true })
+    .withMessage('Please enter your username or email'),
+  body('password')
+    .exists({ checkFalsy: true })
+    .withMessage('Password cannot be empty!'),
 ];
 
 const errorHandlingForValidation = (req, res, next) => {

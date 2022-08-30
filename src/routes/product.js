@@ -13,6 +13,6 @@ router.post('/:productId/request', productController.orderRequest);
 router.get('/:productId/requesters', productController.getRequesters);
 router.patch(
   '/:productId/requesters/:requesterId/approve',
-  productController.approveProduct
+  productController.approveRequest
 );
 module.exports = router;

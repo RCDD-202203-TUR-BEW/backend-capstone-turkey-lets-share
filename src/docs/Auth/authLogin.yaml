@@ -11,31 +11,31 @@ paths:
             schema:
               type: object
               properties:
-                email:
+                usernameOrEmail:
                   type: string,
                 password:
                   type: string,
             examples:
               'REAL USER':
                 value: '{
-                  "email": "tester@domain.com",
+                  "usernameOrEmail": "tester@domain.com",
                   "password": "Qwerty-123"
                   }'
               'ANOTHER REAL USER':
                 value: '{
-                  "email": "niloaydin@domain.com.tr",
+                  "usernameOrEmail": "niloaydin@domain.com.tr",
                   "password": "Nilay-123"
                   }'
               'CUSTOM':
                 value: '{
-                  "email" : "String",
+                  "usernameOrEmail" : "String",
                   "password": "String"
                   }'
       responses:
         '201':
           description: 'Created (User successfully signed in!)'
         '401':
-          description: 'Unauthorized (Wrong email or password!)'
+          description: 'Unauthorized (Wrong username or password!) OR (Wrong email or password!)'
         '422':
           description: 'Unprocessable entity'
         '500':

@@ -59,21 +59,48 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const currentUser = await UserModel.findOne({ email });
+    const { usernameOrEmail, password } = req.body;
+    if (constants.EMAIL_REGEX.test(usernameOrEmail)) {
+      const foundEmail = await UserModel.findOne({ email: usernameOrEmail });
 
-    if (!currentUser) {
-      return res.status(401).json({ message: 'Wrong email or password!' });
+      if (!foundEmail) {
+        return res.status(401).json({ message: 'Wrong email or password!' });
+      }
+      const validPassword = await bcrypt.compare(
+        password,
+        foundEmail.passwordHash
+      );
+      if (!validPassword) {
+        return res.status(401).json({ message: 'Wrong email or password!' });
+      }
+
+      const payload = { userId: foundEmail.id };
+      const token = jwt.sign(payload, process.env.SECRET_KEY, {
+        expiresIn: constants.TOKEN_EXPIRATION_DURATION,
+      });
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: constants.COOKIE_MAX_AGE, // 14 days
+      });
+      return res.status(201).json({ message: 'User successfully signed in!' });
+    }
+
+    const foundUsername = await UserModel.findOne({
+      username: usernameOrEmail,
+    });
+
+    if (!foundUsername) {
+      return res.status(401).json({ message: 'Wrong username or password!' });
     }
     const validPassword = await bcrypt.compare(
       password,
-      currentUser.passwordHash
+      foundUsername.passwordHash
     );
     if (!validPassword) {
-      return res.status(401).json({ message: 'Wrong email or password!' });
+      return res.status(401).json({ message: 'Wrong username or password!' });
     }
 
-    const payload = { userId: currentUser.id };
+    const payload = { userId: foundUsername.id };
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: constants.TOKEN_EXPIRATION_DURATION,
     });

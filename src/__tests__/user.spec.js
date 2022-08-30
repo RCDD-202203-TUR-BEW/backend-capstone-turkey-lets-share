@@ -44,7 +44,10 @@ describe('GET /api/user/:id', () => {
   it('should return a token when correct user is logged in', (done) => {
     supertest(app)
       .post('/api/auth/login')
-      .send({ email: createCurrentUser.email, password: 'Qwerty-123' })
+      .send({
+        usernameOrEmail: createCurrentUser.email,
+        password: 'Qwerty-123',
+      })
       .end((err, res) => {
         if (err) {
           return done(err);
