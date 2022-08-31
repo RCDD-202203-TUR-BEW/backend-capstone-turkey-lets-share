@@ -11,9 +11,10 @@
 
 # 🔬 Description
 
-> “Let’s share” website encourages people who live in the same region to share their daily extra electronics clothes ,
-> furniture, etc. Let's share is an API allows people to post donation and request posts
-> where one order request can be approved to take the product,
+> "Let's Share" encourages people who live in the same region to share their extra electronics, clothes,
+> furniture, etc.<br>
+> Let's Share is an API that allows people to post donation and request posts
+> where one order request can be approved to take the product.
 
 # ⚙️ Demo
 
@@ -21,8 +22,8 @@ Server link: [Let's Share API]
 
 # 🧱 Features
 
-- Sigin/Signup authentication
-- 3rd Party authentication (Google, Facebbok)
+- Signin/Signup authentication
+- 3rd Party authentication (Google, Facebook)
 - List products
 - CRUD operations for products
 - CRUD operations for users
@@ -49,19 +50,19 @@ Server link: [Let's Share API]
 
 # 🛠 Tech
 
-Let's Share uses a number of open source projects to work properly:
+Let's Share uses a number of open source modules to work properly:
 
-- [ExpressJS] - fast node.js network app framework
-- [NodeJS] - evented I/O for the backend
-- [VSCode] - awesome web-based text editor
-- [Heroku] - a cloud platform as a service
+- [ExpressJS] - a fast Node.js network app framework.
+- [Node.js] - an evented I/O for the backend.
+- [VSCode] - an awesome web-based text editor.
+- [Heroku] - a cloud platform as a service.
 - [Nodemailer] - a module for Node.js applications to allow easy email sending.
 - [Nodemon] - automatically restarting the node application when file changes in the directory are detected.
-- [MongoDB] - a source-available cross-platform document-oriented database program
-- [PassportJS] - authentication middleware for Node.js
-- [Swagger] - build, document, test and consume RESTful web services
-- [JWT] - a compact URL-safe means of representing claims to be transferred between two parties
-- [Chai] - BDD / TDD assertion library for node
+- [MongoDB] - a source-available cross-platform document-oriented database program.
+- [PassportJS] - an authentication middleware for Node.js.
+- [Swagger] - build, document, test and consume RESTful web services.
+- [JWT] - a compact URL-safe means of representing claims to be transferred between two parties.
+- [Chai] - BDD / TDD assertion library for Node.js.
 
 # 🌆 Screenshots
 
@@ -77,29 +78,29 @@ Let's Share uses a number of open source projects to work properly:
 
 Let's Share requires [Node.js](https://nodejs.org/) v10+ to run.
 
-Install the dependencies and devDependencies and start the server.
+Install the dependencies and devDependencies and start the server:
 
 ```sh
 cd backend-capstone-turkey-lets-share
 yarn install
 ```
 
-For production environments...
+For production environments:
 
 ```sh
 yarn install --production
 NODE_ENV=production
 ```
 
-Starting the server
+### Starting the server
 
-to start with node
+To start with node:
 
 ```sh
 yarn start
 ```
 
-to start with nodemon
+To start with nodemon:
 
 ```sh
 yarn dev
@@ -129,7 +130,7 @@ MIT
 
 [let's share api]: https://lets-share-capstone.herokuapp.com/#/
 [expressjs]: https://expressjs.com/
-[nodejs]: http://nodejs.org
+[node.js]: http://nodejs.org
 [vscode]: https://code.visualstudio.com/
 [heroku]: https://www.heroku.com/
 [nodemailer]: https://nodemailer.com/about/
